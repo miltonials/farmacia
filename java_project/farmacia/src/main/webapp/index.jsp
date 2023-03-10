@@ -17,7 +17,7 @@
               Iniciar sesión
             </div>
             <div class="card-body">
-                <form action="./pages/home.jsp" method="get">
+                <form action="Controlador">
                 <div class="form-group">
                   <label for="username">Nombre de usuario</label>
                   <input type="text" class="form-control" id="username" name="username">
@@ -26,7 +26,7 @@
                   <label for="password">Contraseña</label>
                   <input type="password" class="form-control" id="password" name="password">
                 </div>
-                <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+                <button type="submit" class="btn btn-primary" name="accion" >Iniciar sesión</button>
               </form>
             </div>
           </div>

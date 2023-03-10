@@ -4,10 +4,26 @@
  */
 package modelo;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+
 /**
  *
  * @author milto
  */
 public class Conexion {
-    
+    Connection con;
+    String url = "jdbc:oracle:thin:@localhost:1521:ksalazar";
+    String user = "KSALAZAR";
+    String pass = "bdAlajuela2023s1";
+    //String pass = "12345";
+    public Connection conectar (){
+        try {
+            Class. forName ("oracle. jdbc. driver. ,OracleDriver");
+            con=DriverManager.getConnection (url, user, pass);
+        } catch (Exception e) {
+            
+        }
+        return con;
+    }
 }
