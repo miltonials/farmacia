@@ -7,6 +7,7 @@ package modelo;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import utilitaria.Archivos;
 
 /**
  *
@@ -15,14 +16,15 @@ import java.sql.DriverManager;
 public class Conexion {
 
     private Connection con;
-    private String url = "jdbc:oracle:thin:@siuadb1_high?TNS_ADMIN=C:/db_wallets/Wallet_siuadb1";
-    private String user = "mbarrera";
-    private String pass = "Deodorize.jump.legible1";
+    private String url;
+    private String user;
+    private String pass;
 
     public Connection conectar() {
-        String rutaRelativa = "C:/db_wallets/Wallet_siuadb1/tsnames.ora";
-        File archivo = new File(rutaRelativa);
-        //System.out.println("Ruta abs: " + archivo.getAbsolutePath());
+        String[] credenciales = Archivos.leer("C:/db_wallets/credenciales.rsa").split(";");
+        url = credenciales[0];
+        user = credenciales[1];
+        pass = credenciales[2];
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
 
