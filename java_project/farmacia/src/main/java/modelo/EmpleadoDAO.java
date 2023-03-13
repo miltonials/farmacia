@@ -22,7 +22,7 @@ public class EmpleadoDAO implements Validar {
 
     @Override
     public int validar(Empleado pEmpleado) {
-        String sql = "SELECT * FROM empleado WHERE nombre = ? AND cargo = ?";
+        String sql = "SELECT * FROM empleado WHERE nombre = ? AND clave = ?";
         int resultado = 0;
 
         try {
