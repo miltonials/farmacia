@@ -52,8 +52,8 @@ CREATE TABLE Producto (
 -- creacion de la tabla farmaceutica
 CREATE TABLE Farmaceutica (
     id_farmaceutica NUMBER GENERATED ALWAYS AS IDENTITY,
-    Nombre VARCHAR2(50) CONSTRAINT NN_Nombre_Farmacia NOT NULL,
-    Telefono VARCHAR2(20) CONSTRAINT NN_Telefono_Farmacia NOT NULL,
+    Nombre VARCHAR2(50) CONSTRAINT NN_Nombre_Farmaceutica NOT NULL,
+    Telefono VARCHAR2(20) CONSTRAINT NN_Telefono_Farmaceutica NOT NULL,
    
     CONSTRAINT PK_Farmaceutica PRIMARY KEY (id_farmaceutica)
 );
@@ -328,7 +328,7 @@ IS
 -- Procedimiento para listar los farmaceuticos
 CREATE OR REPLACE PROCEDURE ListarFarmaceutica
 IS
-    id_farmaceuticA Farmaceutica.id_farmaceutico%TYPE;
+    id_farmaceutica Farmaceutica.id_farmaceutica%TYPE;
     nombre Farmaceutica.nombre%TYPE;
     Telefono Farmaceutica.Telefono%TYPE;
     CURSOR c_farmaceutica IS
@@ -354,7 +354,7 @@ IS
         UPDATE Farmaceutica
         SET nombre = nombre,
             Telefono = Telefono
-        WHERE id_farmaceutico = id_farmaceutico;
+        WHERE id_farmaceutica = id_farmaceutica;
     END;
 
 
@@ -363,12 +363,12 @@ IS
 -- Procedimiento para eliminar un farmaceutico
 -- debe tener un trigger para solo eliminar si existe la farmacia
 CREATE OR REPLACE PROCEDURE EliminarFarmaceutico (
-    id_farmaceutico IN NUMBER
+    id_farmaceutica IN NUMBER
 )
 IS
     BEGIN
         DELETE FROM farmaceutica
-        WHERE id_farmaceutico = id_farmaceutico;
+        WHERE id_farmaceutica = id_farmaceutica;
     END;
     
 -- Procedimiento para crear un cliente
