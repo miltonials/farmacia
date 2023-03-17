@@ -121,3 +121,180 @@ CREATE TABLE Detalle_venta (
         REFERENCES producto (ID_Producto)
         ON DELETE CASCADE
 );
+
+
+--Procedimientos-Kevin
+CREATE OR REPLACE PROCEDURE CrearTipoProducto (
+    nombre_tipo_producto IN VARCHAR2
+)
+IS
+    BEGIN
+        INSERT INTO tipo_producto (nombre)
+        VALUES (nombre_tipo_producto);
+    END;
+
+CREATE OR REPLACE PROCEDURE ListarTipoProducto
+IS
+    nombre_tipo_producto tipo_producto.nombre%TYPE;
+    CURSOR c_tipo_producto IS
+        SELECT nombre FROM tipo_producto;
+    BEGIN
+        OPEN c_tipo_producto;
+        LOOP
+            FETCH c_tipo_producto INTO nombre_tipo_producto;
+            EXIT WHEN c_tipo_producto%NOTFOUND;
+            DBMS_OUTPUT.PUT_LINE(nombre_tipo_producto);
+        END LOOP;
+        CLOSE c_tipo_producto;
+    END;
+
+
+CREATE OR REPLACE PROCEDURE ModificarTipoProducto (
+    id_tipo_producto IN NUMBER,
+    nombre_tipo_producto IN VARCHAR2
+)
+IS
+    BEGIN
+        UPDATE tipo_producto
+        SET nombre = nombre_tipo_producto
+        WHERE id_tipo_producto = id_tipo_producto;
+    END;
+    
+CREATE OR REPLACE PROCEDURE EliminarTipoProducto (
+    id_tipo_producto IN NUMBER
+)
+IS
+    BEGIN
+        DELETE FROM tipo_producto
+        WHERE id_tipo_producto = id_tipo_producto;
+    END;
+-- ********************************************************
+-- ********************************************************
+CREATE OR REPLACE PROCEDURE CrearVenta (
+    fecha_emision IN DATE,
+    id_cliente IN NUMBER,
+    id_empleado IN NUMBER,
+    total_venta IN NUMBER
+)
+IS
+    BEGIN
+        INSERT INTO venta (fecha_emision, id_cliente, id_empleado, total_venta)
+        VALUES (fecha_emision, id_cliente, id_empleado, total_venta);
+    END;
+    
+CREATE OR REPLACE PROCEDURE ListarVentas
+IS
+    id_venta venta.id_venta%TYPE;
+    fecha_emision venta.fecha_emision%TYPE;
+    id_cliente venta.id_cliente%TYPE;
+    id_empleado venta.id_empleado%TYPE;
+    total_venta venta.total_venta%TYPE;
+    CURSOR c_venta IS
+        SELECT * FROM venta;
+    BEGIN
+        OPEN c_venta;
+        LOOP
+            FETCH c_venta INTO id_venta, fecha_emision, id_cliente, id_empleado, total_venta;
+            EXIT WHEN c_venta%NOTFOUND;
+            DBMS_OUTPUT.PUT_LINE(id_venta || ' ' || fecha_emision || ' ' || id_cliente || ' ' || id_empleado || ' ' || total_venta);
+        END LOOP;
+        CLOSE c_venta;
+    END;
+    
+CREATE OR REPLACE PROCEDURE ModificarVenta (
+    id_venta IN NUMBER,
+    fecha_emision IN DATE,
+    id_cliente IN NUMBER,
+    id_empleado IN NUMBER,
+    total_venta IN NUMBER
+)
+IS
+    BEGIN
+        UPDATE venta
+        SET fecha_emision = fecha_emision,
+            id_cliente = id_cliente,
+            id_empleado = id_empleado,
+            total_venta = total_venta
+        WHERE id_venta = id_venta;
+    END;
+
+CREATE OR REPLACE PROCEDURE EliminarVenta (
+    id_venta IN NUMBER
+)
+IS
+    BEGIN
+        DELETE FROM venta
+        WHERE id_venta = id_venta;
+    END;
+-- ********************************************************
+-- ********************************************************
+CREATE OR REPLACE PROCEDURE CrearEmpleado (
+    id_cargo IN NUMBER,
+    nombre IN VARCHAR2,
+    apellido IN VARCHAR2,
+    salario IN NUMBER,
+    fecha_contratacion IN DATE,
+    clave IN VARCHAR2
+)
+IS
+    BEGIN
+        INSERT INTO empleado (id_cargo, nombre, apellido, salario, fecha_contratacion, clave)
+        VALUES (id_cargo, nombre, apellido, salario, fecha_contratacion, clave);
+    END;
+
+CREATE OR REPLACE PROCEDURE ListarEmpleado
+IS
+    id_empleado empleado.id_empleado%TYPE;
+    id_cargo empleado.id_cargo%TYPE;
+    nombre empleado.nombre%TYPE;
+    apellido empleado.apellido%TYPE;
+    salario empleado.salario%TYPE;
+    fecha_contratacion empleado.fecha_contratacion%TYPE;
+    clave empleado.clave%TYPE;
+    CURSOR c_empleado IS
+        SELECT * FROM empleado;
+    BEGIN
+        OPEN c_empleado;
+        LOOP
+            FETCH c_empleado INTO id_empleado, id_cargo, nombre, apellido, salario, fecha_contratacion, clave;
+            EXIT WHEN c_empleado%NOTFOUND;
+            DBMS_OUTPUT.PUT_LINE(id_empleado || ' ' || id_cargo || ' ' || nombre || ' ' || apellido || ' ' || salario || ' ' || fecha_contratacion || ' ' || clave);
+        END LOOP;
+        CLOSE c_empleado;
+    END;
+
+CREATE OR REPLACE PROCEDURE ModificarEmpleado (
+    id_empleado IN NUMBER,
+    id_cargo IN NUMBER,
+    nombre IN VARCHAR2,
+    apellido IN VARCHAR2,
+    salario IN NUMBER,
+    fecha_contratacion IN DATE,
+    clave IN VARCHAR2
+)
+IS
+    BEGIN
+        UPDATE empleado
+        SET id_cargo = id_cargo,
+            nombre = nombre,
+            apellido = apellido,
+            salario = salario,
+            fecha_contratacion = fecha_contratacion,
+            clave = clave
+        WHERE id_empleado = id_empleado;
+    END;
+
+CREATE OR REPLACE PROCEDURE EliminarEmpleado (
+    id_empleado IN NUMBER
+)
+IS
+    BEGIN
+        DELETE FROM empleado
+        WHERE id_empleado = id_empleado;
+    END;
+-- ********************************************************
+-- ********************************************************
+CREATE OR REPLACE VIEW total_ventas AS
+SELECT TO_CHAR(Fecha_emision, 'MM') AS Mes,  SUM(Total_venta) AS Monto
+FROM Venta
+GROUP BY TO_CHAR(Fecha_emision, 'MM');
