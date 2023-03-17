@@ -7,6 +7,7 @@ DROP TABLE CLIENTE;
 DROP TABLE PRODUCTO;
 DROP TABLE TIPO_PRODUCTO;
 DROP TABLE PROVEEDOR;
+DROP TABLE FARMACEUTICA
 */
 
 CREATE TABLE Proveedor (
@@ -46,6 +47,15 @@ CREATE TABLE Producto (
     CONSTRAINT FK_Producto_tipoProducto FOREIGN KEY (ID_tipo_producto)
         REFERENCES tipo_producto (ID_tipo_producto)
         ON DELETE CASCADE
+);
+
+-- creacion de la tabla farmaceutica
+CREATE TABLE Farmaceutica (
+    id_farmaceutica NUMBER GENERATED ALWAYS AS IDENTITY,
+    Nombre VARCHAR2(50) CONSTRAINT NN_Nombre_Farmacia NOT NULL,
+    Telefono VARCHAR2(20) CONSTRAINT NN_Telefono_Farmacia NOT NULL,
+   
+    CONSTRAINT PK_Farmaceutica PRIMARY KEY (id_farmaceutica)
 );
 
 -- Creaci�n de la tabla Cliente
@@ -298,3 +308,145 @@ CREATE OR REPLACE VIEW total_ventas AS
 SELECT TO_CHAR(Fecha_emision, 'MM') AS Mes,  SUM(Total_venta) AS Monto
 FROM Venta
 GROUP BY TO_CHAR(Fecha_emision, 'MM');
+
+/******************************
+*  Procedimiento Andy *
+******************************/
+
+-- Procedimiento para crear un Farmaceutico(farmacia) usando un trigger
+CREATE OR REPLACE PROCEDURE CrearFarmaceutica (
+    id_farmaceutica IN NUMBER,
+    nombre IN VARCHAR2,
+    Telefono IN VARCHAR2
+)
+IS
+    BEGIN
+        INSERT INTO Farmaceutica (id_farmaceutica, nombre, Telefono)
+        VALUES (id_farmaceutica, nombre, Telefono);
+    END;
+
+-- Procedimiento para listar los farmaceuticos
+CREATE OR REPLACE PROCEDURE ListarFarmaceutica
+IS
+    id_farmaceuticA Farmaceutica.id_farmaceutico%TYPE;
+    nombre Farmaceutica.nombre%TYPE;
+    Telefono Farmaceutica.Telefono%TYPE;
+    CURSOR c_farmaceutica IS
+        SELECT * FROM Farmaceutica;
+    BEGIN
+        OPEN c_farmaceutica;
+        LOOP
+            FETCH c_farmaceutica INTO id_farmaceutica, nombre, Telefono;
+            EXIT WHEN c_farmaceutica%NOTFOUND;
+            DBMS_OUTPUT.PUT_LINE(id_farmaceutica || ' ' || nombre || ' ' || Telefono);
+        END LOOP;
+        CLOSE c_farmaceutica;
+    END;
+
+-- Procedimiento para modificar un farmaceutico
+CREATE OR REPLACE PROCEDURE ModificarFarmaceutica (
+    id_farmaceutico IN NUMBER,
+    nombre IN VARCHAR2,
+    Telefono IN VARCHAR2
+)
+IS
+    BEGIN
+        UPDATE Farmaceutica
+        SET nombre = nombre,
+            Telefono = Telefono
+        WHERE id_farmaceutico = id_farmaceutico;
+    END;
+
+
+
+
+-- Procedimiento para eliminar un farmaceutico
+-- debe tener un trigger para solo eliminar si existe la farmacia
+CREATE OR REPLACE PROCEDURE EliminarFarmaceutico (
+    id_farmaceutico IN NUMBER
+)
+IS
+    BEGIN
+        DELETE FROM farmaceutica
+        WHERE id_farmaceutico = id_farmaceutico;
+    END;
+    
+-- Procedimiento para crear un cliente
+CREATE OR REPLACE PROCEDURE CrearCliente (
+    id_cliente IN NUMBER,
+    nombre IN VARCHAR2,
+    apellido IN VARCHAR2,
+    Telefono IN VARCHAR2,
+    Correo_electronico IN VARCHAR2,
+    Fecha_nacimiento IN DATE,
+    Genero IN VARCHAR2
+)   
+IS
+    BEGIN
+        INSERT INTO cliente (id_cliente, nombre, apellido, Telefono, Correo_electronico, Fecha_nacimiento, Genero)
+        VALUES (id_cliente, nombre, apellido, Telefono, Correo_electronico, Fecha_nacimiento, Genero);
+    END;
+
+-- Procedimiento para listar los clientes
+CREATE OR REPLACE PROCEDURE ListarCliente
+IS
+    id_cliente cliente.id_cliente%TYPE;
+    nombre cliente.nombre%TYPE;
+    apellido cliente.apellido%TYPE;
+    Telefono cliente.Telefono%TYPE;
+    Correo_electronico cliente.Correo_electronico%TYPE;
+    Fecha_nacimiento cliente.Fecha_nacimiento%TYPE;
+    Genero cliente.Genero%TYPE;
+    CURSOR c_cliente IS
+        SELECT * FROM cliente;
+    BEGIN
+        OPEN c_cliente;
+        LOOP
+            FETCH c_cliente INTO id_cliente, nombre, apellido, Telefono, Correo_electronico, Fecha_nacimiento, Genero;
+            EXIT WHEN c_cliente%NOTFOUND;
+            DBMS_OUTPUT.PUT_LINE(id_cliente || ' ' || nombre || ' ' || apellido || ' ' || Telefono || ' ' || Correo_electronico || ' ' || Fecha_nacimiento || ' ' || Genero);
+        END LOOP;
+        CLOSE c_cliente;
+    END;
+
+-- Procedimiento para modificar un cliente
+CREATE OR REPLACE PROCEDURE ModificarCliente (
+    id_cliente IN NUMBER,
+    nombre IN VARCHAR2,
+    apellido IN VARCHAR2,
+    Telefono IN VARCHAR2,
+    Correo_electronico IN VARCHAR2,
+    Fecha_nacimiento IN VARCHAR2
+    Genero IN VARCHAR2
+)
+IS
+    BEGIN
+        UPDATE cliente
+        SET nombre = nombre,
+            apellido = apellido,
+            Telefono = Telefono,
+            Correo_electronico = Correo_electronico,
+            Fecha_nacimiento = Fecha_nacimiento,
+            Genero = Genero
+        WHERE id_cliente = id_cliente;
+    END;
+
+-- Procedimiento para eliminar un cliente
+CREATE OR REPLACE PROCEDURE EliminarCliente (
+    id_cliente IN NUMBER
+)
+IS
+    BEGIN
+        DELETE FROM cliente
+        WHERE id_cliente = id_cliente;
+    END;
+
+-- vista de productos mas vendidos
+CREATE OR REPLACE VIEW productos_mas_vendidos AS
+SELECT p.id_producto, p.nombre, p.descripcion, p.precio, p.Cantidad_stock, p.Fecha_caducidad, SUM(dv.cantidad) AS cantidad
+FROM producto p, detalle_venta dv, venta v
+WHERE p.id_producto = dv.id_producto AND dv.id_venta = v.id_venta
+GROUP BY p.id_producto, p.nombre, p.descripcion, p.precio, p.Cantidad_stock, p.Fecha_caducidad
+ORDER BY cantidad DESC;
+
+
