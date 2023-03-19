@@ -1,22 +1,26 @@
+--SELECT * FROM USER_CONSTRAINTS WHERE TABLE_NAME = 'CARGO_EMPLEADO';
 /*
 DROP TABLE DETALLE_VENTA;
 DROP TABLE VENTA;
+DROP TABLE BITACORA;
 DROP TABLE EMPLEADO;
 DROP TABLE CARGO_EMPLEADO;
 DROP TABLE CLIENTE;
 DROP TABLE PRODUCTO;
 DROP TABLE TIPO_PRODUCTO;
-DROP TABLE PROVEEDOR;
-DROP TABLE FARMACEUTICA
+DROP TABLE FARMACEUTICA;
 */
 
-CREATE TABLE Proveedor (
-    ID_Proveedor NUMBER GENERATED ALWAYS AS IDENTITY,
-    Nombre VARCHAR2(50) CONSTRAINT NN_Nombre_Proveedor NOT NULL,
-    Telefono VARCHAR2(20) CONSTRAINT NN_Telefono_Proveedor NOT NULL,
-    Correo_electronico VARCHAR2(100) CONSTRAINT NN_CorreoElectronico_Proveedor NOT NULL,
+CREATE TABLE Farmaceutica (
+    ID_Farmaceutica NUMBER GENERATED ALWAYS AS IDENTITY,
+    Nombre VARCHAR2(50) CONSTRAINT NN_Nombre_Farmaceutica NOT NULL
+        CONSTRAINT UNI_Nombre_Farmaceutica UNIQUE,
+    Telefono VARCHAR2(20) CONSTRAINT NN_Telefono_Farmaceutica NOT NULL
+        CONSTRAINT UNI_Telefono_Farmaceutica UNIQUE,
+    Correo_electronico VARCHAR2(100) CONSTRAINT NN_CorreoElectronico_Farmaceutica NOT NULL
+        CONSTRAINT UNI_CorreoElectronico_Farmaceutica UNIQUE,
     
-    CONSTRAINT PK_Proveedor PRIMARY KEY (ID_Proveedor)
+    CONSTRAINT PK_Farmaceutica PRIMARY KEY (ID_Farmaceutica)
 );
 
 CREATE TABLE Tipo_producto (
@@ -31,31 +35,22 @@ CREATE TABLE Tipo_producto (
 -- Creaci�n de la tabla Producto
 CREATE TABLE Producto (
     ID_Producto NUMBER GENERATED ALWAYS AS IDENTITY,
-    ID_Proveedor NUMBER CONSTRAINT NN_IDProveedor_Producto NOT NULL,
+    ID_Farmaceutica NUMBER CONSTRAINT NN_IDFarmaceutica_Producto NOT NULL,
     ID_tipo_producto NUMBER CONSTRAINT NN_IDTipoProducto_Producto NOT NULL,
     Nombre VARCHAR2(50) CONSTRAINT NN_Nombre_Producto NOT NULL,
     Descripcion VARCHAR2(500) CONSTRAINT NN_Descripcion_Producto NOT NULL,
     Precio NUMBER(10,2) CONSTRAINT NN_Precio_Producto NOT NULL,
     Cantidad_stock NUMBER CONSTRAINT NN_CantidadStock_Producto NOT NULL,
-    Fecha_caducidad DATE CONSTRAINT NN_FechaCaducidad_Producto NOT NULL,
+    --Fecha_caducidad DATE CONSTRAINT NN_FechaCaducidad_Producto NOT NULL,
     
     CONSTRAINT PK_Producto PRIMARY KEY (ID_Producto),
-    CONSTRAINT FK_Producto_Proveedor FOREIGN KEY (ID_Proveedor)
-        REFERENCES proveedor (ID_Proveedor)
+    CONSTRAINT FK_Producto_Farmaceutica FOREIGN KEY (ID_Farmaceutica)
+        REFERENCES Farmaceutica (ID_Farmaceutica)
         ON DELETE CASCADE,
         
     CONSTRAINT FK_Producto_tipoProducto FOREIGN KEY (ID_tipo_producto)
         REFERENCES tipo_producto (ID_tipo_producto)
         ON DELETE CASCADE
-);
-
--- creacion de la tabla farmaceutica
-CREATE TABLE Farmaceutica (
-    id_farmaceutica NUMBER GENERATED ALWAYS AS IDENTITY,
-    Nombre VARCHAR2(50) CONSTRAINT NN_Nombre_Farmaceutica NOT NULL,
-    Telefono VARCHAR2(20) CONSTRAINT NN_Telefono_Farmaceutica NOT NULL,
-   
-    CONSTRAINT PK_Farmaceutica PRIMARY KEY (id_farmaceutica)
 );
 
 -- Creaci�n de la tabla Cliente
@@ -132,6 +127,20 @@ CREATE TABLE Detalle_venta (
         ON DELETE CASCADE
 );
 
+-- Creaci�n de la tabla Bitacora que tiene fecha, hora, empleado y valor modificado de la tabla empleado
+CREATE TABLE bitacora (
+    ID_Bitacora NUMBER GENERATED ALWAYS AS IDENTITY,
+    Fecha DATE CONSTRAINT NN_Fecha_Bitacora NOT NULL,
+    Hora DATE CONSTRAINT NN_Hora_Bitacora NOT NULL,
+    ID_Empleado NUMBER CONSTRAINT NN_IDEmpleado_Bitacora NOT NULL,
+    Valor_modificado VARCHAR2(100) CONSTRAINT NN_ValorModificado_Bitacora NOT NULL,
+    
+    CONSTRAINT PK_Bitacora PRIMARY KEY (ID_Bitacora),
+    CONSTRAINT FK_Bitacora_Empleado FOREIGN KEY (ID_Empleado)
+        REFERENCES empleado (ID_Empleado)
+        ON DELETE CASCADE
+);
+
 
 --Procedimientos-Kevin
 CREATE OR REPLACE PROCEDURE CrearTipoProducto (
@@ -143,20 +152,6 @@ IS
         VALUES (nombre_tipo_producto);
     END;
 
-CREATE OR REPLACE PROCEDURE ListarTipoProducto
-IS
-    nombre_tipo_producto tipo_producto.nombre%TYPE;
-    CURSOR c_tipo_producto IS
-        SELECT nombre FROM tipo_producto;
-    BEGIN
-        OPEN c_tipo_producto;
-        LOOP
-            FETCH c_tipo_producto INTO nombre_tipo_producto;
-            EXIT WHEN c_tipo_producto%NOTFOUND;
-            DBMS_OUTPUT.PUT_LINE(nombre_tipo_producto);
-        END LOOP;
-        CLOSE c_tipo_producto;
-    END;
 
 
 CREATE OR REPLACE PROCEDURE ModificarTipoProducto (
@@ -170,14 +165,7 @@ IS
         WHERE id_tipo_producto = id_tipo_producto;
     END;
     
-CREATE OR REPLACE PROCEDURE EliminarTipoProducto (
-    id_tipo_producto IN NUMBER
-)
-IS
-    BEGIN
-        DELETE FROM tipo_producto
-        WHERE id_tipo_producto = id_tipo_producto;
-    END;
+
 -- ********************************************************
 -- ********************************************************
 CREATE OR REPLACE PROCEDURE CrearVenta (
@@ -191,25 +179,7 @@ IS
         INSERT INTO venta (fecha_emision, id_cliente, id_empleado, total_venta)
         VALUES (fecha_emision, id_cliente, id_empleado, total_venta);
     END;
-    
-CREATE OR REPLACE PROCEDURE ListarVentas
-IS
-    id_venta venta.id_venta%TYPE;
-    fecha_emision venta.fecha_emision%TYPE;
-    id_cliente venta.id_cliente%TYPE;
-    id_empleado venta.id_empleado%TYPE;
-    total_venta venta.total_venta%TYPE;
-    CURSOR c_venta IS
-        SELECT * FROM venta;
-    BEGIN
-        OPEN c_venta;
-        LOOP
-            FETCH c_venta INTO id_venta, fecha_emision, id_cliente, id_empleado, total_venta;
-            EXIT WHEN c_venta%NOTFOUND;
-            DBMS_OUTPUT.PUT_LINE(id_venta || ' ' || fecha_emision || ' ' || id_cliente || ' ' || id_empleado || ' ' || total_venta);
-        END LOOP;
-        CLOSE c_venta;
-    END;
+
     
 CREATE OR REPLACE PROCEDURE ModificarVenta (
     id_venta IN NUMBER,
@@ -228,14 +198,7 @@ IS
         WHERE id_venta = id_venta;
     END;
 
-CREATE OR REPLACE PROCEDURE EliminarVenta (
-    id_venta IN NUMBER
-)
-IS
-    BEGIN
-        DELETE FROM venta
-        WHERE id_venta = id_venta;
-    END;
+
 -- ********************************************************
 -- ********************************************************
 CREATE OR REPLACE PROCEDURE CrearEmpleado (
@@ -252,26 +215,6 @@ IS
         VALUES (id_cargo, nombre, apellido, salario, fecha_contratacion, clave);
     END;
 
-CREATE OR REPLACE PROCEDURE ListarEmpleado
-IS
-    id_empleado empleado.id_empleado%TYPE;
-    id_cargo empleado.id_cargo%TYPE;
-    nombre empleado.nombre%TYPE;
-    apellido empleado.apellido%TYPE;
-    salario empleado.salario%TYPE;
-    fecha_contratacion empleado.fecha_contratacion%TYPE;
-    clave empleado.clave%TYPE;
-    CURSOR c_empleado IS
-        SELECT * FROM empleado;
-    BEGIN
-        OPEN c_empleado;
-        LOOP
-            FETCH c_empleado INTO id_empleado, id_cargo, nombre, apellido, salario, fecha_contratacion, clave;
-            EXIT WHEN c_empleado%NOTFOUND;
-            DBMS_OUTPUT.PUT_LINE(id_empleado || ' ' || id_cargo || ' ' || nombre || ' ' || apellido || ' ' || salario || ' ' || fecha_contratacion || ' ' || clave);
-        END LOOP;
-        CLOSE c_empleado;
-    END;
 
 CREATE OR REPLACE PROCEDURE ModificarEmpleado (
     id_empleado IN NUMBER,
@@ -294,14 +237,7 @@ IS
         WHERE id_empleado = id_empleado;
     END;
 
-CREATE OR REPLACE PROCEDURE EliminarEmpleado (
-    id_empleado IN NUMBER
-)
-IS
-    BEGIN
-        DELETE FROM empleado
-        WHERE id_empleado = id_empleado;
-    END;
+
 -- ********************************************************
 -- ********************************************************
 CREATE OR REPLACE VIEW total_ventas AS
@@ -325,24 +261,6 @@ IS
         VALUES (id_farmaceutica, nombre, Telefono);
     END;
 
--- Procedimiento para listar los farmaceuticos
-CREATE OR REPLACE PROCEDURE ListarFarmaceutica
-IS
-    id_farmaceutica Farmaceutica.id_farmaceutica%TYPE;
-    nombre Farmaceutica.nombre%TYPE;
-    Telefono Farmaceutica.Telefono%TYPE;
-    CURSOR c_farmaceutica IS
-        SELECT * FROM Farmaceutica;
-    BEGIN
-        OPEN c_farmaceutica;
-        LOOP
-            FETCH c_farmaceutica INTO id_farmaceutica, nombre, Telefono;
-            EXIT WHEN c_farmaceutica%NOTFOUND;
-            DBMS_OUTPUT.PUT_LINE(id_farmaceutica || ' ' || nombre || ' ' || Telefono);
-        END LOOP;
-        CLOSE c_farmaceutica;
-    END;
-
 -- Procedimiento para modificar un farmaceutico
 CREATE OR REPLACE PROCEDURE ModificarFarmaceutica (
     id_farmaceutico IN NUMBER,
@@ -357,57 +275,6 @@ IS
         WHERE id_farmaceutica = id_farmaceutica;
     END;
 
-
-
-
--- Procedimiento para eliminar un farmaceutico
--- debe tener un trigger para solo eliminar si existe la farmacia
-CREATE OR REPLACE PROCEDURE EliminarFarmaceutico (
-    id_farmaceutica IN NUMBER
-)
-IS
-    BEGIN
-        DELETE FROM farmaceutica
-        WHERE id_farmaceutica = id_farmaceutica;
-    END;
-    
--- Procedimiento para crear un cliente
-CREATE OR REPLACE PROCEDURE CrearCliente (
-    id_cliente IN NUMBER,
-    nombre IN VARCHAR2,
-    apellido IN VARCHAR2,
-    Telefono IN VARCHAR2,
-    Correo_electronico IN VARCHAR2,
-    Fecha_nacimiento IN DATE,
-    Genero IN VARCHAR2
-)   
-IS
-    BEGIN
-        INSERT INTO cliente (id_cliente, nombre, apellido, Telefono, Correo_electronico, Fecha_nacimiento, Genero)
-        VALUES (id_cliente, nombre, apellido, Telefono, Correo_electronico, Fecha_nacimiento, Genero);
-    END;
-
--- Procedimiento para listar los clientes
-CREATE OR REPLACE PROCEDURE ListarCliente
-IS
-    id_cliente cliente.id_cliente%TYPE;
-    nombre cliente.nombre%TYPE;
-    apellido cliente.apellido%TYPE;
-    Telefono cliente.Telefono%TYPE;
-    Correo_electronico cliente.Correo_electronico%TYPE;
-    Fecha_nacimiento cliente.Fecha_nacimiento%TYPE;
-    Genero cliente.Genero%TYPE;
-    CURSOR c_cliente IS
-        SELECT * FROM cliente;
-    BEGIN
-        OPEN c_cliente;
-        LOOP
-            FETCH c_cliente INTO id_cliente, nombre, apellido, Telefono, Correo_electronico, Fecha_nacimiento, Genero;
-            EXIT WHEN c_cliente%NOTFOUND;
-            DBMS_OUTPUT.PUT_LINE(id_cliente || ' ' || nombre || ' ' || apellido || ' ' || Telefono || ' ' || Correo_electronico || ' ' || Fecha_nacimiento || ' ' || Genero);
-        END LOOP;
-        CLOSE c_cliente;
-    END;
 
 -- Procedimiento para modificar un cliente
 CREATE OR REPLACE PROCEDURE ModificarCliente (
@@ -430,23 +297,5 @@ IS
             Genero = Genero
         WHERE id_cliente = id_cliente;
     END;
-
--- Procedimiento para eliminar un cliente
-CREATE OR REPLACE PROCEDURE EliminarCliente (
-    id_cliente IN NUMBER
-)
-IS
-    BEGIN
-        DELETE FROM cliente
-        WHERE id_cliente = id_cliente;
-    END;
-
--- vista de productos mas vendidos
-CREATE OR REPLACE VIEW productos_mas_vendidos AS
-SELECT p.id_producto, p.nombre, p.descripcion, p.precio, p.Cantidad_stock, p.Fecha_caducidad, SUM(dv.cantidad) AS cantidad
-FROM producto p, detalle_venta dv, venta v
-WHERE p.id_producto = dv.id_producto AND dv.id_venta = v.id_venta
-GROUP BY p.id_producto, p.nombre, p.descripcion, p.precio, p.Cantidad_stock, p.Fecha_caducidad
-ORDER BY cantidad DESC;
-
+/
 
