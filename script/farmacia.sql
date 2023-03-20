@@ -32,7 +32,7 @@ CREATE TABLE Tipo_producto (
     CONSTRAINT PK_tipo_producto PRIMARY KEY (ID_tipo_producto)
 );
 
--- Creaci�n de la tabla Producto
+-- Creacion de la tabla Producto
 CREATE TABLE Producto (
     ID_Producto NUMBER GENERATED ALWAYS AS IDENTITY,
     ID_Farmaceutica NUMBER CONSTRAINT NN_IDFarmaceutica_Producto NOT NULL,
@@ -53,7 +53,7 @@ CREATE TABLE Producto (
         ON DELETE CASCADE
 );
 
--- Creaci�n de la tabla Cliente
+-- Creacion de la tabla Cliente
 CREATE TABLE Cliente (
     ID_Cliente NUMBER GENERATED ALWAYS AS IDENTITY,
     Nombre VARCHAR2(50) CONSTRAINT NN_Nombre_Cliente NOT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE Cargo_empleado (
     CONSTRAINT PK_Cargo_empleado PRIMARY KEY (ID_Cargo)
 );
 
--- Creaci�n de la tabla Empleado
+-- Creacion de la tabla Empleado
 CREATE TABLE Empleado (
     ID_Empleado NUMBER GENERATED ALWAYS AS IDENTITY,
     ID_Cargo NUMBER CONSTRAINT NN_IDCargo_Empleado NOT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE Empleado (
         ON DELETE CASCADE
 );
 
--- Creaci�n de la tabla Venta
+-- Creacion de la tabla Venta
 CREATE TABLE Venta (
     ID_venta NUMBER GENERATED ALWAYS AS IDENTITY,
     Fecha_emision DATE CONSTRAINT NN_FechaEmision_Venta NOT NULL,
@@ -111,7 +111,7 @@ CREATE TABLE Venta (
         ON DELETE CASCADE
 );
 
--- Creaci�n de la tabla Detalle_Factura
+-- Creacion de la tabla Detalle_Factura
 CREATE TABLE Detalle_venta (
     ID_venta NUMBER CONSTRAINT NN_IDVenta_DetalleVenta NOT NULL,
     ID_Producto NUMBER CONSTRAINT NN_IDProducto_DetalleVenta NOT NULL,
@@ -129,7 +129,7 @@ CREATE TABLE Detalle_venta (
         ON DELETE CASCADE
 );
 
--- Creaci�n de la tabla Bitacora que tiene fecha, hora, empleado y valor modificado de la tabla empleado
+-- Creacion de la tabla Bitacora que tiene fecha, hora, empleado y valor modificado de la tabla empleado
 CREATE TABLE bitacora (
     ID_Bitacora NUMBER GENERATED ALWAYS AS IDENTITY,
     Fecha DATE CONSTRAINT NN_Fecha_Bitacora NOT NULL,
@@ -145,7 +145,47 @@ CREATE TABLE bitacora (
         REFERENCES Producto (ID_Producto)
         ON DELETE CASCADE
 );
+delete from farmaceutica;
+delete from tipo_producto;
+delete from producto;
 
+select * from farmaceutica;
+select * from tipo_producto;
+select * from producto;
+select * from bitacora;
+
+insert into farmaceutica (nombre, telefono, correo_electronico) values ('a', 'b', 'c23fa@gmail.com');
+insert into tipo_producto (nombre) values ('a');
+insert into producto (id_farmaceutica, id_tipo_producto, nombre, descripcion, precio, cantidad_stock) values (1,1,'a','b', 3, 10);
+
+-- prueba del trigger
+UPDATE producto
+SET cantidad_stock = 1
+WHERE id_producto = 1;
+CREATE OR REPLACE TRIGGER BITACORA_PRODUCTO
+AFTER UPDATE ON PRODUCTO
+FOR EACH ROW
+DECLARE
+    V_COLUMNA_MODIFICADA VARCHAR2(100);
+BEGIN
+    IF UPDATING('NOMBRE') THEN
+        V_COLUMNA_MODIFICADA := 'Nombre';
+        INSERT INTO BITACORA (FECHA, HORA, ID_EMPLEADO, ID_PRODUCTO, COLUMNA_MODIFICADA, VALOR_ANTERIOR, NUEVO_VALOR)
+        VALUES (SYSDATE, TO_CHAR(SYSDATE, 'HH24:MI:SS'), 1, :NEW.ID_PRODUCTO, V_COLUMNA_MODIFICADA, :OLD.NOMBRE, :NEW.NOMBRE);
+    ELSIF UPDATING('DESCRIPCION') THEN
+        V_COLUMNA_MODIFICADA := 'Descripcion';
+        INSERT INTO BITACORA (FECHA, HORA, ID_EMPLEADO, ID_PRODUCTO, COLUMNA_MODIFICADA, VALOR_ANTERIOR, NUEVO_VALOR)
+        VALUES (SYSDATE, TO_CHAR(SYSDATE, 'HH24:MI:SS'), 1, :NEW.ID_PRODUCTO, V_COLUMNA_MODIFICADA, :OLD.DESCRIPCION, :NEW.DESCRIPCION);
+    ELSIF UPDATING('PRECIO') THEN
+        V_COLUMNA_MODIFICADA := 'Precio';
+        INSERT INTO BITACORA (FECHA, HORA, ID_EMPLEADO, ID_PRODUCTO, COLUMNA_MODIFICADA, VALOR_ANTERIOR, NUEVO_VALOR)
+        VALUES (SYSDATE, TO_CHAR(SYSDATE, 'HH24:MI:SS'), 1, :NEW.ID_PRODUCTO, V_COLUMNA_MODIFICADA, :OLD.PRECIO, :NEW.PRECIO);
+    ELSIF UPDATING('CANTIDAD_STOCK') THEN
+        V_COLUMNA_MODIFICADA := 'Cantidad_stock';
+        INSERT INTO BITACORA (FECHA, HORA, ID_EMPLEADO, ID_PRODUCTO, COLUMNA_MODIFICADA, VALOR_ANTERIOR, NUEVO_VALOR)
+        VALUES (SYSDATE, TO_CHAR(SYSDATE, 'HH24:MI:SS'), 1, :NEW.ID_PRODUCTO, V_COLUMNA_MODIFICADA, :OLD.CANTIDAD_STOCK, :NEW.CANTIDAD_STOCK);
+    END IF;
+END;
 
 --Procedimientos-Kevin
 CREATE OR REPLACE PROCEDURE CrearTipoProducto (
