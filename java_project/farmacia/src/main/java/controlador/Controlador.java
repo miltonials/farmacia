@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modelo.Empleado;
 import modelo.EmpleadoDAO;
+import modelo.Farmacia;
 
 /**
  *
@@ -20,6 +21,7 @@ public class Controlador extends HttpServlet {
 
     private EmpleadoDAO dao = new EmpleadoDAO();
     private Empleado empleado;
+    private Farmacia farmacia;
     private int resultado;
 
     /**
@@ -35,7 +37,7 @@ public class Controlador extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.getRequestDispatcher("./index.jsp").forward(request, response);
-        dao.cerrarConexion();
+        dao.cerrarConexion(empleado);
 }
     
 /**
@@ -57,13 +59,12 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         if (accion.equals("btn_iniciarSesion")) {
             empleado = new Empleado(usuario, contrasena);
             resultado = dao.validar(empleado);
-            System.out.println(resultado);
             if (resultado > 0) {
                 request.getSession().setAttribute("empleado", empleado);
                 request.getRequestDispatcher("./pages/home.jsp").forward(request, response);
             } else {
                 request.getRequestDispatcher("./index.jsp").forward(request, response);
-                dao.cerrarConexion();
+                dao.cerrarConexion(empleado);
             }
         }
     }

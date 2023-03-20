@@ -1,8 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package modelo;
+
+import java.sql.Date;
 
 /**
  *
@@ -12,11 +10,26 @@ public class Empleado {
 
     private int id;
     private String nombre;
-    private String cargo;
-    
-    public Empleado(String nombre, String cargo) {
+    private String idCargo;
+    private String Apellido;
+    private float salario;
+    private Date fechaContratacion;
+    private String cedula;
+    private String clave;
+
+    public Empleado(int id, String nombre, String idCargo, String Apellido, float salario, Date fechaContratacion, String cedula) {
+        this.id = id;
         this.nombre = nombre;
-        this.cargo = cargo;
+        this.idCargo = idCargo;
+        this.Apellido = Apellido;
+        this.salario = salario;
+        this.fechaContratacion = fechaContratacion;
+        this.cedula = cedula;
+    }
+
+    public Empleado(String nombre, String clave) {
+        this.nombre = nombre;
+        this.clave = clave;
     }
 
     public int getId() {
@@ -27,8 +40,28 @@ public class Empleado {
         return nombre;
     }
 
-    public String getCargo() {
-        return cargo;
+    public String getIdCargo() {
+        return idCargo;
+    }
+
+    public String getApellido() {
+        return Apellido;
+    }
+
+    public float getSalario() {
+        return salario;
+    }
+
+    public Date getFechaContratacion() {
+        return fechaContratacion;
+    }
+
+    public String getCedula() {
+        return cedula;
+    }
+
+    public String getClave() {
+        return clave;
     }
 
     public void setId(int id) {
@@ -39,8 +72,29 @@ public class Empleado {
         this.nombre = nombre;
     }
 
-    public void setCargo(String cargo) {
-        this.cargo = cargo;
+    public void setIdCargo(String idCargo) {
+        this.idCargo = idCargo;
     }
 
+    public void setApellido(String Apellido) {
+        this.Apellido = Apellido;
+    }
+
+    public void setSalario(float salario) {
+        this.salario = salario;
+    }
+
+    public void setFechaContratacion(Date fechaContratacion) {
+        this.fechaContratacion = fechaContratacion;
+    }
+
+    public void setCedula(String cedula) {
+        this.cedula = cedula;
+    }
+
+    public void setClave(String clave) {
+        this.clave = clave;
+    }
+
+    
 }
