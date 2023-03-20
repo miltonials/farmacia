@@ -1,4 +1,4 @@
---SELECT * FROM USER_CONSTRAINTS WHERE TABLE_NAME = 'CARGO_EMPLEADO';
+--SELECT * FROM USER_CONSTRAINTS WHERE TABLE_NAME = 'EMPLEADO';
 /*
 DROP TABLE DETALLE_VENTA;
 DROP TABLE VENTA;
@@ -79,6 +79,8 @@ CREATE TABLE Cargo_empleado (
 CREATE TABLE Empleado (
     ID_Empleado NUMBER GENERATED ALWAYS AS IDENTITY,
     ID_Cargo NUMBER CONSTRAINT NN_IDCargo_Empleado NOT NULL,
+    Cedula VARCHAR2(50) CONSTRAINT NN_Cedula_empleado NOT NULL
+        CONSTRAINT UNI_Cedula_Empleado UNIQUE,
     Nombre VARCHAR2(50) CONSTRAINT NN_Nombre_Empleado NOT NULL,
     Apellido VARCHAR2(50) CONSTRAINT NN_Apellido_Empleado NOT NULL,
     Salario NUMBER(10,2) CONSTRAINT NN_Salario_Empleado NOT NULL,
@@ -131,13 +133,16 @@ CREATE TABLE Detalle_venta (
 CREATE TABLE bitacora (
     ID_Bitacora NUMBER GENERATED ALWAYS AS IDENTITY,
     Fecha DATE CONSTRAINT NN_Fecha_Bitacora NOT NULL,
-    Hora DATE CONSTRAINT NN_Hora_Bitacora NOT NULL,
+    Hora VARCHAR2(100) CONSTRAINT NN_Hora_Bitacora NOT NULL,
     ID_Empleado NUMBER CONSTRAINT NN_IDEmpleado_Bitacora NOT NULL,
-    Valor_modificado VARCHAR2(100) CONSTRAINT NN_ValorModificado_Bitacora NOT NULL,
+    ID_Producto NUMBER CONSTRAINT NN_IDProducto_Bitacora NOT NULL,
+    Columna_modificada VARCHAR2(100) CONSTRAINT NN_ValorModificado_Bitacora NOT NULL,
+    Valor_anterior VARCHAR(100) CONSTRAINT NN_ValorAnterior NOT NULL,
+    Nuevo_Valor VARCHAR(100) CONSTRAINT NN_NuevoValor NOT NULL,
     
     CONSTRAINT PK_Bitacora PRIMARY KEY (ID_Bitacora),
-    CONSTRAINT FK_Bitacora_Empleado FOREIGN KEY (ID_Empleado)
-        REFERENCES empleado (ID_Empleado)
+    CONSTRAINT FK_Bitacora_Producto FOREIGN KEY (ID_Producto)
+        REFERENCES Producto (ID_Producto)
         ON DELETE CASCADE
 );
 
@@ -299,3 +304,6 @@ IS
     END;
 /
 
+
+select * from bitacora;
+select * from empleado;

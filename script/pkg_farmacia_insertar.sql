@@ -5,7 +5,7 @@ CREATE OR REPLACE PACKAGE farmacia_insertar AS
   FUNCTION insertar_venta (p_fecha_emision IN DATE, p_id_cliente IN NUMBER, p_id_empleado IN NUMBER, p_total_venta IN NUMBER) RETURN NUMBER;
   FUNCTION insertar_detalle_venta (p_id_venta IN NUMBER, p_id_producto IN NUMBER, p_cantidad IN NUMBER, precio_unitario IN NUMBER) RETURN NUMBER;
   FUNCTION insertar_cliente (p_nombre IN VARCHAR2, p_apellido IN VARCHAR2, p_telefono IN VARCHAR2, p_correo_electronico IN VARCHAR2, p_fecha_nacimiento IN DATE, p_genero IN VARCHAR2) RETURN NUMBER;
-  FUNCTION insertar_empleado (p_id_cargo IN NUMBER, p_nombre IN VARCHAR2, p_apellido IN VARCHAR2, p_salario IN NUMBER, p_fecha_contratacion IN DATE, p_clave IN VARCHAR2) RETURN NUMBER;
+  FUNCTION insertar_empleado (p_cedula IN VARCHAR2, p_id_cargo IN NUMBER, p_nombre IN VARCHAR2, p_apellido IN VARCHAR2, p_salario IN NUMBER, p_fecha_contratacion IN DATE, p_clave IN VARCHAR2) RETURN NUMBER;
   FUNCTION insertar_cargo_empleado (p_nombre IN VARCHAR2) RETURN NUMBER;
 END farmacia_insertar;
 /
@@ -161,12 +161,12 @@ CREATE OR REPLACE PACKAGE BODY farmacia_insertar AS
         END;
     END;
 
-    FUNCTION insertar_empleado (p_id_cargo IN NUMBER, p_nombre IN VARCHAR2, p_apellido IN VARCHAR2, p_salario IN NUMBER, p_fecha_contratacion IN DATE, p_clave IN VARCHAR2) RETURN NUMBER AS
+    FUNCTION insertar_empleado (p_cedula IN VARCHAR2, p_id_cargo IN NUMBER, p_nombre IN VARCHAR2, p_apellido IN VARCHAR2, p_salario IN NUMBER, p_fecha_contratacion IN DATE, p_clave IN VARCHAR2) RETURN NUMBER AS
     respuesta NUMBER;
     BEGIN
         BEGIN
-            INSERT INTO empleado (id_cargo, nombre, apellido, salario, fecha_contratacion, clave)
-              VALUES (p_id_cargo, p_nombre, p_apellido, p_salario, p_fecha_contratacion, p_clave);
+            INSERT INTO empleado (id_cargo, cedula, nombre, apellido, salario, fecha_contratacion, clave)
+              VALUES (p_id_cargo, p_cedula, p_nombre, p_apellido, p_salario, p_fecha_contratacion, p_clave);
 
             respuesta := 1;
             --COMMIT;
