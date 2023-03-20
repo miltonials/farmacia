@@ -5,7 +5,7 @@ CREATE OR REPLACE PACKAGE farmacia_modificar AS
   FUNCTION modificar_venta (p_id_venta IN NUMBER, p_id_cliente IN NUMBER, p_id_empleado IN NUMBER, p_fecha_venta IN DATE) RETURN NUMBER;
   FUNCTION modificar_detalle_venta (p_id_venta IN NUMBER, p_id_producto IN NUMBER, p_cantidad IN NUMBER) RETURN NUMBER; 
   FUNCTION modificar_cliente (p_id_cliente IN NUMBER, p_nombre IN VARCHAR2, p_apellido IN VARCHAR2, p_telefono IN VARCHAR2, p_correo IN VARCHAR2, p_fecha_nacimiento IN DATE, p_genero IN VARCHAR2) RETURN NUMBER;
-  FUNCTION modificar_empleado (p_id_empleado IN NUMBER, p_id_cargo IN NUMBER, p_nombre IN VARCHAR2, p_apellido IN VARCHAR2, p_fecha_contratacion IN DATE, p_salario IN NUMBER) RETURN NUMBER;
+  FUNCTION modificar_empleado (p_id_empleado IN NUMBER, p_cedula IN VARCHAR2, p_id_cargo IN NUMBER, p_nombre IN VARCHAR2, p_apellido IN VARCHAR2, p_fecha_contratacion IN DATE, p_salario IN NUMBER) RETURN NUMBER;
   FUNCTION modificar_cargo_empleado (p_id_cargo IN NUMBER, p_nombre IN VARCHAR2) RETURN NUMBER;
 END farmacia_modificar;
 /
@@ -131,7 +131,7 @@ CREATE OR REPLACE PACKAGE BODY farmacia_modificar AS
             respuesta := 1;
             --COMMIT;
 
-            DBMS_OUTPUT.Put_Line('Se ha modificado el detalle de venta ' );
+            DBMS_OUTPUT.Put_Line('Se ha modificado el detalle de venta ');
             RETURN respuesta;
         
         EXCEPTION
@@ -175,12 +175,13 @@ CREATE OR REPLACE PACKAGE BODY farmacia_modificar AS
         END;
     END;
 
-    FUNCTION modificar_empleado (p_id_empleado IN NUMBER, p_id_cargo IN NUMBER, p_nombre IN VARCHAR2, p_apellido IN VARCHAR2, p_fecha_contratacion IN DATE, p_salario IN NUMBER) RETURN NUMBER AS
+    FUNCTION modificar_empleado (p_id_empleado IN NUMBER, p_cedula IN VARCHAR2, p_id_cargo IN NUMBER, p_nombre IN VARCHAR2, p_apellido IN VARCHAR2, p_fecha_contratacion IN DATE, p_salario IN NUMBER) RETURN NUMBER AS
     respuesta NUMBER;
     BEGIN
         BEGIN
             UPDATE empleado
               SET nombre = p_nombre,
+                  cedula = p_cedula,
                   apellido = p_apellido,
                   fecha_contratacion = p_fecha_contratacion,
                   salario = p_salario,
