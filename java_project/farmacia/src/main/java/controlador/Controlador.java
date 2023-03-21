@@ -68,7 +68,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             resultado = dao.validar(empleado);
             if (resultado > 0) {
                 farmacia = new Farmacia(empleado);
-                request.getSession().setAttribute("farmacia", farmacia);
+                request.getSession().setAttribute("farmacia", farmacia);;
                 request.getRequestDispatcher("./pages/home.jsp").forward(request, response);
             } else {
                 request.getRequestDispatcher("./index.jsp").forward(request, response);
