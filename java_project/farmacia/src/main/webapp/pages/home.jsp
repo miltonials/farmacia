@@ -64,14 +64,14 @@
                     
                     <div>
                         <h2>Información del empleado</h2>
-                        <p><strong>id:</strong> ${empleado.getId()}</p>
-                        <p><strong>Nombre:</strong> ${empleado.getNombre()}</p>
-                        <p><strong>Apellido:</strong> ${empleado.getApellido()}</p>
-                        <p><strong>Cargo:</strong> ${empleado.getIdCargo()}</p>
-                        <p><strong>Salario:</strong> ${empleado.getSalario()}</p>
-                        <p><strong>Fecha de contratación:</strong> ${empleado.getFechaContratacion()}</p>
-                        <p><strong>Cédula:</strong> ${empleado.getCedula()}</p>
-                        <p><strong>Clave:</strong> ${empleado.getClave()}</p>
+                        <p><strong>id:</strong> ${farmacia.getEmpleadoActual().getId()}</p>
+                        <p><strong>Nombre:</strong> ${farmacia.getEmpleadoActual().getNombre()}</p>
+                        <p><strong>Apellido:</strong> ${farmacia.getEmpleadoActual().getApellido()}</p>
+                        <p><strong>Cargo:</strong> ${farmacia.getEmpleadoActual().getIdCargo()}</p>
+                        <p><strong>Salario:</strong> ${farmacia.getEmpleadoActual().getSalario()}</p>
+                        <p><strong>Fecha de contratación:</strong> ${farmacia.getEmpleadoActual().getFechaContratacion()}</p>
+                        <p><strong>Cédula:</strong> ${farmacia.getEmpleadoActual().getCedula()}</p>
+                        <p><strong>Clave:</strong> ${farmacia.getEmpleadoActual().getClave()}</p>
                     </div>
                 </main>
             </div>

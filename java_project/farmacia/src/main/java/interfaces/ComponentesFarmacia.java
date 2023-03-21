@@ -9,6 +9,7 @@ import modelo.Producto;
 import modelo.TipoProducto;
 import modelo.Venta;
 import modelo.Cliente;
+import modelo.Farmacia;
 
 /**
  * Interfaz que contiene los métodos para cargar los componentes de la farmacia.
@@ -23,7 +24,7 @@ public interface ComponentesFarmacia {
     public ArrayList<Venta> cargarVentas();
     public ArrayList<Farmaceutica> cargarFarmaceuticas();
     public ArrayList<TipoProducto> cargarTiposProductos();
-    public ArrayList<Producto> cargarProductos();
+    public ArrayList<Producto> cargarProductos(Farmacia miFarmacia);
     public ArrayList<CargoEmpleado> cargarCargosEmpleados();
     public ArrayList<Empleado> cargarEmpleados();
     public ArrayList<Cliente> cargarClientes();

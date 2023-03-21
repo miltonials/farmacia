@@ -14,27 +14,23 @@ import modelo.Empleado;
  * @author milto
  */
 public class EmpleadoDAO implements CRUD {
-    Connection con;
-    Conexion cn = new Conexion();
-    PreparedStatement ps;
-    ResultSet rs;
+
+    private Conexion conexion = new Conexion();
+    private ResultSet rs;
 
     public int validar(Empleado pEmpleado) {
         String sql = "SELECT * FROM empleado WHERE nombre = ? AND clave = ?";
-        System.out.println(pEmpleado.getNombre());
-        System.out.println(pEmpleado.getClave());
         int resultado = 0;
-
+        
         try {
-            con = cn.conectar();
-            ps = con.prepareStatement(sql);
-            ps.setString(1,  pEmpleado.getNombre());
+            conexion.conectar();
+            PreparedStatement ps = conexion.prepararSql(sql);
+            ps.setString(1, pEmpleado.getNombre());
             ps.setString(2, pEmpleado.getClave());
+            rs = conexion.ejecutarSql(ps);
             
-            rs = ps.executeQuery();
             while (rs.next()) {
-                
-                resultado +=  1;
+                resultado += 1;
                 pEmpleado.setId(rs.getInt("id_empleado"));
                 pEmpleado.setNombre(rs.getString("nombre"));
                 pEmpleado.setIdCargo(rs.getString("id_cargo"));
@@ -43,23 +39,20 @@ public class EmpleadoDAO implements CRUD {
                 pEmpleado.setFechaContratacion(rs.getDate("fecha_contratacion"));
                 pEmpleado.setCedula(rs.getString("cedula"));
             }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
+        conexion.desconectar();
+
         return resultado;
     }
-    
+
     public void cerrarConexion(Empleado pEmpleado) {
-        try {
-            pEmpleado = null;
-            this.con.close();
-            System.out.println("Desconectado de la base de datos");
-        }
-        catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
+        pEmpleado = null;
+        conexion.desconectar();
+        System.out.println("Desconectado de la base de datos");
     }
-    
+
     @Override
     public boolean create(Object objeto) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

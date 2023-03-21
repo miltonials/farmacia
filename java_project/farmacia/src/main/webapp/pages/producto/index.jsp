@@ -42,25 +42,32 @@
                         <table class="table table-striped table-sm">
                             <thead>
                                 <tr>
-                                    <th scope="col">Mes</th>
-                                    <th scope="col">Empleado</th>
-                                    <th scope="col">Cantidad de ventas</th>
-                                    <th scope="col">Monto total vendido</th>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Tipo de producto</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Descripción</th>
+                                    <th scope="col">Precio</th>
+                                    <th scope="col">Cantidad en stock</th>
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1,001</td>
-                                    <td>random</td>
-                                    <td>data</td>
-                                    <td>text</td>
-                                </tr>
-                                <tr>
-                                    <td>1,002</td>
-                                    <td>placeholder</td>
-                                    <td>irrelevant</td>
-                                    <td>layout</td>
-                                </tr>
+                                <c:forEach var="producto" items="${farmacia.getProductos()}">
+                                    <%
+                                    import java.util.ArrayList;
+                                            ArrayList<Producto> productos = farmacia.getProductos();
+                                            System.out.println("Productos: " + productos);
+                                        %>
+
+                                    <tr>
+                                        <td>${producto.getId()}${farmacia.getProductos()}</td>
+                                        <td>${producto.getTipoProducto()}</td>
+                                        <td>${producto.getNombre()}</td>
+                                        <td>${producto.getDescripcion()}</td>
+                                        <td>${producto.getPrecio()}</td>
+                                        <td>${producto.getCantidadStock()}</td>
+                                    </tr>
+                                </c:forEach>
                             </tbody>
                         </table>
                     </div>
