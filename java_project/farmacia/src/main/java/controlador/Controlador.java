@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modelo.Empleado;
-import modelo.EmpleadoDAO;
+import dao.EmpleadoDAO;
 import modelo.Farmacia;
 
 /**
@@ -36,8 +36,15 @@ public class Controlador extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.getRequestDispatcher("./index.jsp").forward(request, response);
-        dao.cerrarConexion(empleado);
+        if (request.getParameter("accion").equals("btn_cerrarSesion")) {
+            farmacia = null;
+            request.getSession().removeAttribute("empleado");
+            dao.cerrarConexion(empleado);
+            request.getRequestDispatcher("./index.jsp").forward(request, response);
+        }
+        else {
+            request.getRequestDispatcher("./pages/home.jsp").forward(request, response);
+        }
 }
     
 /**
@@ -55,17 +62,20 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         String accion = request.getParameter("accion");
         String usuario = request.getParameter("txt_usuario");
         String contrasena = request.getParameter("txt_contrasena");
-
+        
         if (accion.equals("btn_iniciarSesion")) {
             empleado = new Empleado(usuario, contrasena);
             resultado = dao.validar(empleado);
             if (resultado > 0) {
+                //farmacia = new Farmacia(empleado);
                 request.getSession().setAttribute("empleado", empleado);
                 request.getRequestDispatcher("./pages/home.jsp").forward(request, response);
             } else {
                 request.getRequestDispatcher("./index.jsp").forward(request, response);
                 dao.cerrarConexion(empleado);
             }
+        } else {
+            request.getRequestDispatcher("./pages/home.jsp").forward(request, response);
         }
     }
 }

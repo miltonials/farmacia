@@ -4,6 +4,6 @@ package modelo;
  *
  * @author milto
  */
-class TipoProducto {
+public class TipoProducto {
     
 }

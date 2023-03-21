@@ -1,10 +1,13 @@
-package modelo;
+package dao;
+
+import java.util.ArrayList;
+import interfaces.CRUD;
 
 /**
  *
  * @author milto
  */
-public class FarmaceuticaDAO implements CRUD {
+public class TipoProductoDAO implements CRUD{
 
     @Override
     public boolean create(Object objeto) {
@@ -25,5 +28,4 @@ public class FarmaceuticaDAO implements CRUD {
     public boolean delete(Object objeto) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
 }

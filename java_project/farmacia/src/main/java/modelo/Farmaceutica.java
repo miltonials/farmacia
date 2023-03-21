@@ -4,6 +4,6 @@ package modelo;
  *
  * @author milto
  */
-class Farmaceutica {
+public class Farmaceutica {
     
 }

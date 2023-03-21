@@ -1,4 +1,7 @@
-package modelo;
+package dao;
+
+import java.util.ArrayList;
+import interfaces.CRUD;
 
 /**
  *
@@ -25,5 +28,4 @@ public class ProductoDAO implements CRUD {
     public boolean delete(Object objeto) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
 }

@@ -8,6 +8,6 @@ package modelo;
  *
  * @author milto
  */
-class Cliente {
+public class Cliente {
     
 }

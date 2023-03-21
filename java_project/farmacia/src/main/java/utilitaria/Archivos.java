@@ -11,7 +11,7 @@ import java.io.IOException;
 
 /**
  *
- * @author milto
+ * @author Milton Barrera
  */
 public class Archivos {
     public static String leer(String ruta){

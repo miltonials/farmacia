@@ -1,4 +1,7 @@
-package modelo;
+package interfaces;
+
+import java.util.ArrayList;
+import modelo.Empleado;
 
 /**
  *
