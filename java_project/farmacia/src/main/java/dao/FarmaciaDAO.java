@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import modelo.CargoEmpleado;
 import modelo.Cliente;
 import interfaces.ComponentesFarmacia;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,9 +25,14 @@ import modelo.Venta;
  * @author milto
  */
 public class FarmaciaDAO implements ComponentesFarmacia {
-    private Conexion conexion = new Conexion();
+    private Conexion conexion;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
+
+    public FarmaciaDAO() {
+        conexion = new Conexion();
+        conexion.conectar();
+    }
 
     @Override
     public ArrayList<DetalleVenta> cargarDetallesVentas() {
@@ -42,12 +46,46 @@ public class FarmaciaDAO implements ComponentesFarmacia {
 
     @Override
     public ArrayList<Farmaceutica> cargarFarmaceuticas() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ArrayList<Farmaceutica> farmaceuticas = new ArrayList<>();
+        String sql = "SELECT * FROM FARMACEUTICA";
+
+        try {
+            preparedStatement = conexion.prepararSql(sql);
+            resultSet = preparedStatement.executeQuery();
+            
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id_farmaceutica");
+                String nombre = resultSet.getString("nombre");
+                String telefono = resultSet.getString("telefono");
+                String correo = resultSet.getString("correo_electronico");
+                Farmaceutica farmaceutica = new Farmaceutica(id, nombre, telefono, correo);
+                farmaceuticas.add(farmaceutica);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al cargar farmaceuticas: " + e.getMessage());
+        }
+        return farmaceuticas;
     }
 
     @Override
     public ArrayList<TipoProducto> cargarTiposProductos() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ArrayList<TipoProducto> tiposProductos = new ArrayList<>();
+        String sql = "SELECT * FROM TIPO_PRODUCTO";
+
+        try {
+            preparedStatement = conexion.prepararSql(sql);
+            resultSet = preparedStatement.executeQuery();
+            
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id_tipo_producto");
+                String nombre = resultSet.getString("nombre");
+                TipoProducto tipoProducto = new TipoProducto(id, nombre);
+                tiposProductos.add(tipoProducto);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al cargar tipos de productos: " + e.getMessage());
+        }
+        return tiposProductos;
     }
 
     @Override
@@ -56,21 +94,19 @@ public class FarmaciaDAO implements ComponentesFarmacia {
         String sql = "SELECT * FROM PRODUCTO";
 
         try {
-            conexion.conectar();
             preparedStatement = conexion.prepararSql(sql);
             resultSet = preparedStatement.executeQuery();
             
             while (resultSet.next()) {
                 int id = resultSet.getInt("id_producto");
-                Farmaceutica farmaceutica = null;
-                //Farmaceutica farmaceutica = miFarmacia.buscarFarmaceutica(rs.getInt("id_farmaceutica"));
-                TipoProducto tipoProducto = null;
-                //TipoProducto tipoProducto = miFarmacia.buscarTipoProducto(rs.getInt("id_tipo_producto"));
+                Farmaceutica farmaceutica = miFarmacia.buscarFarmaceuticaPorId(resultSet.getInt("id_farmaceutica"));
+                TipoProducto tipoProducto = miFarmacia.buscarTipoProductoPorId(resultSet.getInt("id_tipo_producto"));
                 String nombre = resultSet.getString("nombre");
                 String descripcion = resultSet.getString("descripcion");
                 double precio = resultSet.getDouble("precio");
                 int cantidadStock = resultSet.getInt("cantidad_stock");
-                Producto producto = new Producto(id, farmaceutica, tipoProducto, nombre, descripcion, precio, cantidadStock);
+                Producto producto = new Producto(farmaceutica, tipoProducto, nombre, descripcion, precio, cantidadStock);
+                producto.setId(id);
                 productos.add(producto);
                 System.out.println("producto agregado: " + nombre);
             }

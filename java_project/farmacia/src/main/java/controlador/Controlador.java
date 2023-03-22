@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controlador;
 
 import java.io.IOException;
@@ -36,10 +32,13 @@ public class Controlador extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
         if (request.getParameter("accion").equals("btn_cerrarSesion")) {
             farmacia = null;
             request.getSession().removeAttribute("empleado");
-            dao.cerrarConexion(empleado);
+            if (dao == null) {
+                dao.cerrarConexion(empleado);
+            }
             request.getRequestDispatcher("./index.jsp").forward(request, response);
         }
         else {

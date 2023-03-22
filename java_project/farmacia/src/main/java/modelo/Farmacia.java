@@ -23,9 +23,9 @@ public class Farmacia {
 
     public Farmacia(Empleado empleado) {
         empleadoActual = empleado;
-        //this.farmaceuticas = farmaciaDao.cargarFarmaceuticas();
-        //this.tiposProductos = farmaciaDao.cargarTiposProductos();
-        //this.productos = new ArrayList<Producto>();
+        this.farmaceuticas = farmaciaDao.cargarFarmaceuticas();
+        this.tiposProductos = farmaciaDao.cargarTiposProductos();
+        //this.tiposProductos  = new ArrayList<TipoProducto>();
         this.productos = farmaciaDao.cargarProductos(this);
         //this.cargosEmpleados = farmaciaDao.cargarCargosEmpleados();//@miltonials
         //this.empleados = farmaciaDao.cargarEmpleados();
@@ -80,10 +80,37 @@ public class Farmacia {
      * @param id : id de la farmaceutica
      * @return Farmaceutica : objeto que representa la farmaceutica.
      */
-    public Farmaceutica buscarFarmaceutica(int id) {
+    public Farmaceutica buscarFarmaceuticaPorId(int id) {
         for (Farmaceutica farmaceutica : this.farmaceuticas) {
             if (farmaceutica.getId() == id) {
                 return farmaceutica;
+            }
+        }
+        return null;
+    }
+    
+    public Farmaceutica buscarFarmaceuticaPorNombre(String nombre) {
+        for (Farmaceutica farmaceutica : this.farmaceuticas) {
+            if (farmaceutica.getNombre().equals(nombre)) {
+                return farmaceutica;
+            }
+        }
+        return null;
+    }
+
+    public TipoProducto buscarTipoProductoPorNombre(String nombreTipoProducto) {
+        for (TipoProducto tipoProducto : this.tiposProductos) {
+            if (tipoProducto.getNombre().equals(nombreTipoProducto)) {
+                return tipoProducto;
+            }
+        }
+        return null;
+    }
+    
+    public TipoProducto buscarTipoProductoPorId(int id) {
+        for (TipoProducto tipoProducto : this.tiposProductos) {
+            if (tipoProducto.getId() == id) {
+                return tipoProducto;
             }
         }
         return null;

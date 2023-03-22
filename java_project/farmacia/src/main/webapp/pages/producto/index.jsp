@@ -40,6 +40,7 @@
                         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                         <h1 class="h2">Productos</h1>
                     </div>
+                    <a class="btn btn-primary" href="ControladorProducto?accion=agregar" method="GET">Agregar producto</a>
                     <div class="table-responsive">
                         <table class="table table-striped table-sm">
                             <thead>
@@ -49,6 +50,7 @@
                                     <th scope="col">Nombre</th>
                                     <th scope="col">Descripción</th>
                                     <th scope="col">Precio</th>
+                                    <th scope = "col">Farmaceutica</th>
                                     <th scope="col">Cantidad en stock</th>
                                     <th scope="col"></th>
                                 </tr>
@@ -58,27 +60,22 @@
                             <c:forEach items="${farmacia.getProductos()}" var="producto" >
                                 <tr>
                                     <td>${producto.getId()}</td>
-                                    <td>${producto.getTipo()}</td>
+                                    <td>${producto.getTipo().getNombre()}</td>
                                     <td>${producto.getNombre()}</td>
                                     <td>${producto.getDescripcion()}</td>
                                     <td>${producto.getPrecio()}</td>
+                                    <td>${producto.getFarmaceutica().getNombre()}</td>
                                     <td>${producto.getCantidadStock()}</td>
+                                    <td>
+                                        <form action="ControladorProducto">
+                                            <input type="submit" class="btn btn-primary" name="accion" value="editar">
+                                            <input type="submit" class="btn btn-danger" name="accion" value="eliminar">
+                                        </form>
+                                    </td>
                                 </tr>
                                 </c:forEach>
                             </tbody>
                         </table>
-                    </div>
-
-                    <div>
-                        <h2>Información del empleado</h2>
-                        <p><strong>id:</strong> ${empleado.getId()}</p>
-                        <p><strong>Nombre:</strong> ${empleado.getNombre()}</p>
-                        <p><strong>Apellido:</strong> ${empleado.getApellido()}</p>
-                        <p><strong>Cargo:</strong> ${empleado.getIdCargo()}</p>
-                        <p><strong>Salario:</strong> ${empleado.getSalario()}</p>
-                        <p><strong>Fecha de contratación:</strong> ${empleado.getFechaContratacion()}</p>
-                        <p><strong>Cédula:</strong> ${empleado.getCedula()}</p>
-                        <p><strong>Clave:</strong> ${empleado.getClave()}</p>
                     </div>
                 </main>
             </div>

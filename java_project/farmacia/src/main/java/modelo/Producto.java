@@ -13,8 +13,7 @@ public class Producto {
     private double precio;
     private int cantidadStock;
 
-    public Producto(int id, Farmaceutica farmaceutica, TipoProducto tipo, String nombre, String descripcion, double precio, int cantidadStock) {
-        this.id = id;
+    public Producto(Farmaceutica farmaceutica, TipoProducto tipo, String nombre, String descripcion, double precio, int cantidadStock) {
         this.farmaceutica = farmaceutica;
         this.tipo = tipo;
         this.nombre = nombre;
@@ -22,7 +21,7 @@ public class Producto {
         this.precio = precio;
         this.cantidadStock = cantidadStock;
     }
-
+    
     public int getId() {
         return id;
     }

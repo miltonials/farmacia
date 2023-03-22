@@ -8,8 +8,8 @@ import java.util.ArrayList;
  * @author Milton Barrera
  */
 public interface CRUD {
-    public boolean create(Object objeto);
-    public boolean read(Object objecto);
-    public boolean update(Object objeto);
-    public boolean delete(Object objeto);
+    public int create(Object objeto);
+    public int read(Object objecto);
+    public int update(Object objeto);
+    public int delete(Object objeto);
 }
