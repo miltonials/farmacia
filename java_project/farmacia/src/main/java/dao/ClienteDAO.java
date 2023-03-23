@@ -35,7 +35,7 @@ private Conexion conexion = new Conexion();
             preparedStatement.setString(2, miCliente.getApellido());
             preparedStatement.setString(3, miCliente.getTelefono());
             preparedStatement.setString(4, miCliente.getCorreoElectronico());
-            preparedStatement.setDate(5, (Date) miCliente.getFechaNaciemiento());
+            preparedStatement.setString(5, miCliente.getFechaNaciemiento());
             preparedStatement.setString(6, miCliente.getGenero());
             resultSet = preparedStatement.executeQuery();
             
@@ -47,7 +47,7 @@ private Conexion conexion = new Conexion();
                 preparedStatement.setString(2, miCliente.getApellido());
                 preparedStatement.setString(3, miCliente.getTelefono());
                 preparedStatement.setString(4, miCliente.getCorreoElectronico());
-                preparedStatement.setDate(5, (Date) miCliente.getFechaNaciemiento());
+                preparedStatement.setString(5, miCliente.getFechaNaciemiento());
                 preparedStatement.setString(6, miCliente.getGenero());
                 resultSet = preparedStatement.executeQuery();
                 
