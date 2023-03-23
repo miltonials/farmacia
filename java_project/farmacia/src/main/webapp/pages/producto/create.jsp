@@ -65,7 +65,7 @@
                             <label for="precio">cantidad</label>
                             <input type="number" class="form-control" placeholder="Cantidad" min="1" name="txtCantidad" required>
                         </div>
-                        <input type="submit" class="btn btn-primary" name="accion" value="Guardar">
+                        <input type="submit" class="btn btn-primary" name="accion" value="create">
                     </form>
             </div>
         </main>

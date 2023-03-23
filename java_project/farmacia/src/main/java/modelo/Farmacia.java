@@ -62,7 +62,7 @@ public class Farmacia {
         return clientes;
     }
 
-    public ArrayList<Farmaceutica> getFarmaceutica() {
+    public ArrayList<Farmaceutica> getFarmaceuticas() {
         return farmaceuticas;
     }
 

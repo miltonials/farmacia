@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import modelo.Empleado;
 import modelo.Farmaceutica;
 import modelo.Farmacia;
 import modelo.Producto;
@@ -44,21 +45,19 @@ public class ControladorProducto extends HttpServlet {
                 request.getRequestDispatcher("./pages/producto/create.jsp").forward(request, response);
                 break;
             case "paginaEditar":
-                String id = request.getParameter("id");
-                Farmacia miFarmacia= (Farmacia) request.getSession().getAttribute("farmacia");
-                Producto producto = miFarmacia.buscarProductoPorId(Integer.parseInt(id));
-
-                request.getSession().setAttribute("productoModificar", producto);
-                request.getRequestDispatcher("./pages/producto/update.jsp").forward(request, response);
+                cargarPaginaEditar(request, response);
                 break;
             case "paginaEliminar":
-                request.getRequestDispatcher("./pages/producto/delete.jsp").forward(request, response);
+                cargarPaginaEliminar(request, response);
                 break;
-            case "Create":
+            case "create":
                 registrarNuevoProducto(request, response);
                 break;
             case "update":
                 actualizarProducto(request, response);
+                break;
+            case "delete":
+                eliminarProducto(request, response);
                 break;
             default:
                 request.getRequestDispatcher("./pages/producto/index.jsp").forward(request, response);
@@ -133,11 +132,11 @@ public class ControladorProducto extends HttpServlet {
             request.getRequestDispatcher("./pages/producto/create.jsp").forward(request, response);
         }
     }
-    
+
     private void actualizarProducto(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
+            throws ServletException, IOException {
         Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
-        
+
         String nombre = request.getParameter("txtNombreProducto");
         String idTipoProducto = request.getParameter("multiTipoProducto");
         TipoProducto tipoProducto = farmacia.buscarTipoProductoPorId(Integer.parseInt(idTipoProducto));
@@ -146,7 +145,7 @@ public class ControladorProducto extends HttpServlet {
         String nombreFarmaceutica = request.getParameter("multiFarmaceutica");
         Farmaceutica farmaceutica = farmacia.buscarFarmaceuticaPorId(Integer.parseInt(nombreFarmaceutica));
         String cantidad = request.getParameter("txtCantidad");
-        
+
         Producto producto = (Producto) request.getSession().getAttribute("productoModificar");
         producto.setNombre(nombre);
         producto.setTipo(tipoProducto);
@@ -154,10 +153,10 @@ public class ControladorProducto extends HttpServlet {
         producto.setPrecio(Double.parseDouble(precio));
         producto.setFarmaceutica(farmaceutica);
         producto.setCantidadStock(Integer.parseInt(cantidad));
-        
+
         ProductoDAO productoDAO = new ProductoDAO();
         int respuesta = productoDAO.update(producto);
-        
+
         if (respuesta == 1) {
             request.getSession().setAttribute("farmacia", farmacia);
             request.getRequestDispatcher("./pages/producto/index.jsp").forward(request, response);
@@ -165,7 +164,39 @@ public class ControladorProducto extends HttpServlet {
             request.getSession().setAttribute("errorMjs", "Código de error: " + respuesta);
             request.getRequestDispatcher("./pages/producto/update.jsp").forward(request, response);
         }
+
+    }
+
+    private void cargarPaginaEditar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String id = request.getParameter("id");
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        Producto producto = miFarmacia.buscarProductoPorId(Integer.parseInt(id));
+
+        request.getSession().setAttribute("productoModificar", producto);
+        request.getRequestDispatcher("./pages/producto/update.jsp").forward(request, response);
+    }
+
+    private void cargarPaginaEliminar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String id = request.getParameter("id");
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        Producto producto = miFarmacia.buscarProductoPorId(Integer.parseInt(id));
+
+        request.getSession().setAttribute("productoModificar", producto);
+
+        request.getRequestDispatcher("./pages/producto/delete.jsp").forward(request, response);
+    }
+
+    private void eliminarProducto(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Producto producto = (Producto) request.getSession().getAttribute("productoModificar");
+        ProductoDAO productoDAO = new ProductoDAO();
+        int respuesta = productoDAO.delete(producto);
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        miFarmacia.getProductos().remove(producto);
         
-        
+        request.getSession().setAttribute("farmacia", miFarmacia);
+        request.getRequestDispatcher("./pages/producto/index.jsp").forward(request, response);
     }
 }
