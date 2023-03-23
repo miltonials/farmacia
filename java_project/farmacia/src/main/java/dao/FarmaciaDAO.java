@@ -119,7 +119,25 @@ public class FarmaciaDAO implements ComponentesFarmacia {
 
 @Override
 public ArrayList<CargoEmpleado> cargarCargosEmpleados() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                ArrayList<CargoEmpleado> cargosEmpleados = new ArrayList<>();
+        String sql = "SELECT * FROM CARGO_EMPLEADO";
+
+        try {
+            preparedStatement = conexion.prepararSql(sql);
+            resultSet = preparedStatement.executeQuery();
+            
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id_cargo");
+                String nombre = resultSet.getString("nombre");
+                CargoEmpleado cargoEmpleado = new CargoEmpleado(id, nombre);
+                cargosEmpleados.add(cargoEmpleado);
+                System.out.println("Cargo empleado agregado: " + nombre);
+            }
+            //conexion.desconectar();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return cargosEmpleados;
     }
 
     @Override

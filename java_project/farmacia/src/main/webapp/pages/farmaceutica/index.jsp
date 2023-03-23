@@ -52,7 +52,7 @@
                                 </tr>
                             </thead>
                             <tbody>  
-                            <c:forEach items="${farmacia.getFarmaceutica()}" var="farmaceutica" >
+                            <c:forEach items="${farmacia.getFarmaceuticas()}" var="farmaceutica" >
                                 <tr>
                                     <td>${farmaceutica.getId()}</td>
                                     <td>${farmaceutica.getNombre()}</td>
