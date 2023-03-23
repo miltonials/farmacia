@@ -12,6 +12,10 @@ public class CargoEmpleado {
         this.id = id;
         this.nombre = nombre;
     }
+    
+    public CargoEmpleado(String nombre) {
+        this.nombre = nombre;
+    }
 
     public int getId() {
         return id;
