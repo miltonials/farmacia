@@ -60,8 +60,9 @@
                                     <td>${farmaceutica.getCorreoElectronico()}</td>
                                     <td>
                                         <form action="ControladorFarmaceutica">
-                                            <input type="submit" class="btn btn-primary" name="accion" value="editar">
-                                            <input type="submit" class="btn btn-danger" name="accion" value="eliminar">
+                                            <input type="hidden" name="id" value="${farmaceutica.getId()}">
+                                            <a class="btn btn-primary" href="ControladorFarmaceutica?accion=paginaEditar" method="POST">Editar</a>
+                                            <a class="btn btn-danger" href="ControladorFarceutica?accion=paginaEliminar" method="POST">Eliminar</a>
                                         </form>
                                     </td>
                                 </tr>

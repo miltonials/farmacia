@@ -4,6 +4,7 @@
  */
 package controlador;
 
+import dao.ClienteDAO;
 import dao.FarmaceuticaDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import modelo.Cliente;
 import modelo.Farmaceutica;
 import modelo.Farmacia;
 
@@ -18,7 +20,8 @@ import modelo.Farmacia;
  *
  * @author Andy Porras
  */
-public class ControladorFarmaceutica extends HttpServlet {
+public class ControladorCliente extends HttpServlet {
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -34,43 +37,46 @@ public class ControladorFarmaceutica extends HttpServlet {
         String accion = request.getParameter("accion");
         switch (accion){
             case "index":
-                request.getRequestDispatcher("./pages/farmaceutica/index.jsp").forward(request, response);
+                request.getRequestDispatcher("./pages/cliente/index.jsp").forward(request, response);
                 break;
             case "listar":
-                request.getRequestDispatcher("./pages/farmaceutica/listar.jsp").forward(request, response);
+                request.getRequestDispatcher("./pages/cliente/listar.jsp").forward(request, response);
                 break;
             case "agregar":
-                request.getRequestDispatcher("./pages/farmaceutica/create.jsp").forward(request, response);
+                request.getRequestDispatcher("./pages/cliente/create.jsp").forward(request, response);
                 break;
             case "paginaEditar":
-                request.getRequestDispatcher("./pages/farmaceutica/update.jsp").forward(request, response);
+                request.getRequestDispatcher("./pages/cliente/update.jsp").forward(request, response);
                 break;
             case "paginaEliminar":
-                request.getRequestDispatcher("./pages/farmaceutica/delete.jsp").forward(request, response);
+                request.getRequestDispatcher("./pages/cliente/delete.jsp").forward(request, response);
                 break;
             case "Guardar":
                 Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
                 
-                String nombre = request.getParameter("txtNombreFarmaceutica");
+                String nombre = request.getParameter("txtNombre");
+                String apellido = request.getParameter("txtApellido");
                 String telefono = request.getParameter("txtTelefono");
                 String correo_electronico = request.getParameter("txtCorreoElectronico");
-                Farmaceutica farmaceutica = new Farmaceutica(nombre,telefono,correo_electronico);
-                
-                FarmaceuticaDAO farmaceuticaDAO = new FarmaceuticaDAO();
-                int respuesta = farmaceuticaDAO.create(farmaceutica);
+                String fecha_nacimiento = request.getParameter("txtFechaNacimiento");
+                String genero = request.getParameter("txtGenero");
+
+                Cliente cliente = new Cliente(nombre,apellido,telefono,correo_electronico,fecha_nacimiento,genero);                
+                ClienteDAO clienteDAO = new ClienteDAO();
+                int respuesta = clienteDAO.create(cliente);
                 if (respuesta == 1 ) {
                     request.getSession().setAttribute("errorMjs","");
-                    farmacia.getFarmaceutica().add(farmaceutica);
-                    request.getSession().setAttribute("farmacia", farmacia);
-                    request.getRequestDispatcher("./pages/farmaceutica/index.jsp").forward(request, response);
+                    farmacia.getClientes().add(cliente);
+                    request.getSession().setAttribute("farmacia", cliente);
+                    request.getRequestDispatcher("./pages/cliente/index.jsp").forward(request, response);
                 }
                 else {
                     request.getSession().setAttribute("errorMjs", "Código de error: " + respuesta);
-                    request.getRequestDispatcher("./pages/farmaceutica/create.jsp").forward(request, response);
+                    request.getRequestDispatcher("./pages/cliente/create.jsp").forward(request, response);
                 }
                 break;
             default:
-                request.getRequestDispatcher("./pages/farmaceutica/index.jsp").forward(request, response);
+                request.getRequestDispatcher("./pages/cliente/index.jsp").forward(request, response);
                 break;
         }
     } // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
