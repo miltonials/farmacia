@@ -124,9 +124,33 @@ public ArrayList<CargoEmpleado> cargarCargosEmpleados() {
     }
 
     @Override
-public ArrayList<Empleado> cargarEmpleados() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public ArrayList<Empleado> cargarEmpleados() {
+    ArrayList<Empleado> empleados = new ArrayList<>();
+        String sql = "SELECT * FROM EMPLEADO";
+
+        try {
+            preparedStatement = conexion.prepararSql(sql);
+            resultSet = preparedStatement.executeQuery();
+            
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id_empleado");
+                String cargo = resultSet.getString("id_cargo");
+                String cedula = resultSet.getString("cedula");
+                String nombre = resultSet.getString("nombre");
+                String apellido = resultSet.getString("apellido");
+                double salario = resultSet.getDouble("salario");
+                Date fechaContratacion= resultSet.getDate("fecha_contratacion");
+                String clave = resultSet.getString("clave");
+                
+                Empleado emp = new Empleado(id, nombre, cargo, apellido, salario, fechaContratacion, cedula, clave);
+                empleados.add(emp);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al cargar empleados: " + e.getMessage());
+        }
+        return empleados;
     }
+
 
     @Override
 public ArrayList<Cliente> cargarClientes() {

@@ -28,7 +28,7 @@ public class Farmacia {
         //this.tiposProductos  = new ArrayList<TipoProducto>();
         this.productos = farmaciaDao.cargarProductos(this);
         //this.cargosEmpleados = farmaciaDao.cargarCargosEmpleados();//@miltonials
-        //this.empleados = farmaciaDao.cargarEmpleados();
+        this.empleados = farmaciaDao.cargarEmpleados();
         this.clientes = farmaciaDao.cargarClientes();
         //this.vistas = new Vistas();//@miltonials
         //this.ventas = farmaciaDao.cargarVentas();

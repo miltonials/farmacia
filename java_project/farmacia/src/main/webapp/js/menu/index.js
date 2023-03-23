@@ -18,12 +18,12 @@ const menu = () => {
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="ControladorVenta?accion=index" method="POST">
                         🛒 Ventas
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="ControladorEmpleado?accion=index" method="POST">
                         💼 Empleados
                     </a>
                 </li>
@@ -38,7 +38,7 @@ const menu = () => {
                     </a>
                 </li>
                 <li>
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="ControladorTipoProducto?accion=index" method="POST">
                         📃 Tipos de productos
                     </a>
                 </li>

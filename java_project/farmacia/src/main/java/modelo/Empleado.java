@@ -1,6 +1,6 @@
 package modelo;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  *
@@ -12,12 +12,12 @@ public class Empleado {
     private String nombre;
     private String idCargo;
     private String Apellido;
-    private float salario;
+    private double salario;
     private Date fechaContratacion;
     private String cedula;
     private String clave;
 
-    public Empleado(int id, String nombre, String idCargo, String Apellido, float salario, Date fechaContratacion, String cedula) {
+    public Empleado(int id, String nombre, String idCargo, String Apellido, double salario, Date fechaContratacion, String cedula) {
         this.id = id;
         this.nombre = nombre;
         this.idCargo = idCargo;
@@ -26,6 +26,29 @@ public class Empleado {
         this.fechaContratacion = fechaContratacion;
         this.cedula = cedula;
     }
+    
+    public Empleado(String idCargo, String cedula, String nombre, String Apellido, double salario, Date fechaContratacion, String clave) {
+        this.idCargo = idCargo;
+        this.nombre = nombre;
+        this.Apellido = Apellido;
+        this.salario = salario;
+        this.fechaContratacion = fechaContratacion;
+        this.cedula = cedula;
+        this.clave = clave;
+    }
+
+    public Empleado(int id, String nombre, String idCargo, String Apellido, double salario, Date fechaContratacion, String cedula, String clave) {
+        this.id = id;
+        this.nombre = nombre;
+        this.idCargo = idCargo;
+        this.Apellido = Apellido;
+        this.salario = salario;
+        this.fechaContratacion = fechaContratacion;
+        this.cedula = cedula;
+        this.clave = clave;
+    }
+    
+    
 
     public Empleado(String nombre, String clave) {
         this.nombre = nombre;
@@ -48,7 +71,7 @@ public class Empleado {
         return Apellido;
     }
 
-    public float getSalario() {
+    public double getSalario() {
         return salario;
     }
 

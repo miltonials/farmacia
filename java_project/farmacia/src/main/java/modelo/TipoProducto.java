@@ -12,6 +12,9 @@ public class TipoProducto {
         this.id = id;
         this.nombre = nombre;
     }
+    public TipoProducto(String nombre) {
+        this.nombre = nombre;
+    }
 
     public int getId() {
         return id;
@@ -20,4 +23,14 @@ public class TipoProducto {
     public String getNombre() {
         return nombre;
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    
+    
 }

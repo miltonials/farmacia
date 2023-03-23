@@ -17,12 +17,20 @@
         <servlet-class>controlador.ControladorCargoEmpleado</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ControladorFarmaceutica</servlet-name>
-        <servlet-class>controlador.ControladorFarmaceutica</servlet-class>
+        <servlet-name>ControladorVenta</servlet-name>
+        <servlet-class>controlador.ControladorVenta</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ControladorCliente</servlet-name>
-        <servlet-class>controlador.ControladorCliente</servlet-class>
+        <servlet-name>ControladorTipoProducto</servlet-name>
+        <servlet-class>controlador.ControladorTipoProducto</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ControladorEmpleado</servlet-name>
+        <servlet-class>controlador.ControladorEmpleado</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>prueba</servlet-name>
+        <servlet-class>controlador.prueba</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Controlador</servlet-name>
@@ -41,12 +49,20 @@
         <url-pattern>/ControladorCargoEmpleado</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ControladorFarmaceutica</servlet-name>
-        <url-pattern>/ControladorFarmaceutica</url-pattern>
+        <servlet-name>ControladorVenta</servlet-name>
+        <url-pattern>/ControladorVenta</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ControladorCliente</servlet-name>
-        <url-pattern>/ControladorCliente</url-pattern>
+        <servlet-name>ControladorTipoProducto</servlet-name>
+        <url-pattern>/ControladorTipoProducto</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControladorEmpleado</servlet-name>
+        <url-pattern>/ControladorEmpleado</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>prueba</servlet-name>
+        <url-pattern>/prueba</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
