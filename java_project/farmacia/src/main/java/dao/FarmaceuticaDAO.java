@@ -25,20 +25,18 @@ public class FarmaceuticaDAO implements CRUD {
         try {
             conexion.conectar();
             preparedStatement = conexion.prepararSql(sql);
-            preparedStatement.setInt(1, miFarmaceutica.getId());
-            preparedStatement.setString(2, miFarmaceutica.getNombre());
-            preparedStatement.setString(3, miFarmaceutica.getTelefono());
-            preparedStatement.setString(4, miFarmaceutica.getCorreoElectronico());
+            preparedStatement.setString(1, miFarmaceutica.getNombre());
+            preparedStatement.setString(2, miFarmaceutica.getTelefono());
+            preparedStatement.setString(3, miFarmaceutica.getCorreoElectronico());
             resultSet = preparedStatement.executeQuery();
             
             if (resultSet.next()) {
                 respuesta = resultSet.getInt(1);
-                sql = "SELECT id_farmaceutica FROM FARMACEUTICA WHERE id_farmaceutica = ? AND nombre = ? AND telefono = ? AND correo_electronico = ?";
+                sql = "SELECT id_farmaceutica FROM FARMACEUTICA WHERE nombre = ? AND telefono = ? AND correo_electronico = ?";
                 preparedStatement = conexion.prepararSql(sql);
-                preparedStatement.setInt(1, miFarmaceutica.getId());
-                preparedStatement.setString(2, miFarmaceutica.getNombre());
-                preparedStatement.setString(3, miFarmaceutica.getTelefono());
-                preparedStatement.setString(4, miFarmaceutica.getCorreoElectronico());
+                preparedStatement.setString(1, miFarmaceutica.getNombre());
+                preparedStatement.setString(2, miFarmaceutica.getTelefono());
+                preparedStatement.setString(3, miFarmaceutica.getCorreoElectronico());
                 resultSet = preparedStatement.executeQuery();
                 
                 if (resultSet.next()) {

@@ -42,14 +42,14 @@
                         <h3 class="h3">${errorMjs}</h3>
                     </div>
                     <!-- agregar.jsp -->
-                    <form action="ControladorProducto" method="POST">
+                    <form action="ControladorFarmaceutica" method="POST">
                         <div class="form-group">
                             <label for="nombre">Nombre</label>
                             <input type="text" class="form-control" placeholder="Nombre de la farmaceutica" name="txtNombreFarmaceutica" required>
                             <label for="telefono">Telefono</label>
                             <input type="number" class="form-control" placeholder="Telefono" name="txtTelefono" required>
                             <label for="CorreoElectronico">Correo Electronico</label>
-                            <textarea class="form-control" rows="3" name = "txtCorreoElectronico" placeholder="Correo Electronico" required></textarea>
+                            <input type="text" class="form-control" placeholder="Correo Electronico" name="txtCorreoElectronico" required>
 
                             <!-- <input type="number" class="form-control" placeholder="Cantidad" min="1" name="txtCantidad" required> -->
                         </div>

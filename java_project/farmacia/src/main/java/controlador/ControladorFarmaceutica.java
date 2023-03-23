@@ -58,7 +58,8 @@ public class ControladorFarmaceutica extends HttpServlet {
                 
                 FarmaceuticaDAO farmaceuticaDAO = new FarmaceuticaDAO();
                 int respuesta = farmaceuticaDAO.create(farmaceutica);
-                if (respuesta == 1) {
+                if (respuesta == 1 ) {
+                    request.getSession().setAttribute("errorMjs","");
                     farmacia.getFarmaceutica().add(farmaceutica);
                     request.getSession().setAttribute("farmacia", farmacia);
                     request.getRequestDispatcher("./pages/farmaceutica/index.jsp").forward(request, response);

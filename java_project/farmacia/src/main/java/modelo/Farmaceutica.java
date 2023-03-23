@@ -39,7 +39,7 @@ public class Farmaceutica {
         return correoElectronico;
     }
 
-    public void setId(int aInt) {
-       this.id = id;
+    public void setId(int pID) {
+       this.id = pID;
     }
 }
