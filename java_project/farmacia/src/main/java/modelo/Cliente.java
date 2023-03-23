@@ -17,14 +17,16 @@ public class Cliente {
     private String apellido;
     private String telefono;
     private String correoElectronico;
-    private Date fechaNaciemiento;
+    private String fechaNaciemiento;
     private String genero;
+    
     public Cliente(String nombre, String apellido, String telefono, String correoElectronico, String fechaNaciemiento, String genero) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
         this.correoElectronico = correoElectronico;
-        this.fechaNaciemiento = cambiarStringADate(fechaNaciemiento);
+        this.fechaNaciemiento = fechaNaciemiento; 
+        //= cambiarStringADate(fechaNaciemiento);
         this.genero = genero;
     }
     public String getNombre() {
@@ -39,24 +41,17 @@ public class Cliente {
     public String getCorreoElectronico() {
         return correoElectronico;
     }
-    public Date getFechaNaciemiento() {
+    public String getFechaNaciemiento() {
         return fechaNaciemiento;
     }
     public String getGenero() {
         return genero;
     }
+    public int getId() {
+        return id;
+    }
     public void setId(int pId) {
         this.id = pId;
-    }
-
-    private Date cambiarStringADate(String fechaNaciemiento) {
-     // 2021-05-05
-        String[] fechaArray = fechaNaciemiento.split("-");
-        int anio = Integer.parseInt(fechaArray[0]);
-        int mes = Integer.parseInt(fechaArray[1]);
-        int dia = Integer.parseInt(fechaArray[2]);
-        Date fechaDate = new Date(anio, mes, dia);
-        return fechaDate;  
     }
     
 }

@@ -29,7 +29,7 @@ public class Farmacia {
         this.productos = farmaciaDao.cargarProductos(this);
         this.cargosEmpleados = farmaciaDao.cargarCargosEmpleados();
         //this.empleados = farmaciaDao.cargarEmpleados();
-        //this.clientes = farmaciaDao.cargarClientes();
+        this.clientes = farmaciaDao.cargarClientes();
         //this.vistas = new Vistas();//@miltonials
         //this.ventas = farmaciaDao.cargarVentas();
     }

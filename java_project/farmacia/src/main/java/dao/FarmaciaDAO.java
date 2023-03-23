@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import modelo.CargoEmpleado;
 import modelo.Cliente;
 import interfaces.ComponentesFarmacia;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -147,7 +148,33 @@ public ArrayList<Empleado> cargarEmpleados() {
 
     @Override
 public ArrayList<Cliente> cargarClientes() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    ArrayList<Cliente> clientes = new ArrayList<>();
+        String sql = "SELECT * FROM Cliente";
+
+        try {
+            preparedStatement = conexion.prepararSql(sql);
+            resultSet = preparedStatement.executeQuery();
+            
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id_cliente");
+                String nombre = resultSet.getString("nombre");
+                String apellido = resultSet.getString("apellido");
+                String telefono = resultSet.getString("telefono");
+                String correo = resultSet.getString("correo_electronico");
+                String fecha_nacimiento = resultSet.getString("fecha_nacimiento");
+                String genero = resultSet.getString("genero");
+
+                Cliente cliente = new Cliente(nombre, apellido, telefono, correo, fecha_nacimiento, genero);
+                
+                cliente.setId(id);
+                clientes.add(cliente);
+                System.out.println("Cliente agregado: " + nombre);
+            }
+            //conexion.desconectar();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return clientes;
     }
     
 }
