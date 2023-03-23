@@ -28,7 +28,7 @@ const menu = () => {
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="ControladorFarmaceutica?accion=index" method="POST">
                         🏥 Farmaceuticas
                     </a>
                 </li>
@@ -43,7 +43,7 @@ const menu = () => {
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="ControladorCliente?accion=index" method="POST">
                         💵 Clientes
                     </a>
                 </li>
