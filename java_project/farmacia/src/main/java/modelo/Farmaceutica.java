@@ -10,11 +10,17 @@ public class Farmaceutica {
     private String telefono;
     private String correoElectronico;
 
-    public Farmaceutica(int id, String nombre, String telefono, String correoElectronico) {
+    public Farmaceutica(int id,String nombre, String telefono, String correoElectronico) {
         this.id = id;
         this.nombre = nombre;
         this.telefono = telefono;
         this.correoElectronico = correoElectronico;
+    }
+
+    public Farmaceutica(String nombre, String telefono, String correo_electronico) {
+        this.nombre = nombre;
+        this.telefono = telefono;
+        this.correoElectronico = correo_electronico;
     }
 
     public int getId() {
@@ -31,5 +37,9 @@ public class Farmaceutica {
 
     public String getCorreoElectronico() {
         return correoElectronico;
+    }
+
+    public void setId(int aInt) {
+       this.id = id;
     }
 }
