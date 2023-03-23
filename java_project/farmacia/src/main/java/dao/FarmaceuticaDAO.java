@@ -20,7 +20,7 @@ public class FarmaceuticaDAO implements CRUD {
     public int create(Object farmaceutica) {
        Farmaceutica miFarmaceutica = (Farmaceutica) farmaceutica;
         //FUNCTION insertar_producto (p_id_farmaceutica NUMBER, p_id_tipo_producto NUMBER, p_nombre VARCHAR2, p_descripcion VARCHAR2, p_precio NUMBER, p_cantidad_stock NUMBER) RETURN NUMBER;
-        String sql = "SELECT farmacia_insertar.insertar_farmaceutica(?, ?, ?, ?) FROM DUAL";
+        String sql = "SELECT farmacia_insertar.insertar_farmaceutica(?, ?, ?) FROM DUAL";
         int respuesta = 0;
         try {
             conexion.conectar();

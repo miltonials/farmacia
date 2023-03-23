@@ -54,21 +54,12 @@ public class ControladorFarmaceutica extends HttpServlet {
                 String nombre = request.getParameter("txtNombreFarmaceutica");
                 String telefono = request.getParameter("txtTelefono");
                 String correo_electronico = request.getParameter("txtCorreoElectronico");
-                //String idTipoProducto = request.getParameter("multiTipoProducto");
-                //nombreTipoProducto = nombreTipoProducto.toLowerCase();
-                //TipoProducto tipoProducto = farmacia.buscarTipoProductoPorId(Integer.parseInt(idTipoProducto));
-                //String descripcion = request.getParameter("txtDescripcion");
-                //String precio = request.getParameter("txtPrecio");
-                //String nombreFarmaceutica = request.getParameter("multiFarmaceutica");
-                //Farmaceutica farmaceutica = farmacia.buscarFarmaceuticaPorId(Integer.parseInt(nombreFarmaceutica));
-                //String cantidad = request.getParameter("txtCantidad");
-                // int id, nombre, telefono, correo_electronico
                 Farmaceutica farmaceutica = new Farmaceutica(nombre,telefono,correo_electronico);
                 
                 FarmaceuticaDAO farmaceuticaDAO = new FarmaceuticaDAO();
                 int respuesta = farmaceuticaDAO.create(farmaceutica);
                 if (respuesta == 1) {
-                    farmacia.getFarmaceuticas().add(farmaceutica);
+                    farmacia.getFarmaceutica().add(farmaceutica);
                     request.getSession().setAttribute("farmacia", farmacia);
                     request.getRequestDispatcher("./pages/farmaceutica/index.jsp").forward(request, response);
                 }

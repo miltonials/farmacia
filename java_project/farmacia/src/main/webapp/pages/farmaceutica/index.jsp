@@ -51,8 +51,7 @@
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                
+                            <tbody>  
                             <c:forEach items="${farmacia.getFarmaceutica()}" var="farmaceutica" >
                                 <tr>
                                     <td>${farmaceutica.getId()}</td>
@@ -66,7 +65,7 @@
                                         </form>
                                     </td>
                                 </tr>
-                                </c:forEach>
+                            </c:forEach>
                             </tbody>
                         </table>
                     </div>
