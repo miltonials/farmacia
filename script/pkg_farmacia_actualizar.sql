@@ -11,16 +11,17 @@ END farmacia_modificar;
 /
 
 CREATE OR REPLACE PACKAGE BODY farmacia_modificar AS
-  FUNCTION modificar_tipo_producto (p_id_tipo_producto IN NUMBER, p_nombre IN VARCHAR2) RETURN NUMBER AS
+  FUNCTION modificar_tipo_producto (p_id_tipo_producto IN NUMBER, p_nombre IN VARCHAR2) RETURN NUMBER
+IS PRAGMA AUTONOMOUS_TRANSACTION;
     respuesta NUMBER;
     BEGIN
         BEGIN
-            UPDATE tipo_producto
-              SET nombre = p_nombre
-              WHERE id_tipo_producto = p_id_tipo_producto;
+            EXECUTE IMMEDIATE 'UPDATE tipo_producto SET nombre = :1
+                                WHERE id_tipo_producto = :2'
+            USING p_nombre, p_id_tipo_producto;
 
             respuesta := 1;
-            --COMMIT;
+            COMMIT;
 
             DBMS_OUTPUT.Put_Line('Se ha modificado el tipo de producto ' || p_nombre);
             RETURN respuesta;
@@ -36,7 +37,8 @@ CREATE OR REPLACE PACKAGE BODY farmacia_modificar AS
         END;
     END;
 
-  FUNCTION modificar_producto (p_id_producto IN NUMBER, p_id_farmaceutica NUMBER, p_id_tipo_producto NUMBER, p_nombre VARCHAR2, p_descripcion VARCHAR2, p_precio NUMBER, p_cantidad_stock NUMBER) RETURN NUMBER AS
+  FUNCTION modificar_producto (p_id_producto IN NUMBER, p_id_farmaceutica NUMBER, p_id_tipo_producto NUMBER, p_nombre VARCHAR2, p_descripcion VARCHAR2, p_precio NUMBER, p_cantidad_stock NUMBER) RETURN NUMBER
+IS PRAGMA AUTONOMOUS_TRANSACTION;
     respuesta NUMBER;
     BEGIN
         BEGIN
@@ -50,7 +52,7 @@ CREATE OR REPLACE PACKAGE BODY farmacia_modificar AS
               WHERE id_producto = p_id_producto;
 
             respuesta := 1;
-            --COMMIT;
+            COMMIT;
 
             DBMS_OUTPUT.Put_Line('Se ha modificado el producto ' || p_nombre);
             RETURN respuesta;
@@ -66,7 +68,8 @@ CREATE OR REPLACE PACKAGE BODY farmacia_modificar AS
         END;
     END;
 
-    FUNCTION modificar_farmaceutica (p_id_farmaceutica IN NUMBER, p_nombre IN VARCHAR2, p_telefono IN VARCHAR2, p_correo IN VARCHAR2) RETURN NUMBER AS
+    FUNCTION modificar_farmaceutica (p_id_farmaceutica IN NUMBER, p_nombre IN VARCHAR2, p_telefono IN VARCHAR2, p_correo IN VARCHAR2) RETURN NUMBER
+IS PRAGMA AUTONOMOUS_TRANSACTION;
     respuesta NUMBER;
     BEGIN
         BEGIN
@@ -77,7 +80,7 @@ CREATE OR REPLACE PACKAGE BODY farmacia_modificar AS
               WHERE id_farmaceutica = p_id_farmaceutica;
 
             respuesta := 1;
-            --COMMIT;
+            COMMIT;
 
             DBMS_OUTPUT.Put_Line('Se ha modificado la farmaceutica ' || p_nombre);
             RETURN respuesta;
@@ -93,7 +96,8 @@ CREATE OR REPLACE PACKAGE BODY farmacia_modificar AS
         END;
     END;
 
-    FUNCTION modificar_venta (p_id_venta IN NUMBER, p_id_cliente IN NUMBER, p_id_empleado IN NUMBER, p_fecha_venta IN DATE) RETURN NUMBER AS
+    FUNCTION modificar_venta (p_id_venta IN NUMBER, p_id_cliente IN NUMBER, p_id_empleado IN NUMBER, p_fecha_venta IN DATE) RETURN NUMBER
+IS PRAGMA AUTONOMOUS_TRANSACTION;
     respuesta NUMBER;
     BEGIN
         BEGIN
@@ -104,7 +108,7 @@ CREATE OR REPLACE PACKAGE BODY farmacia_modificar AS
               WHERE id_venta = p_id_venta;
 
             respuesta := 1;
-            --COMMIT;
+            COMMIT;
 
             DBMS_OUTPUT.Put_Line('Se ha modificado la venta ' || p_id_venta);
             RETURN respuesta;
@@ -120,7 +124,8 @@ CREATE OR REPLACE PACKAGE BODY farmacia_modificar AS
         END;
     END;
 
-    FUNCTION modificar_detalle_venta (p_id_venta IN NUMBER, p_id_producto IN NUMBER, p_cantidad IN NUMBER) RETURN NUMBER AS
+    FUNCTION modificar_detalle_venta (p_id_venta IN NUMBER, p_id_producto IN NUMBER, p_cantidad IN NUMBER) RETURN NUMBER
+IS PRAGMA AUTONOMOUS_TRANSACTION;
     respuesta NUMBER;
     BEGIN
         BEGIN
@@ -129,7 +134,7 @@ CREATE OR REPLACE PACKAGE BODY farmacia_modificar AS
               WHERE id_venta = p_id_venta and id_producto  = p_id_producto;
 
             respuesta := 1;
-            --COMMIT;
+            COMMIT;
 
             DBMS_OUTPUT.Put_Line('Se ha modificado el detalle de venta ');
             RETURN respuesta;
@@ -145,7 +150,8 @@ CREATE OR REPLACE PACKAGE BODY farmacia_modificar AS
         END;
     END;
 
-    FUNCTION modificar_cliente (p_id_cliente IN NUMBER, p_nombre IN VARCHAR2, p_apellido IN VARCHAR2, p_telefono IN VARCHAR2, p_correo IN VARCHAR2, p_fecha_nacimiento IN DATE, p_genero IN VARCHAR2) RETURN NUMBER AS
+    FUNCTION modificar_cliente (p_id_cliente IN NUMBER, p_nombre IN VARCHAR2, p_apellido IN VARCHAR2, p_telefono IN VARCHAR2, p_correo IN VARCHAR2, p_fecha_nacimiento IN DATE, p_genero IN VARCHAR2) RETURN NUMBER
+IS PRAGMA AUTONOMOUS_TRANSACTION;
     respuesta NUMBER;
     BEGIN
         BEGIN
@@ -159,7 +165,7 @@ CREATE OR REPLACE PACKAGE BODY farmacia_modificar AS
               WHERE id_cliente = p_id_cliente;
 
             respuesta := 1;
-            --COMMIT;
+            COMMIT;
 
             DBMS_OUTPUT.Put_Line('Se ha modificado el cliente ' || p_nombre);
             RETURN respuesta;
@@ -175,7 +181,8 @@ CREATE OR REPLACE PACKAGE BODY farmacia_modificar AS
         END;
     END;
 
-    FUNCTION modificar_empleado (p_id_empleado IN NUMBER, p_cedula IN VARCHAR2, p_id_cargo IN NUMBER, p_nombre IN VARCHAR2, p_apellido IN VARCHAR2, p_fecha_contratacion IN DATE, p_salario IN NUMBER) RETURN NUMBER AS
+    FUNCTION modificar_empleado (p_id_empleado IN NUMBER, p_cedula IN VARCHAR2, p_id_cargo IN NUMBER, p_nombre IN VARCHAR2, p_apellido IN VARCHAR2, p_fecha_contratacion IN DATE, p_salario IN NUMBER) RETURN NUMBER
+IS PRAGMA AUTONOMOUS_TRANSACTION;
     respuesta NUMBER;
     BEGIN
         BEGIN
@@ -189,7 +196,7 @@ CREATE OR REPLACE PACKAGE BODY farmacia_modificar AS
               WHERE id_empleado = p_id_empleado;
 
             respuesta := 1;
-            --COMMIT;
+            COMMIT;
 
             DBMS_OUTPUT.Put_Line('Se ha modificado el empleado ' || p_nombre);
             RETURN respuesta;
@@ -205,7 +212,8 @@ CREATE OR REPLACE PACKAGE BODY farmacia_modificar AS
         END;
     END;
 
-    FUNCTION modificar_cargo_empleado (p_id_cargo IN NUMBER, p_nombre IN VARCHAR2) RETURN NUMBER AS
+    FUNCTION modificar_cargo_empleado (p_id_cargo IN NUMBER, p_nombre IN VARCHAR2) RETURN NUMBER
+IS PRAGMA AUTONOMOUS_TRANSACTION;
     respuesta NUMBER;
     BEGIN
         BEGIN
@@ -214,7 +222,7 @@ CREATE OR REPLACE PACKAGE BODY farmacia_modificar AS
               WHERE id_cargo = p_id_cargo;
 
             respuesta := 1;
-            --COMMIT;
+            COMMIT;
 
             DBMS_OUTPUT.Put_Line('Se ha modificado el cargo ' || p_nombre);
 

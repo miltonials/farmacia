@@ -22,6 +22,7 @@ import modelo.TipoProducto;
  * @author milto
  */
 public class ControladorProducto extends HttpServlet {
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -35,48 +36,29 @@ public class ControladorProducto extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String accion = request.getParameter("accion");
-        switch (accion){
+        switch (accion) {
             case "index":
                 request.getRequestDispatcher("./pages/producto/index.jsp").forward(request, response);
                 break;
-            case "listar":
-                request.getRequestDispatcher("./pages/producto/listar.jsp").forward(request, response);
-                break;
-            case "agregar":
+            case "paginaCrear":
                 request.getRequestDispatcher("./pages/producto/create.jsp").forward(request, response);
                 break;
-            case "editar":
+            case "paginaEditar":
+                String id = request.getParameter("id");
+                Farmacia miFarmacia= (Farmacia) request.getSession().getAttribute("farmacia");
+                Producto producto = miFarmacia.buscarProductoPorId(Integer.parseInt(id));
+
+                request.getSession().setAttribute("productoModificar", producto);
                 request.getRequestDispatcher("./pages/producto/update.jsp").forward(request, response);
                 break;
-            case "eliminar":
+            case "paginaEliminar":
                 request.getRequestDispatcher("./pages/producto/delete.jsp").forward(request, response);
                 break;
-            case "Guardar":
-                Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
-                
-                String nombre = request.getParameter("txtNombreProducto");
-                String idTipoProducto = request.getParameter("multiTipoProducto");
-                //nombreTipoProducto = nombreTipoProducto.toLowerCase();
-                TipoProducto tipoProducto = farmacia.buscarTipoProductoPorId(Integer.parseInt(idTipoProducto));
-                String descripcion = request.getParameter("txtDescripcion");
-                String precio = request.getParameter("txtPrecio");
-                String nombreFarmaceutica = request.getParameter("multiFarmaceutica");
-                Farmaceutica farmaceutica = farmacia.buscarFarmaceuticaPorId(Integer.parseInt(nombreFarmaceutica));
-                String cantidad = request.getParameter("txtCantidad");
-                // int id, Farmaceutica farmaceutica, TipoProducto tipo, String nombre, String descripcion, double precio, int cantidadStock
-                Producto producto = new Producto(farmaceutica, tipoProducto, nombre, descripcion, Double.parseDouble(precio), Integer.parseInt(cantidad));
-                
-                ProductoDAO productoDAO = new ProductoDAO();
-                int respuesta = productoDAO.create(producto);
-                if (respuesta == 1) {
-                    farmacia.getProductos().add(producto);
-                    request.getSession().setAttribute("farmacia", farmacia);
-                    request.getRequestDispatcher("./pages/producto/index.jsp").forward(request, response);
-                }
-                else {
-                    request.getSession().setAttribute("errorMjs", "Código de error: " + respuesta);
-                    request.getRequestDispatcher("./pages/producto/create.jsp").forward(request, response);
-                }
+            case "Create":
+                registrarNuevoProducto(request, response);
+                break;
+            case "update":
+                actualizarProducto(request, response);
                 break;
             default:
                 request.getRequestDispatcher("./pages/producto/index.jsp").forward(request, response);
@@ -123,4 +105,67 @@ public class ControladorProducto extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    private void registrarNuevoProducto(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+
+        String nombre = request.getParameter("txtNombreProducto");
+        String idTipoProducto = request.getParameter("multiTipoProducto");
+        //nombreTipoProducto = nombreTipoProducto.toLowerCase();
+        TipoProducto tipoProducto = farmacia.buscarTipoProductoPorId(Integer.parseInt(idTipoProducto));
+        String descripcion = request.getParameter("txtDescripcion");
+        String precio = request.getParameter("txtPrecio");
+        String nombreFarmaceutica = request.getParameter("multiFarmaceutica");
+        Farmaceutica farmaceutica = farmacia.buscarFarmaceuticaPorId(Integer.parseInt(nombreFarmaceutica));
+        String cantidad = request.getParameter("txtCantidad");
+        // int id, Farmaceutica farmaceutica, TipoProducto tipo, String nombre, String descripcion, double precio, int cantidadStock
+        Producto producto = new Producto(farmaceutica, tipoProducto, nombre, descripcion, Double.parseDouble(precio), Integer.parseInt(cantidad));
+
+        ProductoDAO productoDAO = new ProductoDAO();
+        int respuesta = productoDAO.create(producto);
+
+        if (respuesta == 1) {
+            farmacia.getProductos().add(producto);
+            request.getSession().setAttribute("farmacia", farmacia);
+            request.getRequestDispatcher("./pages/producto/index.jsp").forward(request, response);
+        } else {
+            request.getSession().setAttribute("errorMjs", "Código de error: " + respuesta);
+            request.getRequestDispatcher("./pages/producto/create.jsp").forward(request, response);
+        }
+    }
+    
+    private void actualizarProducto(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
+        Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        
+        String nombre = request.getParameter("txtNombreProducto");
+        String idTipoProducto = request.getParameter("multiTipoProducto");
+        TipoProducto tipoProducto = farmacia.buscarTipoProductoPorId(Integer.parseInt(idTipoProducto));
+        String descripcion = request.getParameter("txtDescripcion");
+        String precio = request.getParameter("txtPrecio");
+        String nombreFarmaceutica = request.getParameter("multiFarmaceutica");
+        Farmaceutica farmaceutica = farmacia.buscarFarmaceuticaPorId(Integer.parseInt(nombreFarmaceutica));
+        String cantidad = request.getParameter("txtCantidad");
+        
+        Producto producto = (Producto) request.getSession().getAttribute("productoModificar");
+        producto.setNombre(nombre);
+        producto.setTipo(tipoProducto);
+        producto.setDescripcion(descripcion);
+        producto.setPrecio(Double.parseDouble(precio));
+        producto.setFarmaceutica(farmaceutica);
+        producto.setCantidadStock(Integer.parseInt(cantidad));
+        
+        ProductoDAO productoDAO = new ProductoDAO();
+        int respuesta = productoDAO.update(producto);
+        
+        if (respuesta == 1) {
+            request.getSession().setAttribute("farmacia", farmacia);
+            request.getRequestDispatcher("./pages/producto/index.jsp").forward(request, response);
+        } else {
+            request.getSession().setAttribute("errorMjs", "Código de error: " + respuesta);
+            request.getRequestDispatcher("./pages/producto/update.jsp").forward(request, response);
+        }
+        
+        
+    }
 }

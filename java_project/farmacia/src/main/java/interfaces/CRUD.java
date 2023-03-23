@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public interface CRUD {
     public int create(Object objeto);
-    public int read(Object objecto);
+    public Object read(int id);
     public int update(Object objeto);
     public int delete(Object objeto);
 }

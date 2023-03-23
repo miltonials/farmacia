@@ -40,7 +40,7 @@
                         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                         <h1 class="h2">Productos</h1>
                     </div>
-                    <a class="btn btn-primary" href="ControladorProducto?accion=agregar" method="GET">Agregar producto</a>
+                    <a class="btn btn-primary" href="ControladorProducto?accion=paginaCrear" method="GET">Agregar producto</a>
                     <div class="table-responsive">
                         <table class="table table-striped table-sm">
                             <thead>
@@ -67,10 +67,8 @@
                                     <td>${producto.getFarmaceutica().getNombre()}</td>
                                     <td>${producto.getCantidadStock()}</td>
                                     <td>
-                                        <form action="ControladorProducto">
-                                            <input type="submit" class="btn btn-primary" name="accion" value="editar">
-                                            <input type="submit" class="btn btn-danger" name="accion" value="eliminar">
-                                        </form>
+                                        <a class="btn btn-primary" href="ControladorProducto?accion=paginaEditar&id=${producto.getId()}" method="POST">Editar</a>
+                                        <a class="btn btn-danger" href="ControladorProducto?accion=paginaEliminar&id=${producto.getId()}" method="POST">Eliminar</a>
                                     </td>
                                 </tr>
                                 </c:forEach>

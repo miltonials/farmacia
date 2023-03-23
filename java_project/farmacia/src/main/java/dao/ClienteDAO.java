@@ -19,7 +19,7 @@ public class ClienteDAO implements CRUD {
     }
 
     @Override
-    public int read(Object objecto) {
+    public Object read(int id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

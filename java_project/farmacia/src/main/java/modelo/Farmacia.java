@@ -115,4 +115,13 @@ public class Farmacia {
         }
         return null;
     }
+
+    public Producto buscarProductoPorId(int id) {
+         for (Producto producto : this.productos) {
+            if (producto.getId() == id) {
+                return producto;
+            }
+        }
+        return null;
+    }
 }
