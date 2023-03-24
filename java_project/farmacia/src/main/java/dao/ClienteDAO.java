@@ -6,9 +6,10 @@ package dao;
 
 import java.util.ArrayList;
 import interfaces.CRUD;
-import java.sql.Date;
+import static java.sql.DriverManager.println;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Date;
 import modelo.Cliente;
 import modelo.Conexion;
 
@@ -30,12 +31,13 @@ private Conexion conexion = new Conexion();
         try {
             conexion.conectar();
             // Nombre, Apellido, Telefono, Correo_electronico, Fecha_nacimiento, Genero
+            println("fecha: " + miCliente.getFechaNaciemiento());
             preparedStatement = conexion.prepararSql(sql);
             preparedStatement.setString(1, miCliente.getNombre());
             preparedStatement.setString(2, miCliente.getApellido());
             preparedStatement.setString(3, miCliente.getTelefono());
             preparedStatement.setString(4, miCliente.getCorreoElectronico());
-            preparedStatement.setString(5, miCliente.getFechaNaciemiento());
+            preparedStatement.setDate(5, (java.sql.Date) miCliente.getFechaNaciemiento());
             preparedStatement.setString(6, miCliente.getGenero());
             resultSet = preparedStatement.executeQuery();
             
@@ -47,7 +49,7 @@ private Conexion conexion = new Conexion();
                 preparedStatement.setString(2, miCliente.getApellido());
                 preparedStatement.setString(3, miCliente.getTelefono());
                 preparedStatement.setString(4, miCliente.getCorreoElectronico());
-                preparedStatement.setString(5, miCliente.getFechaNaciemiento());
+                preparedStatement.setDate(5, (java.sql.Date) (Date) miCliente.getFechaNaciemiento());
                 preparedStatement.setString(6, miCliente.getGenero());
                 resultSet = preparedStatement.executeQuery();
                 

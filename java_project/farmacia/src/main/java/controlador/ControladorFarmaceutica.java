@@ -46,7 +46,10 @@ public class ControladorFarmaceutica extends HttpServlet {
                 request.getRequestDispatcher("./pages/farmaceutica/update.jsp").forward(request, response);
                 break;
             case "paginaEliminar":
-                request.getRequestDispatcher("./pages/farmaceutica/delete.jsp").forward(request, response);
+                cargarPaginaEliminar(request, response);
+                break;
+            case "delete":
+                eliminarFarmaceutica(request, response);
                 break;
             case "Guardar":
                 Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
@@ -111,4 +114,26 @@ public class ControladorFarmaceutica extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void cargarPaginaEliminar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String id = request.getParameter("id");
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        Farmaceutica farmaceutica = miFarmacia.buscarFarmaceuticaPorId(Integer.parseInt(id));
+
+        request.getSession().setAttribute("farmaceuticaModificar", farmaceutica);
+
+        request.getRequestDispatcher("./pages/farmaceutica/delete.jsp").forward(request, response);
+    }
+    private void eliminarFarmaceutica(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Farmaceutica farmaceutica = (Farmaceutica) request.getSession().getAttribute("farmaceuticaModificar");
+        FarmaceuticaDAO farmaceuticaDAO = new FarmaceuticaDAO();
+        int respuesta = farmaceuticaDAO.delete(farmaceutica);
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        miFarmacia.getFarmaceuticas().remove(farmaceutica);
+        
+        request.getSession().setAttribute("farmacia", miFarmacia);
+        request.getRequestDispatcher("./pages/farmaceutica/index.jsp").forward(request, response);
+    }
 }

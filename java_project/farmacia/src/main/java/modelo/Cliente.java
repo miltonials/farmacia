@@ -17,10 +17,10 @@ public class Cliente {
     private String apellido;
     private String telefono;
     private String correoElectronico;
-    private String fechaNaciemiento;
+    private Date fechaNaciemiento;
     private String genero;
     
-    public Cliente(String nombre, String apellido, String telefono, String correoElectronico, String fechaNaciemiento, String genero) {
+    public Cliente(String nombre, String apellido, String telefono, String correoElectronico, Date fechaNaciemiento, String genero) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
@@ -41,7 +41,7 @@ public class Cliente {
     public String getCorreoElectronico() {
         return correoElectronico;
     }
-    public String getFechaNaciemiento() {
+    public Date getFechaNaciemiento() {
         return fechaNaciemiento;
     }
     public String getGenero() {

@@ -60,7 +60,21 @@ public class FarmaceuticaDAO implements CRUD {
     }
 
     @Override
-    public int delete(Object objeto) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public int delete(Object farmaceutica) {
+        int respuesta = 0;
+        Farmaceutica miFarmaceutica = (Farmaceutica) farmaceutica;
+        String sql = "CALL farmacia_eliminar.eliminar_farmaceutica(?)";
+
+        try {
+            conexion.conectar();
+            preparedStatement = conexion.prepararSql(sql);
+            preparedStatement.setInt(1, miFarmaceutica.getId());
+            preparedStatement.executeQuery();
+            
+        } catch (Exception e) {
+            System.out.println("Error al eliminar farmaceutica: " + e.getMessage());
+        }
+
+        return respuesta;
     }
 }

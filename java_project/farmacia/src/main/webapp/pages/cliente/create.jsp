@@ -54,7 +54,7 @@
                             <label for="correo_electronico">Correo_electronico</label>
                             <input type="text" class="form-control" name="txtCorreoElectronico" id="correo_electronico" placeholder="juan@gmail.com">
                             <label for="fecha_nacimiento">Fecha_nacimiento</label>
-                            <input type="text" class="form-control" name="txtFechaNacimiento" id="fecha_nacimiento" placeholder="2002-11-15">
+                            <input type="date" class="form-control" name="txtFechaNacimiento" id="fecha_nacimiento" placeholder="2002-11-15">
                             <label for="genero">Genero</label>
                             <input type="text" class="form-control" name="txtGenero" id="genero" placeholder="masculino or femenino">
                         </div>

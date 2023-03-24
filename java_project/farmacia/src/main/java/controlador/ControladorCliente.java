@@ -5,15 +5,15 @@
 package controlador;
 
 import dao.ClienteDAO;
-import dao.FarmaceuticaDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modelo.Cliente;
-import modelo.Farmaceutica;
 import modelo.Farmacia;
 
 /**
@@ -53,15 +53,23 @@ public class ControladorCliente extends HttpServlet {
                 break;
             case "Guardar":
                 Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
-                
+                String fecha_nacimiento = request.getParameter("txtFechaNacimiento");
+                Date laFecha = null;
+                try {
+                    SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+                    laFecha = formato.parse(fecha_nacimiento);
+                } catch (Exception e) {
+                    System.out.println("Error al convertir la fecha");
+                }
+
                 String nombre = request.getParameter("txtNombre");
                 String apellido = request.getParameter("txtApellido");
                 String telefono = request.getParameter("txtTelefono");
                 String correo_electronico = request.getParameter("txtCorreoElectronico");
-                String fecha_nacimiento = request.getParameter("txtFechaNacimiento");
+                //String fecha_nacimiento = request.getParameter("txtFechaNacimiento");
                 String genero = request.getParameter("txtGenero");
 
-                Cliente cliente = new Cliente(nombre,apellido,telefono,correo_electronico,fecha_nacimiento,genero);                
+                Cliente cliente = new Cliente(nombre,apellido,telefono,correo_electronico,laFecha,genero);                
                 ClienteDAO clienteDAO = new ClienteDAO();
                 int respuesta = clienteDAO.create(cliente);
                 if (respuesta == 1 ) {

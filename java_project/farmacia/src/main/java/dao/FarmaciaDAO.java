@@ -220,7 +220,7 @@ public ArrayList<Cliente> cargarClientes() {
                 String apellido = resultSet.getString("apellido");
                 String telefono = resultSet.getString("telefono");
                 String correo = resultSet.getString("correo_electronico");
-                String fecha_nacimiento = resultSet.getString("fecha_nacimiento");
+                Date fecha_nacimiento = resultSet.getDate("fecha_nacimiento");
                 String genero = resultSet.getString("genero");
 
                 Cliente cliente = new Cliente(nombre, apellido, telefono, correo, fecha_nacimiento, genero);
