@@ -43,7 +43,10 @@ public class ControladorFarmaceutica extends HttpServlet {
                 request.getRequestDispatcher("./pages/farmaceutica/create.jsp").forward(request, response);
                 break;
             case "paginaEditar":
-                request.getRequestDispatcher("./pages/farmaceutica/update.jsp").forward(request, response);
+                cargarPaginaEditar(request, response);
+                break;
+            case "update":
+                actualizarFarmaceutica(request, response);
                 break;
             case "paginaEliminar":
                 cargarPaginaEliminar(request, response);
@@ -114,6 +117,42 @@ public class ControladorFarmaceutica extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private void cargarPaginaEditar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String id = request.getParameter("id");
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        Farmaceutica farmaceutica = miFarmacia.buscarFarmaceuticaPorId(Integer.parseInt(id));
+
+        request.getSession().setAttribute("farmaceuticaModificar", farmaceutica);
+
+        request.getRequestDispatcher("./pages/farmaceutica/update.jsp").forward(request, response);
+    }
+
+    private void actualizarFarmaceutica(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+
+        String nombre = request.getParameter("txtNombreFarmaceutica");
+        String telefono = request.getParameter("txtTelefono");
+        String correo_electronico = request.getParameter("txtCorreoElectronico");
+        
+        Farmaceutica farmaceutica = (Farmaceutica) request.getSession().getAttribute("farmaceuticaModificar");
+        farmaceutica.setNombre(nombre);
+        farmaceutica.setTelefono(telefono);
+        farmaceutica.setCorreoElectronico(correo_electronico);
+
+        FarmaceuticaDAO farmaceuticaDAO = new FarmaceuticaDAO();
+        int respuesta = farmaceuticaDAO.update(farmaceutica);
+
+        if (respuesta == 1) {
+            request.getSession().setAttribute("farmacia", farmacia);
+            request.getRequestDispatcher("./pages/farmaceutica/index.jsp").forward(request, response);
+        } else {
+            request.getSession().setAttribute("errorMjs", "Código de error: " + respuesta);
+            request.getRequestDispatcher("./pages/farmaceutica/update.jsp").forward(request, response);
+        }
+    }
 
     private void cargarPaginaEliminar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

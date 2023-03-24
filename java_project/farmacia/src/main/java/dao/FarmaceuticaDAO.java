@@ -55,9 +55,29 @@ public class FarmaceuticaDAO implements CRUD {
     }
 
     @Override
-    public int update(Object objeto) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    public int update(Object farmaceutica) {
+        int respuesta = 0;
+        Farmaceutica miFarmaceutica = (Farmaceutica) farmaceutica;
+        String sql = "SELECT farmacia_modificar.modificar_farmaceutica(?, ?, ?, ?) from dual";
+        //p_id_producto IN NUMBER, p_id_farmaceutica NUMBER, p_id_tipo_producto NUMBER, p_nombre VARCHAR2, p_descripcion VARCHAR2, p_precio NUMBER, p_cantidad_stock NUMBER
+
+        try {
+            conexion.conectar();
+            preparedStatement = conexion.prepararSql(sql);
+            preparedStatement.setInt(1, miFarmaceutica.getId());
+            preparedStatement.setString(2, miFarmaceutica.getNombre());
+            preparedStatement.setString(3, miFarmaceutica.getTelefono());
+            preparedStatement.setString(4, miFarmaceutica.getCorreoElectronico());
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                respuesta = resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error al actualizar farmaceutica: " + e.getMessage());
+        }
+
+        return respuesta;    }
 
     @Override
     public int delete(Object farmaceutica) {
