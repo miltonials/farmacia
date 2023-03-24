@@ -68,11 +68,11 @@ public class ControladorVenta extends HttpServlet {
                 
                 String idCliente = request.getParameter("multiCliente");
                 Cliente cliente = null;
-                /*for(Cliente c:farmacia.getClientes()){
+                for(Cliente c:farmacia.getClientes()){
                     if(c.getId()==Integer.parseInt(idCliente)){
                         cliente = c;
                     }
-                }*/
+                }
                 String idEmpleado = request.getParameter("multiEmpleado");
                 Empleado empleado = null;
                 for(Empleado emp:farmacia.getEmpleados()){
