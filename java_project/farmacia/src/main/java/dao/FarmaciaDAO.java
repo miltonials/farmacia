@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import modelo.CargoEmpleado;
 import modelo.Cliente;
 import interfaces.ComponentesFarmacia;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,8 +41,43 @@ public class FarmaciaDAO implements ComponentesFarmacia {
     }
 
     @Override
-    public ArrayList<Venta> cargarVentas() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public ArrayList<Venta> cargarVentas(Farmacia miFarmacia) {
+        ArrayList<Venta> ventas = new ArrayList<>();
+        String sql = "SELECT * FROM VENTA";
+
+        try {
+            preparedStatement = conexion.prepararSql(sql);
+            resultSet = preparedStatement.executeQuery();
+            
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id_venta");
+                System.out.println("hola, "+id);
+                
+                Date fecha = resultSet.getDate("fecha_emision");
+                int idCliente = resultSet.getInt("id_cliente");
+                int idEmpleado = resultSet.getInt("id_empleado");
+                double total = resultSet.getDouble("total_venta");
+                Cliente elCliente = null;
+                for(Cliente c: miFarmacia.getClientes()){
+                    if(c.getId()==idCliente){
+                        elCliente = c;
+                    }
+                }
+                
+                Empleado elEmp = null;
+                for(Empleado emp: miFarmacia.getEmpleados()){
+                    if(emp.getId()==idEmpleado){
+                        elEmp = emp;
+                    }
+                }
+                
+                Venta venta = new Venta(id, fecha, elCliente, elEmp, total);
+                ventas.add(venta);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al cargar ventas: " + e.getMessage());
+        }
+        return ventas;
     }
 
     @Override

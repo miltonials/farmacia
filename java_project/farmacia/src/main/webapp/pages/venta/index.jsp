@@ -55,13 +55,13 @@
                             </thead>
                             <tbody>
                                 
-                            <c:forEach items="${farmacia.getVentas()}" var="venta" >
+                            <c:forEach var="venta" items="${farmacia.getVentas()}">
                                 <tr>
                                     <td>${venta.getId()}</td>
-                                    <td>${venta.getFecha()}</td>
+                                    <td>${venta.getFecha_emision()}</td>
                                     <td>${venta.getCliente().getNombre()}</td>
                                     <td>${venta.getEmpleado().getNombre()}</td>
-                                    <td>${venta.getTotalVenta()}</td>
+                                    <td>${venta.getTotal_venta()}</td>
                                     <td>
                                         <form action="ControladorVenta">
                                             <a class="btn btn-primary" href="ControladorVenta?accion=paginaEditar" method="POST">Editar</a>

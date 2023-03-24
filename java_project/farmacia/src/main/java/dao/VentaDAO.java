@@ -36,7 +36,7 @@ public class VentaDAO implements CRUD {
                 sql = "SELECT id_venta FROM VENTA WHERE Fecha_emision = ? AND ID_cliente = ? AND ID_Empleado = ? AND Total_venta = ?";
                 preparedStatement = conexion.prepararSql(sql);
                 preparedStatement.setDate(1, (Date)miVenta.getFecha_emision());
-                //preparedStatement.setString(2, miVenta.getCliente().getId());
+                preparedStatement.setInt(2, miVenta.getCliente().getId());
                 preparedStatement.setInt(3, miVenta.getEmpleado().getId());
                 preparedStatement.setDouble(4, miVenta.getTotal_venta());
                 resultSet = preparedStatement.executeQuery();

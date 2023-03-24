@@ -20,6 +20,14 @@ public class Venta {
         this.total_venta = total_venta;
     }
 
+    public Venta(int id, Date fecha_emision, Cliente cliente, Empleado empleado, double total_venta) {
+        this.id = id;
+        this.fecha_emision = fecha_emision;
+        this.cliente = cliente;
+        this.empleado = empleado;
+        this.total_venta = total_venta;
+    }
+
     public int getId() {
         return id;
     }

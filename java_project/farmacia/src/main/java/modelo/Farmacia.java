@@ -31,7 +31,8 @@ public class Farmacia {
         this.empleados = farmaciaDao.cargarEmpleados();
         this.clientes = farmaciaDao.cargarClientes();
         //this.vistas = new Vistas();//@miltonials
-        //this.ventas = farmaciaDao.cargarVentas();
+        this.ventas = farmaciaDao.cargarVentas(this);
+        
     }
 
     public FarmaciaDAO getFarmaciaDao() {
