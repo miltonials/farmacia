@@ -25,14 +25,13 @@ public class Farmacia {
         empleadoActual = empleado;
         this.farmaceuticas = farmaciaDao.cargarFarmaceuticas();
         this.tiposProductos = farmaciaDao.cargarTiposProductos();
-        //this.tiposProductos  = new ArrayList<TipoProducto>();
         this.productos = farmaciaDao.cargarProductos(this);
-        //this.cargosEmpleados = farmaciaDao.cargarCargosEmpleados();//@miltonials
+        this.cargosEmpleados = farmaciaDao.cargarCargosEmpleados();
         this.empleados = farmaciaDao.cargarEmpleados();
         this.clientes = farmaciaDao.cargarClientes();
         //this.vistas = new Vistas();//@miltonials
         this.ventas = farmaciaDao.cargarVentas(this);
-        
+
     }
 
     public FarmaciaDAO getFarmaciaDao() {
@@ -98,6 +97,7 @@ public class Farmacia {
         return null;
     }
     
+
     public Farmaceutica buscarFarmaceuticaPorNombre(String nombre) {
         for (Farmaceutica farmaceutica : this.farmaceuticas) {
             if (farmaceutica.getNombre().equals(nombre)) {
@@ -115,7 +115,7 @@ public class Farmacia {
         }
         return null;
     }
-    
+
     public TipoProducto buscarTipoProductoPorId(int id) {
         for (TipoProducto tipoProducto : this.tiposProductos) {
             if (tipoProducto.getId() == id) {
@@ -126,7 +126,7 @@ public class Farmacia {
     }
 
     public Producto buscarProductoPorId(int id) {
-         for (Producto producto : this.productos) {
+        for (Producto producto : this.productos) {
             if (producto.getId() == id) {
                 return producto;
             }
@@ -138,6 +138,24 @@ public class Farmacia {
         for (CargoEmpleado cargoEmpleado : this.cargosEmpleados) {
             if (cargoEmpleado.getId() == id) {
                 return cargoEmpleado;
+            }
+        }
+        return null;
+    }
+
+    public Empleado buscarEmpleadoPorId(int id) {
+        for (Empleado empleado : empleados) {
+            if (empleado.getId() == id) {
+                return empleado;
+            }
+        }
+        return null;
+    }
+    
+    public Venta buscarVentaPorId(int id) {
+        for (Venta venta : ventas) {
+            if (venta.getId() == id) {
+                return venta;
             }
         }
         return null;

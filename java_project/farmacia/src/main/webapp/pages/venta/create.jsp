@@ -58,8 +58,9 @@
                                     <option value="${empleado.getId()}">${empleado.getNombre()}</option>
                                 </c:forEach>
                             </select>
-                            <label for="total">Total de venta</label>
-                            <input type="number" class="form-control" placeholder="Total de venta" name="txtTotal" step="0.01" min = "0" required>
+                            <h6>El total de la venta se calcula automáticamente al registrar los detalles</h6>
+                            <!-- <label for="total">Total de venta</label> -->
+                            <input type="hidden" class="form-control" placeholder="Total de venta" name="txtTotal" step="0.01" min = "0" value="0" required>
                         </div>
                         <input type="submit" class="btn btn-primary" name="accion" value="Guardar">
                     </form>

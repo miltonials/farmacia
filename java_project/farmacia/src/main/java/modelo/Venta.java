@@ -1,5 +1,7 @@
 package modelo;
 
+import dao.VentaDAO;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -12,6 +14,7 @@ public class Venta {
     private Cliente cliente;
     private Empleado empleado;
     private double total_venta;
+    private ArrayList<DetalleVenta> detalleVenta;
 
     public Venta(Date fecha_emision, Cliente cliente, Empleado empleado, double total_venta) {
         this.fecha_emision = fecha_emision;
@@ -28,6 +31,10 @@ public class Venta {
         this.total_venta = total_venta;
     }
 
+    public ArrayList<DetalleVenta> getDetalleVenta() {
+        return detalleVenta;
+    }
+    
     public int getId() {
         return id;
     }
@@ -68,5 +75,16 @@ public class Venta {
         this.total_venta = total_venta;
     }
     
-    
+    public void setDetalleVenta(ArrayList<DetalleVenta> detalles) {
+        this.detalleVenta = detalles;
+    }
+
+    public DetalleVenta buscarDetalleVenta(int idProducto) {
+        for (DetalleVenta detalle: this.detalleVenta) {
+            if (detalle.getProducto().getId() == idProducto) {
+                return detalle;
+            }
+        }
+        return null;
+    }
 }

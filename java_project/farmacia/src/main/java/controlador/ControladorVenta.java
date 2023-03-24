@@ -63,7 +63,7 @@ public class ControladorVenta extends HttpServlet {
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                     laFecha = format.parse(fecha);
                 }catch(Exception exc){
-                    
+                    System.out.println(exc.getMessage());
                 }
                 
                 String idCliente = request.getParameter("multiCliente");
@@ -81,8 +81,8 @@ public class ControladorVenta extends HttpServlet {
                     }
                 }
                 
-                String total = request.getParameter("txtTotal");
-                Venta venta = new Venta(laFecha, cliente, empleado, Double.parseDouble(total));
+                double total = 0.0;
+                Venta venta = new Venta(laFecha, cliente, empleado, total);
                 
                 VentaDAO ventaDAO = new VentaDAO();
                 int respuesta = ventaDAO.create(venta);

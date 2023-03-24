@@ -3,7 +3,7 @@ CREATE OR REPLACE PACKAGE farmacia_modificar AS
   FUNCTION modificar_producto (p_id_producto IN NUMBER, p_id_farmaceutica NUMBER, p_id_tipo_producto NUMBER, p_nombre VARCHAR2, p_descripcion VARCHAR2, p_precio NUMBER, p_cantidad_stock NUMBER) RETURN NUMBER;
   FUNCTION modificar_farmaceutica (p_id_farmaceutica IN NUMBER, p_nombre IN VARCHAR2, p_telefono IN VARCHAR2, p_correo IN VARCHAR2) RETURN NUMBER;
   FUNCTION modificar_venta (p_id_venta IN NUMBER, p_id_cliente IN NUMBER, p_id_empleado IN NUMBER, p_fecha_venta IN DATE) RETURN NUMBER;
-  FUNCTION modificar_detalle_venta (p_id_venta IN NUMBER, p_id_producto IN NUMBER, p_cantidad IN NUMBER) RETURN NUMBER; 
+  FUNCTION modificar_detalle_venta (p_id_venta IN NUMBER, p_id_producto IN NUMBER, p_cantidad IN NUMBER, p_precio_unitario IN NUMBER) RETURN NUMBER; 
   FUNCTION modificar_cliente (p_id_cliente IN NUMBER, p_nombre IN VARCHAR2, p_apellido IN VARCHAR2, p_telefono IN VARCHAR2, p_correo IN VARCHAR2, p_fecha_nacimiento IN DATE, p_genero IN VARCHAR2) RETURN NUMBER;
   FUNCTION modificar_empleado (p_id_empleado IN NUMBER, p_cedula IN VARCHAR2, p_id_cargo IN NUMBER, p_nombre IN VARCHAR2, p_apellido IN VARCHAR2, p_fecha_contratacion IN DATE, p_salario IN NUMBER) RETURN NUMBER;
   FUNCTION modificar_cargo_empleado (p_id_cargo IN NUMBER, p_nombre IN VARCHAR2) RETURN NUMBER;
@@ -135,27 +135,44 @@ IS PRAGMA AUTONOMOUS_TRANSACTION;
         END;
     END;
 
-    FUNCTION modificar_detalle_venta (p_id_venta IN NUMBER, p_id_producto IN NUMBER, p_cantidad IN NUMBER) RETURN NUMBER
-IS PRAGMA AUTONOMOUS_TRANSACTION;
-    respuesta NUMBER;
-    BEGIN
+    FUNCTION modificar_detalle_venta (p_id_venta IN NUMBER, p_id_producto IN NUMBER, p_cantidad IN NUMBER, p_precio_unitario IN NUMBER) RETURN NUMBER
+        IS
+        PRAGMA AUTONOMOUS_TRANSACTION;
+        respuesta NUMBER;
+        nuevoMonto NUMBER;
+        precio NUMBER;
+        cantidadAnterior NUMBER;
+        precioAnterior NUMBER;
         BEGIN
-            EXECUTE IMMEDIATE 'UPDATE detalle_venta SET cantidad = :1
-                                WHERE id_venta = :2 and id_producto = :3'
+        BEGIN
+            -- obtener el precio del producto
+            SELECT precio INTO precio FROM producto WHERE id_producto = p_id_producto;
+        
+            -- obtener la cantidad anterior y el precio anterior del detalle de venta
+            SELECT cantidad, precio_unitario INTO cantidadAnterior, precioAnterior 
+                FROM detalle_venta WHERE id_venta = p_id_venta AND id_producto = p_id_producto;
+        
+            -- calcular el nuevo total de ventas
+            nuevoMonto := precioAnterior - (precio * p_cantidad);
+        
+            -- actualizar la cantidad en el detalle de venta
+            EXECUTE IMMEDIATE 'UPDATE detalle_venta SET cantidad = :1 WHERE id_venta = :2 and id_producto = :3'
             USING p_cantidad, p_id_venta, p_id_producto;
-
-            -- UPDATE detalle_venta
-            --   SET cantidad = p_cantidad
-            --   WHERE id_venta = p_id_venta and id_producto  = p_id_producto;
-
-            respuesta := 1;
+            
+            EXECUTE IMMEDIATE 'UPDATE detalle_venta SET precio_unitario = :1 WHERE id_venta = :2 and id_producto = :3'
+            USING p_precio_unitario, p_id_venta, p_id_producto;
+        
+            -- actualizar el total de ventas en la venta
+            EXECUTE IMMEDIATE 'UPDATE venta SET total_venta = :1 WHERE id_venta = :2'
+            USING nuevoMonto, p_id_venta;
+        
+            respuesta := 1; -- devolver el nuevo total de ventas
             COMMIT;
-
-            DBMS_OUTPUT.Put_Line('Se ha modificado el detalle de venta ');
+        
+            DBMS_OUTPUT.Put_Line('Se ha modificado el detalle de venta y el total de ventas.');
             RETURN respuesta;
         
         EXCEPTION
-            --retorna el código de error
             WHEN DUP_VAL_ON_INDEX THEN
                 DBMS_OUTPUT.Put_Line('El detalle de venta ya existe');
                 RETURN -1;
@@ -164,6 +181,7 @@ IS PRAGMA AUTONOMOUS_TRANSACTION;
                 RETURN SQLCODE;
         END;
     END;
+
 
     FUNCTION modificar_cliente (p_id_cliente IN NUMBER, p_nombre IN VARCHAR2, p_apellido IN VARCHAR2, p_telefono IN VARCHAR2, p_correo IN VARCHAR2, p_fecha_nacimiento IN DATE, p_genero IN VARCHAR2) RETURN NUMBER
 IS PRAGMA AUTONOMOUS_TRANSACTION;

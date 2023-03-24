@@ -3,7 +3,7 @@ CREATE OR REPLACE PACKAGE farmacia_insertar AS
   FUNCTION insertar_producto (p_id_farmaceutica NUMBER, p_id_tipo_producto NUMBER, p_nombre VARCHAR2, p_descripcion VARCHAR2, p_precio NUMBER, p_cantidad_stock NUMBER) RETURN NUMBER;
   FUNCTION insertar_farmaceutica (p_nombre IN VARCHAR2, p_telefono IN VARCHAR2, p_correo IN VARCHAR2) RETURN NUMBER;
   FUNCTION insertar_venta (p_fecha_emision IN DATE, p_id_cliente IN NUMBER, p_id_empleado IN NUMBER, p_total_venta IN NUMBER) RETURN NUMBER;
-  FUNCTION insertar_detalle_venta (p_id_venta IN NUMBER, p_id_producto IN NUMBER, p_cantidad IN NUMBER, precio_unitario IN NUMBER) RETURN NUMBER;
+  FUNCTION insertar_detalle_venta (p_id_venta IN NUMBER, p_id_producto IN NUMBER, p_cantidad IN NUMBER) RETURN NUMBER;
   FUNCTION insertar_cliente (p_nombre IN VARCHAR2, p_apellido IN VARCHAR2, p_telefono IN VARCHAR2, p_correo_electronico IN VARCHAR2, p_fecha_nacimiento IN DATE, p_genero IN VARCHAR2) RETURN NUMBER;
   FUNCTION insertar_empleado (p_cedula IN VARCHAR2, p_id_cargo IN NUMBER, p_nombre IN VARCHAR2, p_apellido IN VARCHAR2, p_salario IN NUMBER, p_fecha_contratacion IN DATE, p_clave IN VARCHAR2) RETURN NUMBER;
   FUNCTION insertar_cargo_empleado (p_nombre IN VARCHAR2) RETURN NUMBER;
@@ -118,15 +118,28 @@ IS PRAGMA AUTONOMOUS_TRANSACTION;
         END;
     END;
 
-    FUNCTION insertar_detalle_venta (p_id_venta IN NUMBER, p_id_producto IN NUMBER, p_cantidad IN NUMBER, precio_unitario IN NUMBER) RETURN NUMBER
+    FUNCTION insertar_detalle_venta (p_id_venta IN NUMBER, p_id_producto IN NUMBER, p_cantidad IN NUMBER) RETURN NUMBER
 IS PRAGMA AUTONOMOUS_TRANSACTION;
     respuesta NUMBER;
+    vprecio_unitario NUMBER;
     BEGIN
         BEGIN
+            SELECT precio INTO vprecio_unitario
+                FROM producto
+                WHERE id_producto = p_id_producto;
+                
             EXECUTE IMMEDIATE 'INSERT INTO detalle_venta (ID_venta, ID_producto, Cantidad, Precio_unitario)
                                     VALUES (:1, :2, :3, :4)'
-                USING p_id_venta, p_id_producto, p_cantidad, precio_unitario;
-
+                USING p_id_venta, p_id_producto, p_cantidad, vprecio_unitario;
+                
+            UPDATE VENTA
+                SET total_venta = total_venta + vprecio_unitario * p_cantidad
+                WHERE id_venta = p_id_venta;
+            
+            UPDATE PRODUCTO
+                SET cantidad_stock = cantidad_stock - p_cantidad
+                WHERE id_producto = p_id_producto;
+                
             respuesta := 1;
             COMMIT;
 

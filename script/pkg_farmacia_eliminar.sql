@@ -3,7 +3,7 @@ CREATE OR REPLACE PACKAGE farmacia_eliminar AS
   PROCEDURE eliminar_producto (p_id_producto IN NUMBER);
   PROCEDURE eliminar_farmaceutica (p_id_farmaceutica IN NUMBER);
   PROCEDURE eliminar_venta (p_id_venta IN NUMBER);
-  PROCEDURE eliminar_detalle_venta (p_id_detalle_venta IN NUMBER);
+  PROCEDURE eliminar_detalle_venta (p_id_venta IN NUMBER, p_id_producto IN NUMBER);
   PROCEDURE eliminar_cliente (p_id_cliente IN NUMBER);
   PROCEDURE eliminar_empleado (p_id_empleado IN NUMBER);
   PROCEDURE eliminar_cargo_empleado (p_id_cargo IN NUMBER);
@@ -71,11 +71,22 @@ CREATE OR REPLACE PACKAGE BODY farmacia_eliminar AS
       END;
 
   PROCEDURE eliminar_detalle_venta (
-  p_id_detalle_venta IN NUMBER
+    p_id_venta IN NUMBER, p_id_producto IN NUMBER
   ) AS
+    monto NUMBER;
       BEGIN
+          SELECT precio_unitario * cantidad INTO monto
+            FROM DETALLE_VENTA
+                WHERE id_venta = p_id_venta AND
+                      id_producto = p_id_producto;
+          UPDATE VENTA
+            SET total_venta = total_venta - monto
+            WHERE id_venta =  p_id_venta;
+            
           DELETE FROM detalle_venta
-            WHERE id_venta = p_id_detalle_venta;
+            WHERE id_venta = p_id_venta AND
+                  id_producto = p_id_producto;
+          COMMIT;
           DBMS_OUTPUT.Put_Line('Registro eliminado');
       END;
 
