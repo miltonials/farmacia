@@ -60,7 +60,7 @@ public class ControladorVenta extends HttpServlet {
                 String fecha = request.getParameter("txtFechaEmision");
                 Date laFecha= null;
                 try{
-                    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                     laFecha = format.parse(fecha);
                 }catch(Exception exc){
                     
