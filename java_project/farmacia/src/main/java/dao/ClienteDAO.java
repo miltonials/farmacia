@@ -84,6 +84,7 @@ private Conexion conexion = new Conexion();
             preparedStatement.setString(4, miCliente.getTelefono());
             preparedStatement.setString(5, miCliente.getCorreoElectronico());
             preparedStatement.setDate(6, new java.sql.Date(miCliente.getFechaNacimiento().getTime()));
+            preparedStatement.setString(7, miCliente.getGenero());
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {

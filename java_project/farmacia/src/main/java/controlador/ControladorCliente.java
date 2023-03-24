@@ -166,10 +166,10 @@ public class ControladorCliente extends HttpServlet {
 
         if (respuesta == 1) {
             request.getSession().setAttribute("farmacia", farmacia);
-            request.getRequestDispatcher("./pages/producto/index.jsp").forward(request, response);
+            request.getRequestDispatcher("./pages/cliente/index.jsp").forward(request, response);
         } else {
             request.getSession().setAttribute("errorMjs", "Código de error: " + respuesta);
-            request.getRequestDispatcher("./pages/producto/update.jsp").forward(request, response);
+            request.getRequestDispatcher("./pages/cliente/update.jsp").forward(request, response);
         }
 
     }

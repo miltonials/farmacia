@@ -8,6 +8,7 @@ import dao.TipoProductoDAO;
 import dao.VentaDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -47,11 +48,17 @@ public class ControladorTipoProducto extends HttpServlet {
             case "agregar":
                 request.getRequestDispatcher("./pages/tipo_producto/create.jsp").forward(request, response);
                 break;
-            case "editar":
-                request.getRequestDispatcher("./pages/tipo_producto/update.jsp").forward(request, response);
+            case "paginaEditar":
+                cargarPaginaEditar(request, response);
                 break;
-            case "eliminar":
-                request.getRequestDispatcher("./pages/tipo_producto/delete.jsp").forward(request, response);
+            case "paginaEliminar":
+                cargarPaginaEliminar(request, response);
+                break;
+            case "update":
+                actualizarTipo(request, response);
+                break;
+            case "delete":
+                eliminarTipo(request, response);
                 break;
             case "Guardar":
                 Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
@@ -115,4 +122,57 @@ public class ControladorTipoProducto extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    private void cargarPaginaEditar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String id = request.getParameter("id");
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        TipoProducto tp = miFarmacia.buscarTipoProductoPorId(Integer.parseInt(id));
+        
+        request.getSession().setAttribute("tipoModificar", tp);
+        request.getRequestDispatcher("./pages/tipo_producto/update.jsp").forward(request, response);
+    }
+
+    private void cargarPaginaEliminar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        TipoProducto tipo = miFarmacia.buscarTipoProductoPorId(Integer.parseInt(request.getParameter("id")));
+        
+        request.getSession().setAttribute("tipoModificar", tipo);
+
+        request.getRequestDispatcher("./pages/tipo_producto/delete.jsp").forward(request, response);
+    }
+    
+    private void actualizarTipo(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+
+        String nombre = request.getParameter("txtNombre");
+        
+        TipoProducto tipo = (TipoProducto) request.getSession().getAttribute("tipoModificar");
+        tipo.setNombre(nombre);
+        
+        TipoProductoDAO tipoDAO = new TipoProductoDAO();
+        int respuesta = tipoDAO.update(tipo);
+
+        if (respuesta == 1) {
+            request.getSession().setAttribute("farmacia", farmacia);
+            request.getRequestDispatcher("./pages/tipo_producto/index.jsp").forward(request, response);
+        } else {
+            request.getSession().setAttribute("errorMjs", "Código de error: " + respuesta);
+            request.getRequestDispatcher("./pages/tipo_producto/update.jsp").forward(request, response);
+        }
+
+    }
+    
+    private void eliminarTipo(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        TipoProducto tipo = (TipoProducto) request.getSession().getAttribute("tipoModificar");
+        TipoProductoDAO tipoDAO = new TipoProductoDAO();
+        int respuesta = tipoDAO.delete(tipo);
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        miFarmacia.getTiposProductos().remove(tipo);
+        
+        request.getSession().setAttribute("farmacia", miFarmacia);
+        request.getRequestDispatcher("./pages/tipo_producto/index.jsp").forward(request, response);
+    }
 }
