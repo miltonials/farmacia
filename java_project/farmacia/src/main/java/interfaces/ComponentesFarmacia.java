@@ -21,7 +21,7 @@ public interface ComponentesFarmacia {
      *  Métodos para cargar los componentes de la farmacia
      */
     public ArrayList<DetalleVenta> cargarDetallesVentas();
-    public ArrayList<Venta> cargarVentas();
+    public ArrayList<Venta> cargarVentas(Farmacia miFarmacia);
     public ArrayList<Farmaceutica> cargarFarmaceuticas();
     public ArrayList<TipoProducto> cargarTiposProductos();
     public ArrayList<Producto> cargarProductos(Farmacia miFarmacia);

@@ -10,7 +10,8 @@ DROP TABLE PRODUCTO;
 DROP TABLE TIPO_PRODUCTO;
 DROP TABLE FARMACEUTICA;
 */
-
+select * from venta
+insert into venta (fecha_emision, id_cliente, id_empleado, total_venta) values (SYSDATE, 1, 3, 2000);
 CREATE TABLE Farmaceutica (
     ID_Farmaceutica NUMBER GENERATED ALWAYS AS IDENTITY,
     Nombre VARCHAR2(50) CONSTRAINT NN_Nombre_Farmaceutica NOT NULL
