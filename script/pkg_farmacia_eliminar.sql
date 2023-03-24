@@ -83,6 +83,15 @@ CREATE OR REPLACE PACKAGE BODY farmacia_eliminar AS
             SET total_venta = total_venta - monto
             WHERE id_venta =  p_id_venta;
             
+
+          --restaurar el stock
+          UPDATE producto
+            SET cantidad_stock = cantidad_stock + (SELECT cantidad
+                                  FROM detalle_venta
+                                  WHERE id_venta = p_id_venta AND
+                                        id_producto = p_id_producto)
+            WHERE id_producto = p_id_producto;
+            
           DELETE FROM detalle_venta
             WHERE id_venta = p_id_venta AND
                   id_producto = p_id_producto;

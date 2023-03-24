@@ -139,21 +139,21 @@ IS PRAGMA AUTONOMOUS_TRANSACTION;
         IS
         PRAGMA AUTONOMOUS_TRANSACTION;
         respuesta NUMBER;
+        montoVentaAnterior NUMBER;
         nuevoMonto NUMBER;
-        precio NUMBER;
         cantidadAnterior NUMBER;
         precioAnterior NUMBER;
         BEGIN
         BEGIN
-            -- obtener el precio del producto
-            SELECT precio INTO precio FROM producto WHERE id_producto = p_id_producto;
-        
+            -- obtener el monto anterior de la venta
+            SELECT total_venta INTO montoVentaAnterior FROM venta WHERE id_venta = p_id_venta;
+
             -- obtener la cantidad anterior y el precio anterior del detalle de venta
-            SELECT cantidad, precio_unitario INTO cantidadAnterior, precioAnterior 
+            SELECT cantidad, precioAnterior INTO cantidadAnterior, precioAnterior 
                 FROM detalle_venta WHERE id_venta = p_id_venta AND id_producto = p_id_producto;
         
             -- calcular el nuevo total de ventas
-            nuevoMonto := precioAnterior - (precio * p_cantidad);
+            nuevoMonto := montoVentaAnterior -(precioAnterior * cantidadAnterior) - (p_precio_unitario * p_cantidad);
         
             -- actualizar la cantidad en el detalle de venta
             EXECUTE IMMEDIATE 'UPDATE detalle_venta SET cantidad = :1 WHERE id_venta = :2 and id_producto = :3'
@@ -162,9 +162,14 @@ IS PRAGMA AUTONOMOUS_TRANSACTION;
             EXECUTE IMMEDIATE 'UPDATE detalle_venta SET precio_unitario = :1 WHERE id_venta = :2 and id_producto = :3'
             USING p_precio_unitario, p_id_venta, p_id_producto;
         
-            -- actualizar el total de ventas en la venta
-            EXECUTE IMMEDIATE 'UPDATE venta SET total_venta = :1 WHERE id_venta = :2'
+            -- actualizar el monto total de la venta en la tabla venta
+
+            EXECUTE IMMEDIATE 'UPDATE venta SET total_venta = total_venta - :1 WHERE id_venta = :2'
             USING nuevoMonto, p_id_venta;
+
+            -- actualizar el stock del producto
+            EXECUTE IMMEDIATE 'UPDATE producto SET cantidad_stock = cantidad_stock + (:1 - :2) WHERE id_producto = :3'
+            USING cantidadAnterior, p_cantidad, p_id_producto;
         
             respuesta := 1; -- devolver el nuevo total de ventas
             COMMIT;
