@@ -57,12 +57,46 @@ public class VentaDAO implements CRUD {
     }
 
     @Override
-    public int update(Object objeto) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public int update(Object venta) {
+        int respuesta = 0;
+        Venta miVenta = (Venta) venta;
+        String sql = "SELECT farmacia_modificar.modificar_venta(?, ?, ?, ?) from dual";
+        
+        try {
+            conexion.conectar();
+            preparedStatement = conexion.prepararSql(sql);
+            preparedStatement.setInt(1, miVenta.getId());
+            preparedStatement.setInt(2, miVenta.getCliente().getId());
+            preparedStatement.setInt(3, miVenta.getEmpleado().getId());
+            preparedStatement.setDate(4, new java.sql.Date(miVenta.getFecha_emision().getTime()));
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                respuesta = resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error al actualizar venta: " + e.getMessage());
+        }
+
+        return respuesta;
     }
 
     @Override
-    public int delete(Object objeto) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public int delete(Object venta) {
+        int respuesta = 0;
+        Venta miVenta = (Venta) venta;
+        String sql = "CALL farmacia_eliminar.eliminar_venta(?)";
+
+        try {
+            conexion.conectar();
+            preparedStatement = conexion.prepararSql(sql);
+            preparedStatement.setInt(1, miVenta.getId());
+            preparedStatement.executeQuery();
+            
+        } catch (Exception e) {
+            System.out.println("Error al eliminar venta: " + e.getMessage());
+        }
+
+        return respuesta;
     }
 }
