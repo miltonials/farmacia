@@ -89,6 +89,14 @@ public class Farmacia {
         }
         return null;
     }
+    public Cliente buscarClientePorId(int id) {
+        for (Cliente cliente : this.clientes) {
+            if (cliente.getId() == id) {
+                return cliente;
+            }
+        }
+        return null;
+    }
     
     public Farmaceutica buscarFarmaceuticaPorNombre(String nombre) {
         for (Farmaceutica farmaceutica : this.farmaceuticas) {

@@ -60,7 +60,7 @@ public class ControladorVenta extends HttpServlet {
                 String fecha = request.getParameter("txtFechaEmision");
                 Date laFecha= null;
                 try{
-                    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                     laFecha = format.parse(fecha);
                 }catch(Exception exc){
                     
@@ -68,11 +68,11 @@ public class ControladorVenta extends HttpServlet {
                 
                 String idCliente = request.getParameter("multiCliente");
                 Cliente cliente = null;
-                /*for(Cliente c:farmacia.getClientes()){
+                for(Cliente c:farmacia.getClientes()){
                     if(c.getId()==Integer.parseInt(idCliente)){
                         cliente = c;
                     }
-                }*/
+                }
                 String idEmpleado = request.getParameter("multiEmpleado");
                 Empleado empleado = null;
                 for(Empleado emp:farmacia.getEmpleados()){

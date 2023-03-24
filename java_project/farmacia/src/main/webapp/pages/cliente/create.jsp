@@ -46,17 +46,20 @@
                         <div class="form-group">
                             <!-- Nombre, Apellido, Telefono, Correo_electronico, Fecha_nacimiento, Genero -->
                             <label for="nombre">Nombre</label>
-                            <input type="text" class="form-control" name="txtNombre" id="nombre" placeholder="Juan">
+                            <input type="text" class="form-control" name="txtNombre" id="nombre" placeholder="Juan" required>
                             <label for="apellido">Apellido</label>
-                            <input type="text" class="form-control" name="txtApellido" id="apellido" placeholder="Castillo">
+                            <input type="text" class="form-control" name="txtApellido" id="apellido" placeholder="Castillo" required>
                             <label for="telefono">Telefono</label>
-                            <input type="text" class="form-control" name="txtTelefono" id="telefono" placeholder="82378273">
+                            <input type="text" class="form-control" name="txtTelefono" id="telefono" placeholder="82378273" required>
                             <label for="correo_electronico">Correo_electronico</label>
-                            <input type="text" class="form-control" name="txtCorreoElectronico" id="correo_electronico" placeholder="juan@gmail.com">
+                            <input type="text" class="form-control" name="txtCorreoElectronico" id="correo_electronico" placeholder="juan@gmail.com" required>
                             <label for="fecha_nacimiento">Fecha_nacimiento</label>
-                            <input type="text" class="form-control" name="txtFechaNacimiento" id="fecha_nacimiento" placeholder="2002-11-15">
+                            <input type="date" class="form-control" name="txtFechaNacimiento" id="fecha_nacimiento" placeholder="2002-11-15" max="2023-05-05" required>
                             <label for="genero">Genero</label>
-                            <input type="text" class="form-control" name="txtGenero" id="genero" placeholder="masculino or femenino">
+                            <select name="txtGenero" id="genero" class="form-control">
+                                <option value="masculino">Masculino</option>
+                                <option value="femenino">Femenino</option>
+                            </select>
                         </div>
                         <input type="submit" class="btn btn-primary" name="accion" value="Guardar">
                     </form>

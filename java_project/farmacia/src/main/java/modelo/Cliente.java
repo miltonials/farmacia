@@ -17,10 +17,10 @@ public class Cliente {
     private String apellido;
     private String telefono;
     private String correoElectronico;
-    private String fechaNaciemiento;
+    private Date fechaNaciemiento;
     private String genero;
     
-    public Cliente(String nombre, String apellido, String telefono, String correoElectronico, String fechaNaciemiento, String genero) {
+    public Cliente(String nombre, String apellido, String telefono, String correoElectronico, Date fechaNaciemiento, String genero) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
@@ -41,7 +41,7 @@ public class Cliente {
     public String getCorreoElectronico() {
         return correoElectronico;
     }
-    public String getFechaNaciemiento() {
+    public Date getFechaNacimiento() {
         return fechaNaciemiento;
     }
     public String getGenero() {
@@ -52,6 +52,30 @@ public class Cliente {
     }
     public void setId(int pId) {
         this.id = pId;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+    
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public void setCorreoElectronico(String correoElectronico) {
+        this.correoElectronico = correoElectronico;
+    }
+
+    public void setFechaNacimiento(Date fechaNaciemiento) {
+        this.fechaNaciemiento = fechaNaciemiento;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
     }
     
 }

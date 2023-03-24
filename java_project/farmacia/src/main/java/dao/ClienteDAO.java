@@ -6,9 +6,10 @@ package dao;
 
 import java.util.ArrayList;
 import interfaces.CRUD;
-import java.sql.Date;
+import static java.sql.DriverManager.println;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Date;
 import modelo.Cliente;
 import modelo.Conexion;
 
@@ -30,12 +31,13 @@ private Conexion conexion = new Conexion();
         try {
             conexion.conectar();
             // Nombre, Apellido, Telefono, Correo_electronico, Fecha_nacimiento, Genero
+            println("fecha: " + miCliente.getFechaNacimiento());
             preparedStatement = conexion.prepararSql(sql);
             preparedStatement.setString(1, miCliente.getNombre());
             preparedStatement.setString(2, miCliente.getApellido());
             preparedStatement.setString(3, miCliente.getTelefono());
             preparedStatement.setString(4, miCliente.getCorreoElectronico());
-            preparedStatement.setString(5, miCliente.getFechaNaciemiento());
+            preparedStatement.setDate(5, new java.sql.Date(miCliente.getFechaNacimiento().getTime()));
             preparedStatement.setString(6, miCliente.getGenero());
             resultSet = preparedStatement.executeQuery();
             
@@ -47,7 +49,7 @@ private Conexion conexion = new Conexion();
                 preparedStatement.setString(2, miCliente.getApellido());
                 preparedStatement.setString(3, miCliente.getTelefono());
                 preparedStatement.setString(4, miCliente.getCorreoElectronico());
-                preparedStatement.setString(5, miCliente.getFechaNaciemiento());
+                preparedStatement.setDate(5, new  java.sql.Date(miCliente.getFechaNacimiento().getTime()));
                 preparedStatement.setString(6, miCliente.getGenero());
                 resultSet = preparedStatement.executeQuery();
                 
@@ -67,12 +69,47 @@ private Conexion conexion = new Conexion();
     }
 
     @Override
-    public int update(Object objeto) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    public int update(Object cliente) {
+        int respuesta = 0;
+        Cliente miCliente = (Cliente) cliente;
+        String sql = "SELECT farmacia_modificar.modificar_cliente(?, ?, ?, ?, ?, ?, ?) from dual";
+        //p_id_producto IN NUMBER, p_id_farmaceutica NUMBER, p_id_tipo_producto NUMBER, p_nombre VARCHAR2, p_descripcion VARCHAR2, p_precio NUMBER, p_cantidad_stock NUMBER
+
+        try {
+            conexion.conectar();
+            preparedStatement = conexion.prepararSql(sql);
+            preparedStatement.setInt(1, miCliente.getId());
+            preparedStatement.setString(2, miCliente.getNombre());
+            preparedStatement.setString(3, miCliente.getApellido());
+            preparedStatement.setString(4, miCliente.getTelefono());
+            preparedStatement.setString(5, miCliente.getCorreoElectronico());
+            preparedStatement.setDate(6, new java.sql.Date(miCliente.getFechaNacimiento().getTime()));
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                respuesta = resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error al actualizar cliente: " + e.getMessage());
+        }
+
+        return respuesta;    }
 
     @Override
-    public int delete(Object objeto) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    public int delete(Object cliente) {
+        int respuesta = 0;
+        Cliente miCliente = (Cliente) cliente;
+        String sql = "CALL farmacia_eliminar.eliminar_cliente(?)";
+
+        try {
+            conexion.conectar();
+            preparedStatement = conexion.prepararSql(sql);
+            preparedStatement.setInt(1, miCliente.getId());
+            preparedStatement.executeQuery();
+            
+        } catch (Exception e) {
+            System.out.println("Error al eliminar el cliente: " + e.getMessage());
+        }
+
+        return respuesta;    }
 }

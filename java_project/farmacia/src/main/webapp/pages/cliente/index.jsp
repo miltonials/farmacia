@@ -58,21 +58,18 @@
                             </thead>
                             <tbody>
                                 
-                            <c:forEach items="${farmacia.getClientes()}" var="cliente" >
+                            <c:forEach items="${farmacia.getClientes()}"  var="cliente">
                                 <tr>
                                     <td>${cliente.getId()}</td>
                                     <td>${cliente.getNombre()}</td>
                                     <td>${cliente.getApellido()}</td>
                                     <td>${cliente.getTelefono()}</td>
                                     <td>${cliente.getCorreoElectronico()}</td>
-                                    <td>${cliente.getFechaNaciemiento()}</td>
+                                    <td>${cliente.getFechaNacimiento()}</td>
                                     <td>${cliente.getGenero()}</td>
                                     <td>
-                                        <form action="Controladorcliente">
-                                            <input type="hidden" name="id" value="${cliente.getId()}">
-                                            <a class="btn btn-primary" href="ControladorCliente?accion=paginaEditar" method="POST">Editar</a>
-                                            <a class="btn btn-danger" href="ControladorCliente?accion=paginaEliminar" method="POST">Eliminar</a>
-                                        </form>
+                                        <a class="btn btn-primary" href="ControladorCliente?accion=paginaEditar&id=${cliente.getId()}" method="POST">Editar</a>
+                                        <a class="btn btn-danger" href="ControladorCliente?accion=paginaEliminar&id=${cliente.getId()}" method="POST">Eliminar</a>
                                     </td>
                                 </tr>
                                 </c:forEach>

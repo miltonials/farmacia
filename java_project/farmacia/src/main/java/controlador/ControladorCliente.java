@@ -5,15 +5,15 @@
 package controlador;
 
 import dao.ClienteDAO;
-import dao.FarmaceuticaDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modelo.Cliente;
-import modelo.Farmaceutica;
 import modelo.Farmacia;
 
 /**
@@ -39,47 +39,30 @@ public class ControladorCliente extends HttpServlet {
             case "index":
                 request.getRequestDispatcher("./pages/cliente/index.jsp").forward(request, response);
                 break;
-            case "listar":
-                request.getRequestDispatcher("./pages/cliente/listar.jsp").forward(request, response);
-                break;
             case "agregar":
                 request.getRequestDispatcher("./pages/cliente/create.jsp").forward(request, response);
                 break;
             case "paginaEditar":
-                request.getRequestDispatcher("./pages/cliente/update.jsp").forward(request, response);
+                cargarPaginaEditar(request, response);
                 break;
+            case "update":
+                actualizarCliente(request, response);
             case "paginaEliminar":
-                request.getRequestDispatcher("./pages/cliente/delete.jsp").forward(request, response);
+                cargarPaginaEliminar(request, response);
+                break;
+            case "delete":
+                eliminarCliente(request, response);
                 break;
             case "Guardar":
-                Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
-                
-                String nombre = request.getParameter("txtNombre");
-                String apellido = request.getParameter("txtApellido");
-                String telefono = request.getParameter("txtTelefono");
-                String correo_electronico = request.getParameter("txtCorreoElectronico");
-                String fecha_nacimiento = request.getParameter("txtFechaNacimiento");
-                String genero = request.getParameter("txtGenero");
-
-                Cliente cliente = new Cliente(nombre,apellido,telefono,correo_electronico,fecha_nacimiento,genero);                
-                ClienteDAO clienteDAO = new ClienteDAO();
-                int respuesta = clienteDAO.create(cliente);
-                if (respuesta == 1 ) {
-                    request.getSession().setAttribute("errorMjs","");
-                    farmacia.getClientes().add(cliente);
-                    request.getSession().setAttribute("farmacia", cliente);
-                    request.getRequestDispatcher("./pages/cliente/index.jsp").forward(request, response);
-                }
-                else {
-                    request.getSession().setAttribute("errorMjs", "Código de error: " + respuesta);
-                    request.getRequestDispatcher("./pages/cliente/create.jsp").forward(request, response);
-                }
+                registrarNuevoCliente(request, response);
                 break;
             default:
-                request.getRequestDispatcher("./pages/cliente/index.jsp").forward(request, response);
+                request.getRequestDispatcher("./pages/producto/index.jsp").forward(request, response);
                 break;
+            }
+               
         }
-    } // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -117,4 +100,108 @@ public class ControladorCliente extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    private void registrarNuevoCliente(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        String fecha_nacimiento = request.getParameter("txtFechaNacimiento");
+        Date laFecha = null;
+        try {
+            SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+            laFecha = formato.parse(fecha_nacimiento);
+        } catch (Exception e) {
+            System.out.println("Error al convertir la fecha");
+        }
+
+        String nombre = request.getParameter("txtNombre");
+        String apellido = request.getParameter("txtApellido");
+        String telefono = request.getParameter("txtTelefono");
+        String correo_electronico = request.getParameter("txtCorreoElectronico");
+        //String fecha_nacimiento = request.getParameter("txtFechaNacimiento");
+        String genero = request.getParameter("txtGenero");
+
+        Cliente cliente = new Cliente(nombre,apellido,telefono,correo_electronico,laFecha,genero);                
+        ClienteDAO clienteDAO = new ClienteDAO();
+        int respuesta = clienteDAO.create(cliente);
+        if (respuesta == 1 ) {
+            request.getSession().setAttribute("errorMjs","");
+            farmacia.getClientes().add(cliente);
+            request.getSession().setAttribute("farmacia", farmacia);
+            request.getRequestDispatcher("./pages/cliente/index.jsp").forward(request, response);
+        }
+        else {
+            request.getSession().setAttribute("errorMjs", "Código de error: " + respuesta);
+            request.getRequestDispatcher("./pages/cliente/create.jsp").forward(request, response);
+        }
+    }
+            
+    private void actualizarCliente(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+
+        String nombre = request.getParameter("txtNombreCliente");
+        String apellido = request.getParameter("txtApellido");
+        String telefono = request.getParameter("txtTelefono");
+        String correo_electronico = request.getParameter("txtCorreoElectronico");
+        String fecha_nacimiento = request.getParameter("txtFechaNacimiento");
+        String genero = request.getParameter("txtGenero");
+         Date laFecha = null;
+        try {
+            SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+            laFecha = formato.parse(fecha_nacimiento);
+        } catch (Exception e) {
+            System.out.println("Error al convertir la fecha");
+        }
+
+
+        Cliente cliente = (Cliente) request.getSession().getAttribute("clienteModificar");
+        cliente.setNombre(nombre);
+        cliente.setApellido(apellido);
+        cliente.setTelefono(telefono);
+        cliente.setCorreoElectronico(correo_electronico);
+        cliente.setFechaNacimiento(laFecha);
+        cliente.setGenero(genero);
+
+        ClienteDAO clienteDAO = new ClienteDAO();
+        int respuesta = clienteDAO.update(cliente);
+
+        if (respuesta == 1) {
+            request.getSession().setAttribute("farmacia", farmacia);
+            request.getRequestDispatcher("./pages/producto/index.jsp").forward(request, response);
+        } else {
+            request.getSession().setAttribute("errorMjs", "Código de error: " + respuesta);
+            request.getRequestDispatcher("./pages/producto/update.jsp").forward(request, response);
+        }
+
+    }
+    private void cargarPaginaEditar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String id = request.getParameter("id");
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        Cliente cliente = miFarmacia.buscarClientePorId(Integer.parseInt(id));
+
+        request.getSession().setAttribute("clienteModificar", cliente);
+        request.getRequestDispatcher("./pages/cliente/update.jsp").forward(request, response);
+    }
+
+    private void cargarPaginaEliminar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String id = request.getParameter("id");
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        Cliente cliente = miFarmacia.buscarClientePorId(Integer.parseInt(id));
+
+        request.getSession().setAttribute("clienteModificar", cliente);
+
+        request.getRequestDispatcher("./pages/cliente/delete.jsp").forward(request, response);
+    }
+    private void eliminarCliente(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Cliente cliente = (Cliente) request.getSession().getAttribute("clienteModificar");
+        ClienteDAO clienteDAO = new ClienteDAO();
+        int respuesta = clienteDAO.delete(cliente);
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        miFarmacia.getClientes().remove(cliente);
+        
+        request.getSession().setAttribute("farmacia", miFarmacia);
+        request.getRequestDispatcher("./pages/cliente/index.jsp").forward(request, response);
+    }
 }

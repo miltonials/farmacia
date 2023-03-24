@@ -59,11 +59,8 @@
                                     <td>${farmaceutica.getTelefono()}</td>
                                     <td>${farmaceutica.getCorreoElectronico()}</td>
                                     <td>
-                                        <form action="ControladorFarmaceutica">
-                                            <input type="hidden" name="id" value="${farmaceutica.getId()}">
-                                            <a class="btn btn-primary" href="ControladorFarmaceutica?accion=paginaEditar" method="POST">Editar</a>
-                                            <a class="btn btn-danger" href="ControladorFarmaceutica?accion=paginaEliminar" method="POST">Eliminar</a>
-                                        </form>
+                                        <a class="btn btn-primary" href="ControladorFarmaceutica?accion=paginaEditar&id=${farmaceutica.getId()}" method="POST">Editar</a>
+                                        <a class="btn btn-danger" href="ControladorFarmaceutica?accion=paginaEliminar&id=${farmaceutica.getId()}" method="POST">Eliminar</a>
                                     </td>
                                 </tr>
                             </c:forEach>
