@@ -2,6 +2,7 @@ package modelo;
 
 import dao.VentaDAO;
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -86,5 +87,9 @@ public class Venta {
             }
         }
         return null;
+    }
+    public String getFecha(){
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MM-yyyy");
+        return formatoFecha.format(this.fecha_emision);
     }
 }
