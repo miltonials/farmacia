@@ -46,8 +46,10 @@ public class ControladorCliente extends HttpServlet {
                 request.getRequestDispatcher("./pages/cliente/create.jsp").forward(request, response);
                 break;
             case "paginaEditar":
-                request.getRequestDispatcher("./pages/cliente/update.jsp").forward(request, response);
+                cargarPaginaEditar(request, response);
                 break;
+            case "update":
+                actualizarCliente(request, response);
             case "paginaEliminar":
                 cargarPaginaEliminar(request, response);
                 break;
@@ -59,7 +61,7 @@ public class ControladorCliente extends HttpServlet {
                 String fecha_nacimiento = request.getParameter("txtFechaNacimiento");
                 Date laFecha = null;
                 try {
-                    SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+                    SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
                     laFecha = formato.parse(fecha_nacimiento);
                 } catch (Exception e) {
                     System.out.println("Error al convertir la fecha");
@@ -128,6 +130,39 @@ public class ControladorCliente extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    private void actualizarCliente(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+
+        String nombre = request.getParameter("txtNombreCliente");
+       
+
+        Cliente cliente = (Cliente) request.getSession().getAttribute("clienteModificar");
+        cliente.setNombre(nombre);
+        
+
+        ClienteDAO clienteDAO = new ClienteDAO();
+        int respuesta = clienteDAO.update(cliente);
+
+        if (respuesta == 1) {
+            request.getSession().setAttribute("farmacia", farmacia);
+            request.getRequestDispatcher("./pages/producto/index.jsp").forward(request, response);
+        } else {
+            request.getSession().setAttribute("errorMjs", "Código de error: " + respuesta);
+            request.getRequestDispatcher("./pages/producto/update.jsp").forward(request, response);
+        }
+
+    }
+    private void cargarPaginaEditar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String id = request.getParameter("id");
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        Cliente cliente = miFarmacia.buscarClientePorId(Integer.parseInt(id));
+
+        request.getSession().setAttribute("clienteModificar", cliente);
+        request.getRequestDispatcher("./pages/cliente/update.jsp").forward(request, response);
+    }
+
     private void cargarPaginaEliminar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String id = request.getParameter("id");

@@ -31,13 +31,13 @@ private Conexion conexion = new Conexion();
         try {
             conexion.conectar();
             // Nombre, Apellido, Telefono, Correo_electronico, Fecha_nacimiento, Genero
-            println("fecha: " + miCliente.getFechaNaciemiento());
+            println("fecha: " + miCliente.getFechaNacimiento());
             preparedStatement = conexion.prepararSql(sql);
             preparedStatement.setString(1, miCliente.getNombre());
             preparedStatement.setString(2, miCliente.getApellido());
             preparedStatement.setString(3, miCliente.getTelefono());
             preparedStatement.setString(4, miCliente.getCorreoElectronico());
-            preparedStatement.setDate(5, new java.sql.Date(miCliente.getFechaNaciemiento().getTime()));
+            preparedStatement.setDate(5, new java.sql.Date(miCliente.getFechaNacimiento().getTime()));
             preparedStatement.setString(6, miCliente.getGenero());
             resultSet = preparedStatement.executeQuery();
             
@@ -49,7 +49,7 @@ private Conexion conexion = new Conexion();
                 preparedStatement.setString(2, miCliente.getApellido());
                 preparedStatement.setString(3, miCliente.getTelefono());
                 preparedStatement.setString(4, miCliente.getCorreoElectronico());
-                preparedStatement.setDate(5, new  java.sql.Date(miCliente.getFechaNaciemiento().getTime()));
+                preparedStatement.setDate(5, new  java.sql.Date(miCliente.getFechaNacimiento().getTime()));
                 preparedStatement.setString(6, miCliente.getGenero());
                 resultSet = preparedStatement.executeQuery();
                 

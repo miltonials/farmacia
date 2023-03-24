@@ -53,5 +53,9 @@ public class Cliente {
     public void setId(int pId) {
         this.id = pId;
     }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
     
 }

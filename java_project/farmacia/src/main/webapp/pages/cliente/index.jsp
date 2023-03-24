@@ -58,7 +58,7 @@
                             </thead>
                             <tbody>
                                 
-                            <c:forEach  var="cliente" items="${farmacia.getClientes()}">
+                            <c:forEach items="${farmacia.getClientes()}"  var="cliente">
                                 <tr>
                                     <td>${cliente.getId()}</td>
                                     <td>${cliente.getNombre()}</td>
