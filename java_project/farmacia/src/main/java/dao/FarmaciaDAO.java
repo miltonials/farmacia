@@ -21,6 +21,7 @@ import modelo.Producto;
 import modelo.TipoProducto;
 import modelo.Venta;
 import modelo.MontoTotalVendidoPorMes;
+import modelo.VentasPorEmpleadoPorMes;
 
 /**
  *
@@ -89,6 +90,28 @@ public class FarmaciaDAO implements ComponentesFarmacia {
             e.printStackTrace();
         }
         return ventas;
+    }
+
+    public ArrayList<VentasPorEmpleadoPorMes> cargarVentasPorEmpleadoPorMes() {
+        ArrayList<VentasPorEmpleadoPorMes> ventasPorEmpleadoPorMes = new ArrayList<>();
+        String sql = "select *from ventas_por_empleado_por_mes";
+
+        try {
+            preparedStatement = conexion.prepararSql(sql);
+            resultSet = preparedStatement.executeQuery();
+            
+            while (resultSet.next()) {
+                String mes = resultSet.getString("mes");
+                String nombre = resultSet.getString("nombre_empleado");
+                int cantidad = resultSet.getInt("cantidad_ventas");
+                int total = resultSet.getInt("monto_total_ventas");
+                VentasPorEmpleadoPorMes ventasPorEmpleadoPorMes1 = new VentasPorEmpleadoPorMes(mes, nombre, cantidad, total);
+                ventasPorEmpleadoPorMes.add(ventasPorEmpleadoPorMes1);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al cargar ventas por empleado por mes: " + e.getMessage());
+        }
+        return ventasPorEmpleadoPorMes;
     }
 
     public ArrayList<MontoTotalVendidoPorMes> cargarMontosTotalesVendidosPorMes(){

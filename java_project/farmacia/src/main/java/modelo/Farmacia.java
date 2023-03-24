@@ -20,6 +20,7 @@ public class Farmacia {
     private ArrayList<Farmaceutica> farmaceuticas;
     private Empleado empleadoActual;
     private ArrayList<MontoTotalVendidoPorMes> montosTotalesVendidosPorMes;
+    private ArrayList<VentasPorEmpleadoPorMes> ventasPorEmpleadoPorMes;
     private Vistas vistas;
 
     public Farmacia(Empleado empleado) {
@@ -31,9 +32,15 @@ public class Farmacia {
         this.empleados = farmaciaDao.cargarEmpleados();
         this.clientes = farmaciaDao.cargarClientes();
         this.montosTotalesVendidosPorMes = farmaciaDao.cargarMontosTotalesVendidosPorMes();
+        this.ventasPorEmpleadoPorMes = farmaciaDao.cargarVentasPorEmpleadoPorMes();
+
         //this.vistas = new Vistas();//@miltonials
         this.ventas = farmaciaDao.cargarVentas(this);
 
+    }
+
+    public ArrayList<VentasPorEmpleadoPorMes> getVentasPorEmpleadoPorMes() {
+        return ventasPorEmpleadoPorMes;
     }
 
     public ArrayList<MontoTotalVendidoPorMes> getMontosTotalesVendidosPorMes() {

@@ -66,18 +66,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1,001</td>
-                                    <td>random</td>
-                                    <td>data</td>
-                                    <td>text</td>
-                                </tr>
-                                <tr>
-                                    <td>1,002</td>
-                                    <td>placeholder</td>
-                                    <td>irrelevant</td>
-                                    <td>layout</td>
-                                </tr>
+                                <c:forEach items="${farmacia.getVentasPorEmpleadoPorMes()}" var="ventaPorEmpleadoPorMes">
+                                    <tr>
+                                        <td>${ventaPorEmpleadoPorMes.getMes()}</td>
+                                        <td>${ventaPorEmpleadoPorMes.getEmpleado()}</td>
+                                        <td>${ventaPorEmpleadoPorMes.getCantidadVentas()}</td>
+                                        <td>${ventaPorEmpleadoPorMes.getMontoTotalVendido()}</td>
+                                    </tr>
+                                </c:forEach>
                             </tbody>
                         </table>
                     </div>
