@@ -58,8 +58,8 @@
                                     <td>${tipo.getNombre()}</td>
                                     <td>
                                         <form action="ControladorTipoProducto">
-                                            <a class="btn btn-primary" href="ControladorTipoProducto?accion=paginaEditar" method="POST">Editar</a>
-                                            <a class="btn btn-danger" href="ControladorTipoProducto?accion=paginaEliminar" method="POST">Eliminar</a>
+                                            <a class="btn btn-primary" href="ControladorTipoProducto?accion=paginaEditar&id=${tipo.getId()}" method="POST">Editar</a>
+                                            <a class="btn btn-danger" href="ControladorTipoProducto?accion=paginaEliminar&id=${tipo.getId()}" method="POST">Eliminar</a>
                                         </form>
                                     </td>
                                 </tr>
