@@ -1,5 +1,6 @@
 package modelo;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -68,5 +69,8 @@ public class Venta {
         this.total_venta = total_venta;
     }
     
-    
+    public String getFecha(){
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MM-yyyy");
+        return formatoFecha.format(this.fecha_emision);
+    }
 }

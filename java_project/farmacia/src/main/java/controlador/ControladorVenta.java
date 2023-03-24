@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import modelo.Cliente;
 import modelo.Empleado;
+import modelo.Farmaceutica;
 import modelo.Farmacia;
 
 import modelo.Venta;
@@ -48,11 +49,17 @@ public class ControladorVenta extends HttpServlet {
             case "agregar":
                 request.getRequestDispatcher("./pages/venta/create.jsp").forward(request, response);
                 break;
-            case "editar":
-                request.getRequestDispatcher("./pages/venta/update.jsp").forward(request, response);
+            case "paginaEditar":
+                cargarPaginaEditar(request, response);
                 break;
-            case "eliminar":
-                request.getRequestDispatcher("./pages/venta/delete.jsp").forward(request, response);
+            case "paginaEliminar":
+                cargarPaginaEliminar(request, response);
+                break;
+            case "update":
+                actualizarVenta(request, response);
+                break;
+            case "delete":
+                eliminarVenta(request, response);
                 break;
             case "Guardar":
                 Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
@@ -141,4 +148,88 @@ public class ControladorVenta extends HttpServlet {
         return "Short description";
     }// </editor-fold>
     
+    private void cargarPaginaEditar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String id = request.getParameter("id");
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        Venta venta = null;
+        
+        for(Venta v: miFarmacia.getVentas()){
+            if(v.getId()==Integer.parseInt(id)){
+                venta = v;
+            }
+        }
+        
+        request.getSession().setAttribute("ventaModificar", venta);
+        request.getRequestDispatcher("./pages/venta/update.jsp").forward(request, response);
+    }
+
+    private void cargarPaginaEliminar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String id = request.getParameter("id");
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        Venta venta = null;
+        
+        for(Venta v: miFarmacia.getVentas()){
+            if(v.getId()==Integer.parseInt(id)){
+                venta = v;
+            }
+        }
+        request.getSession().setAttribute("ventaModificar", venta);
+
+        request.getRequestDispatcher("./pages/venta/delete.jsp").forward(request, response);
+    }
+    
+    private void actualizarVenta(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+
+        String cliente = request.getParameter("multiCliente");
+        String empleado = request.getParameter("multiEmpleado");
+        String fecha = request.getParameter("txtFecha");
+        
+        Venta venta = (Venta) request.getSession().getAttribute("ventaModificar");
+        for (Cliente c: farmacia.getClientes()){
+            if(c.getId() == Integer.parseInt(cliente)){
+                venta.setCliente(c);
+            }
+        }
+        
+        for (Empleado e: farmacia.getEmpleados()){
+            if(e.getId() == Integer.parseInt(empleado)){
+                venta.setEmpleado(e);
+            }
+        }
+        
+        try{
+            SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+            venta.setFecha_emision(formatoFecha.parse(fecha));
+        }catch (Exception exc){
+            exc.printStackTrace();
+        }
+        
+        VentaDAO ventaDAO = new VentaDAO();
+        int respuesta = ventaDAO.update(venta);
+
+        if (respuesta == 1) {
+            request.getSession().setAttribute("farmacia", farmacia);
+            request.getRequestDispatcher("./pages/venta/index.jsp").forward(request, response);
+        } else {
+            request.getSession().setAttribute("errorMjs", "Código de error: " + respuesta);
+            request.getRequestDispatcher("./pages/venta/update.jsp").forward(request, response);
+        }
+
+    }
+    
+    private void eliminarVenta(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Venta venta = (Venta) request.getSession().getAttribute("ventaModificar");
+        VentaDAO ventaDAO = new VentaDAO();
+        int respuesta = ventaDAO.delete(venta);
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        miFarmacia.getVentas().remove(venta);
+        
+        request.getSession().setAttribute("farmacia", miFarmacia);
+        request.getRequestDispatcher("./pages/venta/index.jsp").forward(request, response);
+    }
 }

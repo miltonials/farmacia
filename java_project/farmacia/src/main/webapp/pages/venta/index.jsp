@@ -64,8 +64,8 @@
                                     <td>${venta.getTotal_venta()}</td>
                                     <td>
                                         <form action="ControladorVenta">
-                                            <a class="btn btn-primary" href="ControladorVenta?accion=paginaEditar" method="POST">Editar</a>
-                                            <a class="btn btn-danger" href="ControladorVenta?accion=paginaEliminar" method="POST">Eliminar</a>
+                                            <a class="btn btn-primary" href="ControladorVenta?accion=paginaEditar&id=${venta.getId()}" method="POST">Editar</a>
+                                            <a class="btn btn-danger" href="ControladorVenta?accion=paginaEliminar&id=${venta.getId()}" method="POST">Eliminar</a>
                                         </form>
                                     </td>
                                 </tr>
