@@ -57,5 +57,25 @@ public class Cliente {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+    
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public void setCorreoElectronico(String correoElectronico) {
+        this.correoElectronico = correoElectronico;
+    }
+
+    public void setFechaNacimiento(Date fechaNaciemiento) {
+        this.fechaNaciemiento = fechaNaciemiento;
+    }
+
+    public void setGenero(String genero) {
+        this.genero = genero;
+    }
     
 }

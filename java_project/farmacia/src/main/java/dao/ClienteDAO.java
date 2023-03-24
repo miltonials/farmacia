@@ -69,9 +69,31 @@ private Conexion conexion = new Conexion();
     }
 
     @Override
-    public int update(Object objeto) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    public int update(Object cliente) {
+        int respuesta = 0;
+        Cliente miCliente = (Cliente) cliente;
+        String sql = "SELECT farmacia_modificar.modificar_cliente(?, ?, ?, ?, ?, ?, ?) from dual";
+        //p_id_producto IN NUMBER, p_id_farmaceutica NUMBER, p_id_tipo_producto NUMBER, p_nombre VARCHAR2, p_descripcion VARCHAR2, p_precio NUMBER, p_cantidad_stock NUMBER
+
+        try {
+            conexion.conectar();
+            preparedStatement = conexion.prepararSql(sql);
+            preparedStatement.setInt(1, miCliente.getId());
+            preparedStatement.setString(2, miCliente.getNombre());
+            preparedStatement.setString(3, miCliente.getApellido());
+            preparedStatement.setString(4, miCliente.getTelefono());
+            preparedStatement.setString(5, miCliente.getCorreoElectronico());
+            preparedStatement.setDate(6, new java.sql.Date(miCliente.getFechaNacimiento().getTime()));
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                respuesta = resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            System.out.println("Error al actualizar cliente: " + e.getMessage());
+        }
+
+        return respuesta;    }
 
     @Override
     public int delete(Object cliente) {
