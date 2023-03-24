@@ -1,5 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-    <!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<!DOCTYPE html>
     <html>
 
     <head>
@@ -34,6 +36,24 @@
                         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                         <h1 class="h2">Dashboard</h1>
                     </div>
+                    <h2>Montos Totales VendidosPorMes</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-sm">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Mes</th>
+                                    <th scope="col">Monto total vendido</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach items="${farmacia.getMontosTotalesVendidosPorMes()}" var="montoTotalVendidoPorMes">
+                                    <tr>
+                                        <td>${montoTotalVendidoPorMes.getMes()}</td>
+                                        <td>${montoTotalVendidoPorMes.getTotal()}</td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
                     <h2>Ventas por empleado por mes</h2>
                     <div class="table-responsive">
                         <table class="table table-striped table-sm">
