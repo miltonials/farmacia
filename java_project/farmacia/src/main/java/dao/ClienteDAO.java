@@ -37,7 +37,7 @@ private Conexion conexion = new Conexion();
             preparedStatement.setString(2, miCliente.getApellido());
             preparedStatement.setString(3, miCliente.getTelefono());
             preparedStatement.setString(4, miCliente.getCorreoElectronico());
-            preparedStatement.setDate(5, (java.sql.Date) miCliente.getFechaNaciemiento());
+            preparedStatement.setDate(5, new java.sql.Date(miCliente.getFechaNaciemiento().getTime()));
             preparedStatement.setString(6, miCliente.getGenero());
             resultSet = preparedStatement.executeQuery();
             
@@ -49,7 +49,7 @@ private Conexion conexion = new Conexion();
                 preparedStatement.setString(2, miCliente.getApellido());
                 preparedStatement.setString(3, miCliente.getTelefono());
                 preparedStatement.setString(4, miCliente.getCorreoElectronico());
-                preparedStatement.setDate(5, (java.sql.Date) (Date) miCliente.getFechaNaciemiento());
+                preparedStatement.setDate(5, new  java.sql.Date(miCliente.getFechaNaciemiento().getTime()));
                 preparedStatement.setString(6, miCliente.getGenero());
                 resultSet = preparedStatement.executeQuery();
                 
@@ -74,7 +74,20 @@ private Conexion conexion = new Conexion();
     }
 
     @Override
-    public int delete(Object objeto) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    public int delete(Object cliente) {
+        int respuesta = 0;
+        Cliente miCliente = (Cliente) cliente;
+        String sql = "CALL farmacia_eliminar.eliminar_cliente(?)";
+
+        try {
+            conexion.conectar();
+            preparedStatement = conexion.prepararSql(sql);
+            preparedStatement.setInt(1, miCliente.getId());
+            preparedStatement.executeQuery();
+            
+        } catch (Exception e) {
+            System.out.println("Error al eliminar el cliente: " + e.getMessage());
+        }
+
+        return respuesta;    }
 }

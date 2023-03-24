@@ -49,7 +49,10 @@ public class ControladorCliente extends HttpServlet {
                 request.getRequestDispatcher("./pages/cliente/update.jsp").forward(request, response);
                 break;
             case "paginaEliminar":
-                request.getRequestDispatcher("./pages/cliente/delete.jsp").forward(request, response);
+                cargarPaginaEliminar(request, response);
+                break;
+            case "delete":
+                eliminarCliente(request, response);
                 break;
             case "Guardar":
                 Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
@@ -125,4 +128,25 @@ public class ControladorCliente extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    private void cargarPaginaEliminar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String id = request.getParameter("id");
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        Cliente cliente = miFarmacia.buscarClientePorId(Integer.parseInt(id));
+
+        request.getSession().setAttribute("clienteModificar", cliente);
+
+        request.getRequestDispatcher("./pages/cliente/delete.jsp").forward(request, response);
+    }
+    private void eliminarCliente(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Cliente cliente = (Cliente) request.getSession().getAttribute("clienteModificar");
+        ClienteDAO clienteDAO = new ClienteDAO();
+        int respuesta = clienteDAO.delete(cliente);
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        miFarmacia.getClientes().remove(cliente);
+        
+        request.getSession().setAttribute("farmacia", miFarmacia);
+        request.getRequestDispatcher("./pages/cliente/index.jsp").forward(request, response);
+    }
 }

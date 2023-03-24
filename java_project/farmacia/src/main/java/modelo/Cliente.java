@@ -41,7 +41,7 @@ public class Cliente {
     public String getCorreoElectronico() {
         return correoElectronico;
     }
-    public Date getFechaNaciemiento() {
+    public Date getFechaNacimiento() {
         return fechaNaciemiento;
     }
     public String getGenero() {
