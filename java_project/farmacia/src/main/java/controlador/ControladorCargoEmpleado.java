@@ -127,27 +127,16 @@ public class ControladorCargoEmpleado extends HttpServlet {
             throws ServletException, IOException {
         Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
 
-        String nombre = request.getParameter("txtNombreProducto");
-        String idTipoProducto = request.getParameter("multiTipoProducto");
-        TipoProducto tipoProducto = farmacia.buscarTipoProductoPorId(Integer.parseInt(idTipoProducto));
-        String descripcion = request.getParameter("txtDescripcion");
-        String precio = request.getParameter("txtPrecio");
-        String nombreFarmaceutica = request.getParameter("multiFarmaceutica");
-        Farmaceutica farmaceutica = farmacia.buscarFarmaceuticaPorId(Integer.parseInt(nombreFarmaceutica));
-        String cantidad = request.getParameter("txtCantidad");
+        String nombre = request.getParameter("txtNombreCargoEmpleado");
 
-        Producto producto = (Producto) request.getSession().getAttribute("productoModificar");
-        producto.setNombre(nombre);
-        producto.setTipo(tipoProducto);
-        producto.setDescripcion(descripcion);
-        producto.setPrecio(Double.parseDouble(precio));
-        producto.setFarmaceutica(farmaceutica);
-        producto.setCantidadStock(Integer.parseInt(cantidad));
-
-        ProductoDAO productoDAO = new ProductoDAO();
-        int respuesta = productoDAO.update(producto);
+        CargoEmpleado cargoEmpleado = (CargoEmpleado) request.getSession().getAttribute("cargoEmpleadoModificar");
+        cargoEmpleado.setNombre(nombre);
+        
+        CargoEmpleadoDAO cargoEmpleadoDAO = new CargoEmpleadoDAO();
+        int respuesta = cargoEmpleadoDAO.update(cargoEmpleado);
 
         if (respuesta == 1) {
+            request.getSession().setAttribute("errorMjs", "");
             request.getSession().setAttribute("farmacia", farmacia);
             request.getRequestDispatcher("./pages/cargo_empleado/index.jsp").forward(request, response);
         } else {
@@ -161,9 +150,9 @@ public class ControladorCargoEmpleado extends HttpServlet {
             throws ServletException, IOException {
         String id = request.getParameter("id");
         Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
-        Producto producto = miFarmacia.buscarProductoPorId(Integer.parseInt(id));
+        CargoEmpleado cargoEmpleado = miFarmacia.buscarCargoEmpleadoPorId(Integer.parseInt(id));
 
-        request.getSession().setAttribute("productoModificar", producto);
+        request.getSession().setAttribute("cargoEmpleadoModificar", cargoEmpleado);
         request.getRequestDispatcher("./pages/cargo_empleado/update.jsp").forward(request, response);
     }
 
@@ -171,20 +160,20 @@ public class ControladorCargoEmpleado extends HttpServlet {
             throws ServletException, IOException {
         String id = request.getParameter("id");
         Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
-        Producto producto = miFarmacia.buscarProductoPorId(Integer.parseInt(id));
+        CargoEmpleado cargoEmpleado = miFarmacia.buscarCargoEmpleadoPorId(Integer.parseInt(id));
 
-        request.getSession().setAttribute("productoModificar", producto);
+        request.getSession().setAttribute("cargoEmpleadoModificar", cargoEmpleado);
 
         request.getRequestDispatcher("./pages/cargo_empleado/delete.jsp").forward(request, response);
     }
 
     private void eliminarCargoEmpleado(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Producto producto = (Producto) request.getSession().getAttribute("productoModificar");
-        ProductoDAO productoDAO = new ProductoDAO();
-        int respuesta = productoDAO.delete(producto);
+        CargoEmpleado cargoEmpleado = (CargoEmpleado) request.getSession().getAttribute("cargoEmpleadoModificar");
+        CargoEmpleadoDAO cargoEmpleadoDAO = new CargoEmpleadoDAO();
+        int respuesta = cargoEmpleadoDAO.delete(cargoEmpleado);
         Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
-        miFarmacia.getProductos().remove(producto);
+        miFarmacia.getCargosEmpleados().remove(cargoEmpleado);
         
         request.getSession().setAttribute("farmacia", miFarmacia);
         request.getRequestDispatcher("./pages/cargo_empleado/index.jsp").forward(request, response);

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import interfaces.CRUD;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import modelo.CargoEmpleado;
 import modelo.Conexion;
 import modelo.Producto;
 

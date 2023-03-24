@@ -124,4 +124,13 @@ public class Farmacia {
         }
         return null;
     }
+
+    public CargoEmpleado buscarCargoEmpleadoPorId(int id) {
+        for (CargoEmpleado cargoEmpleado : this.cargosEmpleados) {
+            if (cargoEmpleado.getId() == id) {
+                return cargoEmpleado;
+            }
+        }
+        return null;
+    }
 }

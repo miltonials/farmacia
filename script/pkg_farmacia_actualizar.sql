@@ -42,14 +42,17 @@ IS PRAGMA AUTONOMOUS_TRANSACTION;
     respuesta NUMBER;
     BEGIN
         BEGIN
-            UPDATE producto
-              SET id_farmaceutica = p_id_farmaceutica,
-                  id_tipo_producto = p_id_tipo_producto,
-                  nombre = p_nombre,
-                  descripcion = p_descripcion,
-                  precio = p_precio,
-                  cantidad_stock = p_cantidad_stock
-              WHERE id_producto = p_id_producto;
+            EXECUTE IMMEDIATE 'UPDATE producto SET id_farmaceutica = :1, id_tipo_producto = :2, nombre = :3, descripcion = :4, precio = :5, cantidad_stock = :6
+                                WHERE id_producto = :7'
+            USING p_id_farmaceutica, p_id_tipo_producto, p_nombre, p_descripcion, p_precio, p_cantidad_stock, p_id_producto;
+            -- UPDATE producto
+            --   SET id_farmaceutica = p_id_farmaceutica,
+            --       id_tipo_producto = p_id_tipo_producto,
+            --       nombre = p_nombre,
+            --       descripcion = p_descripcion,
+            --       precio = p_precio,
+            --       cantidad_stock = p_cantidad_stock
+            --   WHERE id_producto = p_id_producto;
 
             respuesta := 1;
             COMMIT;
@@ -73,11 +76,15 @@ IS PRAGMA AUTONOMOUS_TRANSACTION;
     respuesta NUMBER;
     BEGIN
         BEGIN
-            UPDATE farmaceutica
-              SET nombre = p_nombre,
-                  telefono = p_telefono,
-                  correo_electronico = p_correo
-              WHERE id_farmaceutica = p_id_farmaceutica;
+            EXECUTE IMMEDIATE 'UPDATE farmaceutica SET nombre = :1, telefono = :2, correo_electronico = :3
+                                WHERE id_farmaceutica = :4'
+            USING p_nombre, p_telefono, p_correo, p_id_farmaceutica;
+
+            -- UPDATE farmaceutica
+            --   SET nombre = p_nombre,
+            --       telefono = p_telefono,
+            --       correo_electronico = p_correo
+            --   WHERE id_farmaceutica = p_id_farmaceutica;
 
             respuesta := 1;
             COMMIT;
@@ -101,11 +108,15 @@ IS PRAGMA AUTONOMOUS_TRANSACTION;
     respuesta NUMBER;
     BEGIN
         BEGIN
-            UPDATE venta
-              SET id_cliente = p_id_cliente,
-                  id_empleado = p_id_empleado,
-                  fecha_emision = p_fecha_venta
-              WHERE id_venta = p_id_venta;
+            EXECUTE IMMEDIATE 'UPDATE venta SET id_cliente = :1, id_empleado = :2, fecha_emision = :3
+                                WHERE id_venta = :4'
+            USING p_id_cliente, p_id_empleado, p_fecha_venta, p_id_venta;
+
+            -- UPDATE venta
+            --   SET id_cliente = p_id_cliente,
+            --       id_empleado = p_id_empleado,
+            --       fecha_emision = p_fecha_venta
+            --   WHERE id_venta = p_id_venta;
 
             respuesta := 1;
             COMMIT;
@@ -129,9 +140,13 @@ IS PRAGMA AUTONOMOUS_TRANSACTION;
     respuesta NUMBER;
     BEGIN
         BEGIN
-            UPDATE detalle_venta
-              SET cantidad = p_cantidad
-              WHERE id_venta = p_id_venta and id_producto  = p_id_producto;
+            EXECUTE IMMEDIATE 'UPDATE detalle_venta SET cantidad = :1
+                                WHERE id_venta = :2 and id_producto = :3'
+            USING p_cantidad, p_id_venta, p_id_producto;
+
+            -- UPDATE detalle_venta
+            --   SET cantidad = p_cantidad
+            --   WHERE id_venta = p_id_venta and id_producto  = p_id_producto;
 
             respuesta := 1;
             COMMIT;
@@ -155,14 +170,18 @@ IS PRAGMA AUTONOMOUS_TRANSACTION;
     respuesta NUMBER;
     BEGIN
         BEGIN
-            UPDATE cliente
-              SET nombre = p_nombre,
-                  apellido = p_apellido,
-                  telefono = p_telefono,
-                  correo_electronico = p_correo,
-                  fecha_nacimiento = p_fecha_nacimiento,
-                  genero = p_genero
-              WHERE id_cliente = p_id_cliente;
+            EXECUTE IMMEDIATE 'UPDATE cliente SET nombre = :1, apellido = :2, telefono = :3, correo_electronico = :4, fecha_nacimiento = :5, genero = :6
+                                WHERE id_cliente = :7'
+            USING p_nombre, p_apellido, p_telefono, p_correo, p_fecha_nacimiento, p_genero, p_id_cliente;
+
+            -- UPDATE cliente
+            --   SET nombre = p_nombre,
+            --       apellido = p_apellido,
+            --       telefono = p_telefono,
+            --       correo_electronico = p_correo,
+            --       fecha_nacimiento = p_fecha_nacimiento,
+            --       genero = p_genero
+            --   WHERE id_cliente = p_id_cliente;
 
             respuesta := 1;
             COMMIT;
@@ -186,14 +205,18 @@ IS PRAGMA AUTONOMOUS_TRANSACTION;
     respuesta NUMBER;
     BEGIN
         BEGIN
-            UPDATE empleado
-              SET nombre = p_nombre,
-                  cedula = p_cedula,
-                  apellido = p_apellido,
-                  fecha_contratacion = p_fecha_contratacion,
-                  salario = p_salario,
-                  id_cargo = p_id_cargo
-              WHERE id_empleado = p_id_empleado;
+            EXECUTE IMMEDIATE 'UPDATE empleado SET nombre = :1, cedula = :2, apellido = :3, fecha_contratacion = :4, salario = :5, id_cargo = :6
+                                WHERE id_empleado = :7'
+            USING p_nombre, p_cedula, p_apellido, p_fecha_contratacion, p_salario, p_id_cargo, p_id_empleado;
+
+            -- UPDATE empleado
+            --   SET nombre = p_nombre,
+            --       cedula = p_cedula,
+            --       apellido = p_apellido,
+            --       fecha_contratacion = p_fecha_contratacion,
+            --       salario = p_salario,
+            --       id_cargo = p_id_cargo
+            --   WHERE id_empleado = p_id_empleado;
 
             respuesta := 1;
             COMMIT;
@@ -217,9 +240,13 @@ IS PRAGMA AUTONOMOUS_TRANSACTION;
     respuesta NUMBER;
     BEGIN
         BEGIN
-            UPDATE cargo_empleado
-              SET nombre = p_nombre
-              WHERE id_cargo = p_id_cargo;
+            EXECUTE IMMEDIATE 'UPDATE cargo_empleado SET nombre = :1
+                                WHERE id_cargo = :2'
+            USING p_nombre, p_id_cargo;
+
+            -- UPDATE cargo_empleado
+            --   SET nombre = p_nombre
+            --   WHERE id_cargo = p_id_cargo;
 
             respuesta := 1;
             COMMIT;

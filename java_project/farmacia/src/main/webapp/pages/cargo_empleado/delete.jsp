@@ -38,24 +38,14 @@
                     </div>
                     <div
                         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                        <h1 class="h2">Visualizando producto | ${productoModificar.getId()}</h1>
+                        <h1 class="h2">Visualizando cargo empleado | ${cargoEmpleadoModificar.getId()}</h1>
                         <h3 class="h3">${errorMjs}</h3>
                     </div>
                     <!-- update.jsp -->
-                    <form action="ControladorProducto" method="POST">
+                    <form action="ControladorCargoEmpleado" method="POST">
                         <div class="form-group">
                             <label for="nombre">Nombre</label>
-                            <input type="text" class="form-control" placeholder="Nombre del producto" name="txtNombreProducto" value="${productoModificar.getNombre()}" disabled>
-                            <label for="tipoProducto">Tipo de producto </label>
-                            <input type="text" class="form-control" placeholder="Nombre del producto" name="txtNombreProducto" value="${productoModificar.getTipo().getNombre()} (${productoModificar.getTipo().getId()})" disabled>
-                            <label for="descripcionProducto">Descripción</label>
-                            <textarea class="form-control" rows="3" name = "txtDescripcion" placeholder="Descripción del producto" disabled>${productoModificar.getDescripcion()}</textarea>
-                            <label for="precio">Precio</label>
-                            <input type="number" class="form-control" placeholder="Precio unitario" name="txtPrecio" step="0.01" min = "0" value ="${productoModificar.getPrecio()}" disabled>
-                            <label for="farmaceutica">Farmaceutica</label>
-                            <input type="text" class="form-control" placeholder="Nombre del producto" name="txtNombreProducto" value="${productoModificar.getFarmaceutica().getNombre()} (${productoModificar.getFarmaceutica().getId()})" disabled>
-                            <label for="precio">cantidad</label>
-                            <input type="text" class="form-control" placeholder="Cantidad" min="1" name="txtCantidad" value="${productoModificar.getCantidadStock()}" disabled>
+                            <input type="text" class="form-control" placeholder="Nombre del cargo de empleado" name="txtNombreCargoEmpleado" value="${cargoEmpleadoModificar.getNombre()}" disabled>
                         </div>
                         <input type="submit" class="btn btn-danger" name="accion" value="delete">
                     </form>

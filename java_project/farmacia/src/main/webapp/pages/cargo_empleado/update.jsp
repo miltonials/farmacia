@@ -38,46 +38,14 @@
                     </div>
                     <div
                         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                        <h1 class="h2">Editar producto | ${productoModificar.getId()}</h1>
+                        <h1 class="h2">Editar cargo de empleados | ${cargoEmpleadoModificar.getId()}</h1>
                         <h3 class="h3">${errorMjs}</h3>
                     </div>
                     <!-- update.jsp -->
-                    <form action="ControladorProducto" method="POST">
+                    <form action="ControladorCargoEmpleado" method="POST">
                         <div class="form-group">
                             <label for="nombre">Nombre</label>
-                            <input type="text" class="form-control" placeholder="Nombre del producto" name="txtNombreProducto" value="${productoModificar.getNombre()}" required>
-                            <label for="tipoProducto">Tipo de producto </label>
-                            <select class="form-control" name="multiTipoProducto" required>
-                                    <c:forEach var="tipo" items="${farmacia.getTiposProductos()}">
-                                        <c:choose>
-                                            <c:when test="${tipo.id == productoModificar.tipo.id}">
-                                                <option value="${tipo.id}" selected>${tipo.nombre}</option>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <option value="${tipo.id}">${tipo.nombre}</option>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:forEach>
-                            </select>
-                            <label for="descripcionProducto">Descripción</label>
-                            <textarea class="form-control" rows="3" name = "txtDescripcion" placeholder="Descripción del producto" required>${productoModificar.getDescripcion()}</textarea>
-                            <label for="precio">Precio</label>
-                            <input type="number" class="form-control" placeholder="Precio unitario" name="txtPrecio" step="0.01" min = "0" value ="${productoModificar.getPrecio()}" required>
-                            <label for="farmaceutica">Farmaceutica</label>
-                            <select class="form-control" name="multiFarmaceutica" required>
-                                <c:forEach var="farmaceutica" items="${farmacia.getFarmaceuticas()}">
-                                        <c:choose>
-                                            <c:when test="${farmaceutica.getId() == productoModificar.tipo.id}">
-                                                <option value="${farmaceutica.getId()}" selected>${farmaceutica.getNombre()}</option>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <option value="${farmaceutica.getId()}">${farmaceutica.getNombre()}</option>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:forEach>
-                            </select>
-                            <label for="precio">cantidad</label>
-                            <input type="number" class="form-control" placeholder="Cantidad" min="1" name="txtCantidad" value="${productoModificar.getCantidadStock()}" required>
+                            <input type="text" class="form-control" placeholder="Nombre del producto" name="txtNombreCargoEmpleado" value="${cargoEmpleadoModificar.getNombre()}" required>
                         </div>
                         <input type="submit" class="btn btn-primary" name="accion" value="update">
                     </form>
