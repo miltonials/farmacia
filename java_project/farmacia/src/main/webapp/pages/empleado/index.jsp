@@ -71,8 +71,8 @@
                                     <td>${emp.getClave()}</td>
                                     <td>
                                         <form action="ControladorEmpleado">
-                                            <a class="btn btn-primary" href="ControladorEmpleado?accion=paginaEditar" method="POST">Editar</a>
-                                            <a class="btn btn-danger" href="ControladorEmpleado?accion=paginaEliminar" method="POST">Eliminar</a>
+                                            <a class="btn btn-primary" href="ControladorEmpleado?accion=paginaEditar&id=${emp.getId()}" method="POST">Editar</a>
+                                            <a class="btn btn-danger" href="ControladorEmpleado?accion=paginaEliminar&id=${emp.getId()}" method="POST">Eliminar</a>
                                         </form>
                                     </td>
                                 </tr>

@@ -5,7 +5,6 @@
 package controlador;
 
 import dao.EmpleadoDAO;
-import dao.VentaDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
@@ -40,10 +39,6 @@ public class ControladorEmpleado extends HttpServlet {
         String accion = request.getParameter("accion");
         switch (accion){
             case "index":
-                Farmacia f = (Farmacia) request.getSession().getAttribute("farmacia");
-                for(Empleado emp: f.getEmpleados()){
-                    System.out.println(emp.getNombre());
-                }
                 request.getRequestDispatcher("./pages/empleado/index.jsp").forward(request, response);
                 break;
             case "listar":
@@ -52,11 +47,17 @@ public class ControladorEmpleado extends HttpServlet {
             case "agregar":
                 request.getRequestDispatcher("./pages/empleado/create.jsp").forward(request, response);
                 break;
-            case "editar":
-                request.getRequestDispatcher("./pages/empleado/update.jsp").forward(request, response);
+            case "paginaEditar":
+                cargarPaginaEditar(request, response);
                 break;
-            case "eliminar":
-                request.getRequestDispatcher("./pages/empleado/delete.jsp").forward(request, response);
+            case "paginaEliminar":
+                cargarPaginaEliminar(request, response);
+                break;
+            case "update":
+                actualizarEmpleado(request, response);
+                break;
+            case "delete":
+                eliminarEmpleado(request, response);
                 break;
             case "Guardar":
                 Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
@@ -64,7 +65,7 @@ public class ControladorEmpleado extends HttpServlet {
                 String fecha = request.getParameter("txtFechaContratacion");
                 Date laFecha= null;
                 try{
-                    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                     laFecha = format.parse(fecha);
                 }catch(Exception exc){
                     
@@ -81,7 +82,9 @@ public class ControladorEmpleado extends HttpServlet {
                 int respuesta = empDAO.create(emp);
                 if (respuesta == 1) {
                     farmacia.getEmpleados().add(emp);
-                    request.getSession().setAttribute("farmacia", farmacia);
+                    Farmacia nuevaFarmacia = new Farmacia(farmacia.getEmpleadoActual());
+                    request.getSession().setAttribute("farmacia", nuevaFarmacia);
+                    
                     request.getRequestDispatcher("./pages/empleado/index.jsp").forward(request, response);
                 }
                 else {
@@ -133,5 +136,76 @@ public class ControladorEmpleado extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    private void cargarPaginaEditar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String id = request.getParameter("id");
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        Empleado emp = null;
+        for(Empleado e: miFarmacia.getEmpleados()){
+            if(e.getId()==Integer.parseInt(id)){
+                emp = e;
+            }
+        }
+        
+        request.getSession().setAttribute("empModificar",emp);
+        request.getRequestDispatcher("./pages/empleado/update.jsp").forward(request, response);
+    }
 
+    private void cargarPaginaEliminar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String id = request.getParameter("id");
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        Empleado emp = null;
+        for(Empleado e: miFarmacia.getEmpleados()){
+            if(e.getId()==Integer.parseInt(id)){
+                emp = e;
+            }
+        }
+        request.getSession().setAttribute("empModificar", emp);
+
+        request.getRequestDispatcher("./pages/empleado/delete.jsp").forward(request, response);
+    }
+    
+    private void actualizarEmpleado(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Farmacia farmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        
+        String cargo = request.getParameter("multiCargo"); 
+        String cedula = request.getParameter("txtCedula");
+        String nombre = request.getParameter("txtNombre");
+        String apellido = request.getParameter("txtApellido");
+        double salario = Double.parseDouble(request.getParameter("txtSalario"));
+        String clave = request.getParameter("txtClave");
+        Empleado emp = (Empleado) request.getSession().getAttribute("empModificar");
+        emp.setNombre(nombre);
+        emp.setIdCargo(cargo);
+        emp.setCedula(cedula);
+        emp.setNombre(nombre);
+        emp.setApellido(apellido);
+        emp.setSalario(salario);
+        
+        EmpleadoDAO empDAO = new EmpleadoDAO();
+        int respuesta = empDAO.update(emp);
+
+        if (respuesta == 1) {
+            request.getSession().setAttribute("farmacia", farmacia);
+            request.getRequestDispatcher("./pages/empleado/index.jsp").forward(request, response);
+        } else {
+            request.getSession().setAttribute("errorMjs", "Código de error: " + respuesta);
+            request.getRequestDispatcher("./pages/empleado/update.jsp").forward(request, response);
+        }
+
+    }
+    
+    private void eliminarEmpleado(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Empleado emp = (Empleado) request.getSession().getAttribute("empModificar");
+        EmpleadoDAO empDAO = new EmpleadoDAO();
+        int respuesta = empDAO.delete(emp);
+        Farmacia miFarmacia = (Farmacia) request.getSession().getAttribute("farmacia");
+        miFarmacia.getEmpleados().remove(emp);
+        
+        request.getSession().setAttribute("farmacia", miFarmacia);
+        request.getRequestDispatcher("./pages/empleado/index.jsp").forward(request, response);
+    }
 }

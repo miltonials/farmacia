@@ -1,5 +1,6 @@
 package modelo;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -103,7 +104,7 @@ public class Empleado {
         this.Apellido = Apellido;
     }
 
-    public void setSalario(float salario) {
+    public void setSalario(double salario) {
         this.salario = salario;
     }
 
@@ -118,6 +119,10 @@ public class Empleado {
     public void setClave(String clave) {
         this.clave = clave;
     }
-
+    
+    public String getFecha(){
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MM-yyyy");
+        return formatoFecha.format(this.fechaContratacion);
+    }
     
 }
