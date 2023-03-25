@@ -21,6 +21,24 @@ public class Farmacia {
     private Empleado empleadoActual;
     private ArrayList<MontoTotalVendidoPorMes> montosTotalesVendidosPorMes;
     private ArrayList<VentasPorEmpleadoPorMes> ventasPorEmpleadoPorMes;
+    private ArrayList<ProductosMasVendidos> productosMasVendidos;
+
+    public ArrayList<ProductosMasVendidos> getProductosMasVendidos() {
+        return productosMasVendidos;
+    }
+
+    public void setProductosMasVendidos(ArrayList<ProductosMasVendidos> productosMasVendidos) {
+        this.productosMasVendidos = productosMasVendidos;
+    }
+
+    public ArrayList<ProductosMasVendidosPorMes> getProductosMasVendidosPorMes() {
+        return productosMasVendidosPorMes;
+    }
+
+    public void setProductosMasVendidosPorMes(ArrayList<ProductosMasVendidosPorMes> productosMasVendidosPorMes) {
+        this.productosMasVendidosPorMes = productosMasVendidosPorMes;
+    }
+    private ArrayList<ProductosMasVendidosPorMes> productosMasVendidosPorMes;
     private Vistas vistas;
 
     public Farmacia(Empleado empleado) {
@@ -33,7 +51,13 @@ public class Farmacia {
         this.clientes = farmaciaDao.cargarClientes();
         this.montosTotalesVendidosPorMes = farmaciaDao.cargarMontosTotalesVendidosPorMes();
         this.ventasPorEmpleadoPorMes = farmaciaDao.cargarVentasPorEmpleadoPorMes();
-
+        this.productosMasVendidos = farmaciaDao.cargarProductosMasVendidos();
+        this.productosMasVendidosPorMes = farmaciaDao.cargarProductosMasVendidosPorMes();
+        
+        for(ProductosMasVendidos p:this.productosMasVendidos){
+            System.out.println(p.getNombre());
+        }
+        
         //this.vistas = new Vistas();//@miltonials
         this.ventas = farmaciaDao.cargarVentas(this);
 

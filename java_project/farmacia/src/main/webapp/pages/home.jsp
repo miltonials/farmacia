@@ -69,9 +69,53 @@
                                 <c:forEach items="${farmacia.getVentasPorEmpleadoPorMes()}" var="ventaPorEmpleadoPorMes">
                                     <tr>
                                         <td>${ventaPorEmpleadoPorMes.getMes()}</td>
-                                        <td>${ventaPorEmpleadoPorMes.getEmpleado()}</td>
-                                        <td>${ventaPorEmpleadoPorMes.getCantidadVentas()}</td>
-                                        <td>${ventaPorEmpleadoPorMes.getMontoTotalVendido()}</td>
+                                        <td>${ventaPorEmpleadoPorMes.getNombre()}</td>
+                                        <td>${ventaPorEmpleadoPorMes.getCantidad()}</td>
+                                        <td>${ventaPorEmpleadoPorMes.getTotal()}</td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h2>Productos más vendidos por mes</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-sm">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Mes</th>
+                                    <th scope="col">nombre</th>
+                                    <th scope="col">Cantidad de ventas</th>
+                                    <th scope="col">Monto total vendido</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach items="${farmacia.getProductosMasVendidosPorMes()}" var="prod">
+                                    <tr>
+                                        <td>${prod.getMes()}</td>
+                                        <td>${prod.getNombre()}</td>
+                                        <td>${prod.getCantidad()}</td>
+                                        <td>${prod.getTotal()}</td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h2>Productos más vendidos</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-sm">
+                            <thead>
+                                <tr>
+                                    <th scope="col">nombre</th>
+                                    <th scope="col">Cantidad de ventas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach items="${farmacia.getProductosMasVendidos()}" var="prod">
+                                    <tr>
+                                        <td>${prod.getNombre()}</td>
+                                        <td>${prod.getCantidad()}</td>
                                     </tr>
                                 </c:forEach>
                             </tbody>

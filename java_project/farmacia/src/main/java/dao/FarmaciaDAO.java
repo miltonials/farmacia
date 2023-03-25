@@ -22,6 +22,8 @@ import modelo.TipoProducto;
 import modelo.Venta;
 import modelo.MontoTotalVendidoPorMes;
 import modelo.VentasPorEmpleadoPorMes;
+import modelo.ProductosMasVendidos;
+import modelo.ProductosMasVendidosPorMes;
 
 /**
  *
@@ -104,7 +106,7 @@ public class FarmaciaDAO implements ComponentesFarmacia {
                 String mes = resultSet.getString("mes");
                 String nombre = resultSet.getString("nombre_empleado");
                 int cantidad = resultSet.getInt("cantidad_ventas");
-                int total = resultSet.getInt("monto_total_ventas");
+                int total = resultSet.getInt("monto_total_vendido");
                 VentasPorEmpleadoPorMes ventasPorEmpleadoPorMes1 = new VentasPorEmpleadoPorMes(mes, nombre, cantidad, total);
                 ventasPorEmpleadoPorMes.add(ventasPorEmpleadoPorMes1);
             }
@@ -134,6 +136,50 @@ public class FarmaciaDAO implements ComponentesFarmacia {
         return montosTotalesVendidosPorMes;
     } 
 
+    public ArrayList<ProductosMasVendidos> cargarProductosMasVendidos(){
+        ArrayList<ProductosMasVendidos> productos = new ArrayList<>();
+        String sql = "select * from productos_mas_vendidos";
+
+        try {
+            preparedStatement = conexion.prepararSql(sql);
+            resultSet = preparedStatement.executeQuery();
+            
+            while (resultSet.next()) {
+                String nombre = resultSet.getString("nombre");
+                int cantidad = resultSet.getInt("cantidad");
+                ProductosMasVendidos p = new ProductosMasVendidos(nombre, cantidad);
+                productos.add(p);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al cargar productos mas vendidos: " + e.getMessage());
+        }
+        return productos;
+    } 
+
+    public ArrayList<ProductosMasVendidosPorMes> cargarProductosMasVendidosPorMes(){
+        ArrayList<ProductosMasVendidosPorMes> productos = new ArrayList<>();
+        String sql = "select * from productos_mas_vendidos_por_mes";
+
+        try {
+            preparedStatement = conexion.prepararSql(sql);
+            resultSet = preparedStatement.executeQuery();
+            
+            while (resultSet.next()) {
+                String mes = resultSet.getString("mes");
+                String nombre_prod = resultSet.getString("nombre_producto");
+                int cantidad = resultSet.getInt("cantidad_vendida");
+                int total = resultSet.getInt("monto_total_vendido");
+                
+                ProductosMasVendidosPorMes p = new ProductosMasVendidosPorMes(mes, nombre_prod, cantidad, total);
+                productos.add(p);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al cargar productos mas vendidos por mes: " + e.getMessage());
+        }
+        return productos;
+    } 
+
+    
     @Override
     public ArrayList<Farmaceutica> cargarFarmaceuticas() {
         ArrayList<Farmaceutica> farmaceuticas = new ArrayList<>();

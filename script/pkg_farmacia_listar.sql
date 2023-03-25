@@ -56,6 +56,6 @@ CREATE VIEW cliente_del_mes AS
 */
 
 drop view ventas_por_empleado_por_mes;
-drop view productos_mas_vendidos_por_mes;
-drop view monto_total_vendido_por_mes;
-drop view productos_mas_vendidos;
+drop view productos_mas_vendidos_por_mes; --mio
+drop view monto_total_vendido_por_mes;    
+drop view productos_mas_vendidos;       
