@@ -147,30 +147,30 @@ IS PRAGMA AUTONOMOUS_TRANSACTION;
         BEGIN
             -- obtener el monto anterior de la venta
             SELECT total_venta INTO montoVentaAnterior FROM venta WHERE id_venta = p_id_venta;
-
             -- obtener la cantidad anterior y el precio anterior del detalle de venta
-            SELECT cantidad, precioAnterior INTO cantidadAnterior, precioAnterior 
+            SELECT cantidad, precio_unitario INTO cantidadAnterior, precioAnterior 
                 FROM detalle_venta WHERE id_venta = p_id_venta AND id_producto = p_id_producto;
-        
-            -- calcular el nuevo total de ventas
-            nuevoMonto := montoVentaAnterior -(precioAnterior * cantidadAnterior) - (p_precio_unitario * p_cantidad);
-        
+            
+            
             -- actualizar la cantidad en el detalle de venta
             EXECUTE IMMEDIATE 'UPDATE detalle_venta SET cantidad = :1 WHERE id_venta = :2 and id_producto = :3'
             USING p_cantidad, p_id_venta, p_id_producto;
+            COMMIT;
+            DBMS_OUTPUT.Put_Line('print de prueba 2');
             
             EXECUTE IMMEDIATE 'UPDATE detalle_venta SET precio_unitario = :1 WHERE id_venta = :2 and id_producto = :3'
             USING p_precio_unitario, p_id_venta, p_id_producto;
-        
-            -- actualizar el monto total de la venta en la tabla venta
-
-            EXECUTE IMMEDIATE 'UPDATE venta SET total_venta = total_venta - :1 WHERE id_venta = :2'
-            USING nuevoMonto, p_id_venta;
-
+            COMMIT;
+            nuevoMonto := montoVentaAnterior -(precioAnterior * cantidadAnterior) - (p_precio_unitario * p_cantidad);
+            
+            EXECUTE IMMEDIATE 'UPDATE venta SET total_venta = (total_venta - :1) WHERE id_venta = :2'
+                USING nuevoMonto, p_id_venta;
+            COMMIT;
+            DBMS_OUTPUT.Put_Line('print de prueba 4');
             -- actualizar el stock del producto
             EXECUTE IMMEDIATE 'UPDATE producto SET cantidad_stock = cantidad_stock + (:1 - :2) WHERE id_producto = :3'
-            USING cantidadAnterior, p_cantidad, p_id_producto;
-        
+                USING cantidadAnterior, p_cantidad, p_id_producto;
+            DBMS_OUTPUT.Put_Line('print de prueba 5');
             respuesta := 1; -- devolver el nuevo total de ventas
             COMMIT;
         

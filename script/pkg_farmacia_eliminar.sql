@@ -18,6 +18,7 @@ CREATE OR REPLACE PACKAGE BODY farmacia_eliminar AS
           DELETE FROM tipo_producto
             WHERE id_tipo_producto = p_id_tipo_producto;
           DBMS_OUTPUT.Put_Line('Registro eliminado');
+          COMMIT;
       END;
 
   PROCEDURE eliminar_producto (
@@ -28,6 +29,7 @@ CREATE OR REPLACE PACKAGE BODY farmacia_eliminar AS
           DELETE FROM producto
             WHERE id_producto = p_id_producto;
           DBMS_OUTPUT.Put_Line('Registro eliminado');
+          COMMIT;
       END;
   
   PROCEDURE eliminar_venta (
@@ -38,6 +40,7 @@ CREATE OR REPLACE PACKAGE BODY farmacia_eliminar AS
           DELETE FROM venta
             WHERE id_venta = p_id_venta;
           DBMS_OUTPUT.Put_Line('Registro eliminado');
+          COMMIT;
       END;
 
   PROCEDURE eliminar_empleado (
@@ -48,6 +51,7 @@ CREATE OR REPLACE PACKAGE BODY farmacia_eliminar AS
           DELETE FROM empleado
             WHERE id_empleado = p_id_empleado;
           DBMS_OUTPUT.Put_Line('Registro eliminado');
+          COMMIT;
       END;
 
   PROCEDURE eliminar_farmaceutica (
@@ -58,6 +62,7 @@ CREATE OR REPLACE PACKAGE BODY farmacia_eliminar AS
           DELETE FROM farmaceutica
             WHERE id_farmaceutica = p_id_farmaceutica;
           DBMS_OUTPUT.Put_Line('Registro eliminado');
+          COMMIT;
       END;
 
   PROCEDURE eliminar_cliente (
@@ -68,6 +73,7 @@ CREATE OR REPLACE PACKAGE BODY farmacia_eliminar AS
           DELETE FROM cliente
             WHERE id_cliente = p_id_cliente;
           DBMS_OUTPUT.Put_Line('Registro eliminado');
+          COMMIT;
       END;
 
   PROCEDURE eliminar_detalle_venta (
@@ -106,6 +112,7 @@ CREATE OR REPLACE PACKAGE BODY farmacia_eliminar AS
           DELETE FROM cargo_empleado
             WHERE id_cargo = p_id_cargo;
           DBMS_OUTPUT.Put_Line('Registro eliminado');
+          COMMIT;
       END;
 END farmacia_eliminar;
 /

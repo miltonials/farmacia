@@ -53,12 +53,6 @@ public class Farmacia {
         this.ventasPorEmpleadoPorMes = farmaciaDao.cargarVentasPorEmpleadoPorMes();
         this.productosMasVendidos = farmaciaDao.cargarProductosMasVendidos();
         this.productosMasVendidosPorMes = farmaciaDao.cargarProductosMasVendidosPorMes();
-        
-        for(ProductosMasVendidos p:this.productosMasVendidos){
-            System.out.println(p.getNombre());
-        }
-        
-        //this.vistas = new Vistas();//@miltonials
         this.ventas = farmaciaDao.cargarVentas(this);
 
     }

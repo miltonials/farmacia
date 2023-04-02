@@ -74,7 +74,6 @@ public class FarmaciaDAO implements ComponentesFarmacia {
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 int id = resultSet.getInt("id_venta");
-                
                 Date fecha = resultSet.getDate("fecha_emision");
                 int idCliente = resultSet.getInt("id_cliente");
                 int idEmpleado = resultSet.getInt("id_empleado");
@@ -83,7 +82,6 @@ public class FarmaciaDAO implements ComponentesFarmacia {
                 Empleado elEmp = miFarmacia.buscarEmpleadoPorId(idEmpleado);
 
                 Venta venta = new Venta(id, fecha, elCliente, elEmp, total);
-                cargarDetalleVenta(miFarmacia, venta);
                 
                 ventas.add(venta);
             }
@@ -91,6 +89,11 @@ public class FarmaciaDAO implements ComponentesFarmacia {
             System.out.println("Error al cargar ventas: " + e.getMessage());
             e.printStackTrace();
         }
+        
+        for (Venta ventaAct: ventas) {
+            cargarDetalleVenta(miFarmacia, ventaAct);
+        }
+        
         return ventas;
     }
 
